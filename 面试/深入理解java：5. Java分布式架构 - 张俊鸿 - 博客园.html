@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://www.cnblogs.com/my376908915/p/6813321.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="never">
+    <title>深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园</title>
+<meta property="og:description" content="什么是分布式架构 分布式系统（distributed system）是建立在网络之上的软件系统。 内聚性是指每一个数据库分布节点高度自治，有本地的数据库管理系统。 透明性是指每一个数据库分布节点对用户">
+    <link type="text/css" rel="stylesheet" href="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/bundle-coffee.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/bundle-coffee-mobile.css">
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/my376908915/rss">
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/my376908915/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/my376908915/wlwmanifest.xml">
+    <script src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/osd.js.下载"></script><script src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/pubads_impl_rendering_308.js.下载"></script><script async="" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/analytics.js.下载"></script><script src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+    <script>var currentBlogId=350406;var currentBlogApp='my376908915',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/f.txt"></script><script src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/pubads_impl_308.js.下载" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-32/html/container.html"></head>
+<body>
+<a name="top"></a>
+
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/my376908915/"><img id="blogLogo" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/my376908915/">张俊鸿</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="navigator">
+			
+<ul id="navList">
+	<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+	<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/my376908915/">首页</a></li>
+	<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+	<li><a id="blog_nav_contact" accesskey="9" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E5%BC%A0%E4%BF%8A%E9%B8%BF">联系</a></li>
+	<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+	<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/my376908915/rss">订阅</a>
+	<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/my376908915/rss"><img src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/xml.gif" alt="订阅"></a></li>
+</ul>
+
+
+			<div class="blogStats">
+				
+				<div id="blog_stats">
+<!--done-->
+随笔- 34&nbsp;
+文章- 0&nbsp;
+评论- 34&nbsp;
+</div>
+				
+			</div><!--end: blogStats -->
+		</div><!--end: navigator 博客导航栏 -->
+		
+        <div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/my376908915/p/6813321.html">深入理解java：5. Java分布式架构</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><div>
+<div>
+<h1>什么是分布式架构</h1>
+<p>分布式系统（distributed system）是建立在网络之上的软件系统。</p>
+<p>内聚性是指每一个数据库分布节点高度自治，有本地的数据库管理系统。</p>
+<p>透明性是指每一个数据库分布节点对用户的应用来说都是透明的，看不出是本地还是远程。</p>
+<p>&nbsp;</p>
+<p>在分布式数据库系统中，用户感觉不到数据是分布的，即用户不须知道关系是否分割、有无副本、数据存于哪个站点以及事务在哪个站点上执行等。</p>
+<p>简单来讲：在一个分布式系统中，一组独立的计算机展现给用户的是一个统一的整体，就好像是一个系统似的。</p>
+<div class="image-package"><a href="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/1.3-01.jpg.png"><img class="alignnone size-full wp-image-92" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/1.3-01.jpg.png" alt="1-3-01-jpg" width="863" height="392"></a></div>
+<p>分布式系统作为一个整体对用户提供服务，而整个系统的内部的协作用户来说是透明的，用户就像是在使用一个MySQL一样。</p>
+<p>如分布式MySQL中间件-Mycat，来处理大并发大数据量的构架。</p>
+<h1>分布式架构的应用</h1>
+<p>有 分布式文件系统，分布式缓存系统，分布式数据库，分布式WebService，分布式计算 </p>
+<p>我们来举例说明：</p>
+<p>分布式文件系统： 出名的有 Hadoop 的HDFS ,还有 google的 GFS , 淘宝的 TFS 等</p>
+<p>分布式缓存系统：memcache , hbase , mongdb 等</p>
+<p>分布式数据库 ： MySQL , Mariadb, PostgreSQL 等</p>
+<p>以分布式MySQL数据库中间件MyCat 为例子，</p>
+<p>MySQL 在现在电商以及互联网公司的应用非常多，一个是因为他的免费开源，另外一个原因是因为分布式系统</p>
+<p>的水平可扩展性，随着移动互联网用户的暴增，互联网公司，像淘宝，天猫，唯品会等电商都采用分布式系统应对</p>
+<p>用户的高并发量以及大数据量的存储。</p>
+<p>而在Mycat的商业案例中，有对中国移动的账单结算项目中，应用实时处理高峰期每天2亿的数据量，</p>
+<p>在对物联网的项目中，实现处理高达26亿的数据量，并提供实时查询的接口。</p>
+<p>通过对MyCat的学习，加深分布式系统架构的理解，</p>
+<p>以及分布式相关的技术，分布式一致性ZooKeeper服务, 高可用HAProxy/keepalived等相关应用。</p>
+<p>1&gt; 集群 与 分布式</p>
+<p>2&gt; 负载均衡</p>
+<p>3&gt; 分布式相关的高可用、容灾等名词解释</p>
+<p>4&gt; Mycat 中间件学习</p>
+<p>&nbsp;</p>
+<p>首先推荐4本书</p>
+<p>大型分布式网站架构设计与实践</p>
+<p><a class=" external" href="https://link.zhihu.com/?target=http%3A//item.jd.com/11529266.html" rel="nofollow noreferrer" target="_blank"><span class="invisible">http://<span class="visible">item.jd.com/11529266.ht<span class="invisible">ml</span></span></span></a></p>
+<p>大型网站技术架构：核心原理与案例分析</p>
+<p><a class=" external" href="https://link.zhihu.com/?target=http%3A//item.jd.com/11322972.html" rel="nofollow noreferrer" target="_blank"><span class="invisible">http://<span class="visible">item.jd.com/11322972.ht<span class="invisible">ml</span></span></span></a></p>
+<p>大型网站系统与Java中间件实践</p>
+<p><a class=" external" href="https://link.zhihu.com/?target=http%3A//item.jd.com/11449803.html" rel="nofollow noreferrer" target="_blank"><span class="invisible">http://<span class="visible">item.jd.com/11449803.ht<span class="invisible">ml</span></span></span></a></p>
+<p>分布式Java应用：基础与实践</p>
+<p><a class=" external" href="https://link.zhihu.com/?target=http%3A//item.jd.com/10144196.html" rel="nofollow noreferrer" target="_blank"><span class="invisible">http://<span class="visible">item.jd.com/10144196.ht<span class="invisible">ml</span></span></span></a></p>
+<p>貌似都是4位阿里人写的，一本一本的看吧，绝对会增强你的内功。</p>
+</div>
+<br><span class="RichText CopyrightRichText-richText"><strong>分布式架构的演进</strong></span><br>
+<div>
+<div><strong>初始阶段架构</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/13bd5a6612620fdf51c8987ab3eb1273_b.jpg" alt="" width="516" data-rawheight="367" data-rawwidth="516" data-original="https://pic4.zhimg.com/13bd5a6612620fdf51c8987ab3eb1273_r.jpg" data-actualsrc="https://pic4.zhimg.com/13bd5a6612620fdf51c8987ab3eb1273_b.jpg"><br>初始阶段 的小型系统 应用程序、数据库、文件等所有的资源都在一台服务器上通俗称为LAMP<br><br>特征：<br>应用程序、数据库、文件等所有的资源都在一台服务器上。</div>
+
+
+<br>
+<div>
+<div><strong>应用服务和数据服务分离</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/c2ff4e51eec15231b2f69fe6a4038239_b.jpg" alt="" width="510" data-rawheight="408" data-rawwidth="510" data-original="https://pic2.zhimg.com/c2ff4e51eec15231b2f69fe6a4038239_r.jpg" data-actualsrc="https://pic2.zhimg.com/c2ff4e51eec15231b2f69fe6a4038239_b.jpg"><br>好景不长，发现随着系统访问量的再度增加，webserver机器的压力在高峰期会上升到比较高，这个时候开始考虑增加一台webserver<br><br>特征：<br>应用程序、数据库、文件分别部署在独立的资源上。</div>
+
+
+<br>
+<div>
+<div><strong>使用缓存改善性能</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/7f5890aefa3a065ea91baa33e928d59b_b.jpg" alt="" width="526" data-rawheight="525" data-rawwidth="526" data-original="https://pic4.zhimg.com/7f5890aefa3a065ea91baa33e928d59b_r.jpg" data-actualsrc="https://pic4.zhimg.com/7f5890aefa3a065ea91baa33e928d59b_b.jpg"><br>特征：<br>数据库中访问较集中的一小部分数据存储在缓存服务器中，减少数据库的访问次数，降低数据库的访问压力。<br><br>描述：<br>系统访问特点遵循二八定律，即80%的业务访问集中在20%的数据上。<br>缓存分为本地缓存和远程分布式缓存，本地缓存访问速度更快但缓存数据量有限，同时存在与应用程序争用内存的情况。</div>
+
+
+<br>
+<div>作者：知乎用户<br>链接：https://www.zhihu.com/question/22764869/answer/31277656<br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br><br>
+<div><strong>使用应用服务器集群</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/66b50d0767750b0ff30d00d13a2a1963_b.jpg" alt="" width="576" data-rawheight="548" data-rawwidth="576" data-original="https://pic4.zhimg.com/66b50d0767750b0ff30d00d13a2a1963_r.jpg" data-actualsrc="https://pic4.zhimg.com/66b50d0767750b0ff30d00d13a2a1963_b.jpg"><br>在做完分库分表这些工作后，数据库上的压力已经降到比较低了，又开始过着每天看着访问量暴增的幸福生活了，突然有一天，发现系统的访问又开始有变慢的趋势了，这个时候首先查看数据库，压力一切正常，之后查看webserver，发现apache阻塞了很多的请求，而应用服务器对每个请求也是比较快的，看来 是请求数太高导致需要排队等待，响应速度变慢<br><br>特征：<br>多台服务器通过负载均衡同时向外部提供服务，解决单台服务器处理能力和存储空间上限的问题。<br><br>描述：<br>使用集群是系统解决高并发、海量数据问题的常用手段。通过向集群中追加资源，提升系统的并发处理能力，使得服务器的负载压力不再成为整个系统的瓶颈。</div>
+
+
+</div>
+
+<br>
+<div>
+<div><strong>数据库读写分离</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/e8cb08ede220e1f41459374e3ef72f85_b.jpg" alt="" width="568" data-rawheight="549" data-rawwidth="568" data-original="https://pic2.zhimg.com/e8cb08ede220e1f41459374e3ef72f85_r.jpg" data-actualsrc="https://pic2.zhimg.com/e8cb08ede220e1f41459374e3ef72f85_b.jpg"><br>享受了一段时间的系统访问量高速增长的幸福后，发现系统又开始变慢了，这次又是什么状况呢，经过查找，发现数据库写入、更新的这些操作的部分数据库连接的资源竞争非常激烈，导致了系统变慢<br><br>特征：<br>多台服务器通过负载均衡同时向外部提供服务，解决单台服务器处理能力和存储空间上限的问题。<br><br>描述：<br>使用集群是系统解决高并发、海量数据问题的常用手段。通过向集群中追加资源，使得服务器的负载压力不在成为整个系统的瓶颈。</div>
+
+
+<br>
+<div>
+<div><strong>反向代理和CDN加速</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/a2db8db8b2d7500adf6135c76d6323f9_b.jpg" alt="" width="711" data-rawheight="520" data-rawwidth="711" data-original="https://pic2.zhimg.com/a2db8db8b2d7500adf6135c76d6323f9_r.jpg" data-actualsrc="https://pic2.zhimg.com/a2db8db8b2d7500adf6135c76d6323f9_b.jpg"><br>特征：<br>采用CDN和反向代理加快系统的 访问速度。<br><br>描述：<br>为了应付复杂的网络环境和不同地区用户的访问，通过CDN和反向代理加快用户访问的速度，同时减轻后端服务器的负载压力。CDN与反向代理的基本原理都是缓存。</div>
+
+
+<br>
+<div>
+<div><strong>分布式文件系统和分布式数据库</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/ea091b2c553a7771695a4c707b091668_b.jpg" alt="" width="920" data-rawheight="526" data-rawwidth="920" data-original="https://pic1.zhimg.com/ea091b2c553a7771695a4c707b091668_r.jpg" data-actualsrc="https://pic1.zhimg.com/ea091b2c553a7771695a4c707b091668_b.jpg"><br>随着系统的不断运行，数据量开始大幅度增长，这个时候发现分库后查询仍然会有些慢，于是按照分库的思想开始做分表的工作<br><br>特征：<br>数据库采用分布式数据库，文件系统采用分布式文件系统。<br><br>描述：<br>任何强大的单一服务器都满足不了大型系统持续增长的业务需求，数据库读写分离随着业务的发展最终也将无法满足需求，需要使用分布式数据库及分布式文件系统来支撑。<br>分布式数据库是系统数据库拆分的最后方法，只有在单表数据规模非常庞大的时候才使用，更常用的数据库拆分手段是业务分库，将不同的业务数据库部署在不同的物理服务器上。</div>
+
+
+<br>
+<div>
+<div><strong>使用NoSQL和搜索引擎</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/7e25f96d31da26661c078b847c8acc44_b.jpg" alt="" width="936" data-rawheight="518" data-rawwidth="936" data-original="https://pic1.zhimg.com/7e25f96d31da26661c078b847c8acc44_r.jpg" data-actualsrc="https://pic1.zhimg.com/7e25f96d31da26661c078b847c8acc44_b.jpg"><br>特征：<br>系统引入NoSQL数据库及搜索引擎。<br><br>描述：<br>随着业务越来越复杂，对数据存储和检索的需求也越来越复杂，系统需要采用一些非关系型数据库如NoSQL和分数据库查询技术如搜索引擎。应用服务器通过统一数据访问模块访问各种数据，减轻应用程序管理诸多数据源的麻烦。</div>
+
+
+<br>
+<div>作者：知乎用户<br>链接：https://www.zhihu.com/question/22764869/answer/31277656<br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br><br>
+<div><strong>业务拆分</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/51faaff90df43279c82ffd6a6b587135_b.jpg" alt="" width="939" data-rawheight="520" data-rawwidth="939" data-original="https://pic2.zhimg.com/51faaff90df43279c82ffd6a6b587135_r.jpg" data-actualsrc="https://pic2.zhimg.com/51faaff90df43279c82ffd6a6b587135_b.jpg"><br>特征：<br>系统上按照业务进行拆分改造，应用服务器按照业务区分进行分别部署。<br><br>描述：<br>为了应对日益复杂的业务场景，通常使用分而治之的手段将整个系统业务分成不同的产品线，应用之间通过超链接建立关系，也可以通过消息队列进行数据分发，当然更多的还是通过访问同一个数据存储系统来构成一个关联的完整系统。<br><br>纵向拆分：<br>将一个大应用拆分为多个小应用，如果新业务较为独立，那么就直接将其设计部署为一个独立的Web应用系统<br><br>纵向拆分相对较为简单，通过梳理业务，将较少相关的业务剥离即可。<br><br>横向拆分：将复用的业务拆分出来，独立部署为分布式服务，新增业务只需要调用这些分布式服务<br><br>横向拆分需要识别可复用的业务，设计服务接口，规范服务依赖关系。</div>
+
+
+</div>
+
+</div>
+<div>
+<div><strong>分布式服务</strong><br><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/9ef9ad51a11b36cacb2f408ceb928c82_b.jpg" alt="" width="960" data-rawheight="507" data-rawwidth="960" data-original="https://pic3.zhimg.com/9ef9ad51a11b36cacb2f408ceb928c82_r.jpg" data-actualsrc="https://pic3.zhimg.com/9ef9ad51a11b36cacb2f408ceb928c82_b.jpg"><br>特征：<br>公共的应用模块被提取出来，部署在分布式服务器上供应用服务器调用。<br><br>描述：<br>随着业务越拆越小，应用系统整体复杂程度呈指数级上升，由于所有应用要和所有数据库系统连接，最终导致数据库连接资源不足，拒绝服务。</div>
+<div>
+<div>作者：知乎用户<br>链接：https://www.zhihu.com/question/22764869/answer/31277656<br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br><br>
+<div>
+<p><strong>Q：分布式服务应用会面临哪些问题？</strong><br><br>A：<br>(1) 当服务越来越多时，服务URL配置管理变得非常困难，F5硬件负载均衡器的单点压力也越来越大。<br>(2) 当进一步发展，服务间依赖关系变得错踪复杂，甚至分不清哪个应用要在哪个应用之前启动，架构师都不能完整的描述应用的架构关系。<br>(3) 接着，服务的调用量越来越大，服务的容量问题就暴露出来，这个服务需要多少机器支撑？什么时候该加机器？<br>(4) 服务多了，沟通成本也开始上升，调某个服务失败该找谁？服务的参数都有什么约定？ <br>(5) 一个服务有多个业务消费者，如何确保服务质量？<br>(6) 随着服务的不停升级，总有些意想不到的事发生，比如cache写错了导致内存溢出，故障不可避免，每次核心服务一挂，影响一大片，人心慌慌，如何控制故障的影响面？服务是否可以功能降级？或者资源劣化？ <br><br></p>
+<p><strong>Java分布式应用技术基础</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/b7cdb7ac16e2719f5fefe9503f85ad69_b.jpg" alt="" width="700" data-rawheight="545" data-rawwidth="700" data-original="https://pic2.zhimg.com/b7cdb7ac16e2719f5fefe9503f85ad69_r.jpg" data-actualsrc="https://pic2.zhimg.com/b7cdb7ac16e2719f5fefe9503f85ad69_b.jpg"><br>
+<p><strong>分布式服务下的关键技术：消息队列架构</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/9236baf21c201ec37b5cc089b8e09b3c_b.jpg" alt="" width="732" data-rawheight="318" data-rawwidth="732" data-original="https://pic1.zhimg.com/9236baf21c201ec37b5cc089b8e09b3c_r.jpg" data-actualsrc="https://pic1.zhimg.com/9236baf21c201ec37b5cc089b8e09b3c_b.jpg"><br>
+<p>消息对列通过消息对象分解系统耦合性，不同子系统处理同一个消息</p>
+<p><strong>分布式服务下的关键技术：消息队列原理</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/24eac9966e7bb9c38ffd44952194727a_b.jpg" alt="" width="847" data-rawheight="332" data-rawwidth="847" data-original="https://pic3.zhimg.com/24eac9966e7bb9c38ffd44952194727a_r.jpg" data-actualsrc="https://pic3.zhimg.com/24eac9966e7bb9c38ffd44952194727a_b.jpg"><br>
+<p><strong>分布式服务下的关键技术：服务框架架构</strong></p>
+
+<p><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/4aec5baab1575247104347dd5e3e2f07_b.jpg" alt="" width="918" data-rawheight="499" data-rawwidth="918" data-original="https://pic4.zhimg.com/4aec5baab1575247104347dd5e3e2f07_r.jpg" data-actualsrc="https://pic4.zhimg.com/4aec5baab1575247104347dd5e3e2f07_b.jpg"><br>服务框架通过接口分解系统耦合性，不同子系统通过相同的接口描述进行服务启用<br>服务框架是一个点对点模型<br>服务框架面向同构系统<br>适合：移动应用、互联网应用、外部系统<br><br></p>
+<p><strong>分布式服务下的关键技术：服务框架原理</strong></p>
+
+<p><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/2b9eb315bf1edab5f1adfd66ce8e40f4_b.jpg" alt="" width="825" data-rawheight="507" data-rawwidth="825" data-original="https://pic1.zhimg.com/2b9eb315bf1edab5f1adfd66ce8e40f4_r.jpg" data-actualsrc="https://pic1.zhimg.com/2b9eb315bf1edab5f1adfd66ce8e40f4_b.jpg"></p>
+<p><strong>分布式服务下的关键技术：服务总线架构</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/6e28f7b7020b9968ec02ae8f680e81a8_b.jpg" alt="" width="430" data-rawheight="344" data-rawwidth="430" data-original="https://pic1.zhimg.com/6e28f7b7020b9968ec02ae8f680e81a8_r.jpg" data-actualsrc="https://pic1.zhimg.com/6e28f7b7020b9968ec02ae8f680e81a8_b.jpg"><br>
+<p>服务总线同服务框架一样，均是通过接口分解系统耦合性，不同子系统通过相同的接口描述进行服务启用<br>服务总线是一个总线式的模型<br>服务总线面向同构、异构系统<br>适合：内部系统<br><br></p>
+<p><strong>分布式服务下的关键技术：服务总线原理</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/fa80a813b449147587541aca676bf6af_b.jpg" alt="" width="428" data-rawheight="349" data-rawwidth="428" data-original="https://pic4.zhimg.com/fa80a813b449147587541aca676bf6af_r.jpg" data-actualsrc="https://pic4.zhimg.com/fa80a813b449147587541aca676bf6af_b.jpg"><br>
+<p><strong>分布式架构下系统间交互的5种通信模式</strong><br><br>request/response模式（同步模式）：客户端发起请求一直阻塞到服务端返回请求为止。<br><br>Callback（异步模式）：客户端发送一个RPC请求给服务器，服务端处理后再发送一个消息给消息发送端提供的callback端点，此类情况非常合适以下场景：A组件发送RPC请求给B，B处理完成后，需要通知A组件做后续处理。<br><br>Future模式：客户端发送完请求后，继续做自己的事情，返回一个包含消息结果的Future对象。客户端需要使用返回结果时，使用Future对象的.get(),如果此时没有结果返回的话，会一直阻塞到有结果返回为止。<br><br>Oneway模式：客户端调用完继续执行，不管接收端是否成功。<br><br>Reliable模式：为保证通信可靠，将借助于消息中心来实现消息的可靠送达，请求将做持久化存储，在接收方在线时做送达，并由消息中心保证异常重试。</p>
+<p><strong>五种通信模式的实现方式-同步点对点服务模式</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/f011bc4e6c08825bbc2b8dabd28ae0aa_b.jpg" alt="" width="653" data-rawheight="496" data-rawwidth="653" data-original="https://pic3.zhimg.com/f011bc4e6c08825bbc2b8dabd28ae0aa_r.jpg" data-actualsrc="https://pic3.zhimg.com/f011bc4e6c08825bbc2b8dabd28ae0aa_b.jpg"><br>
+<p><strong>五种通信模式的实现方式-异步点对点消息模式1</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/94df9d25af1fff1987e5f9db7fcfe534_b.jpg" alt="" width="638" data-rawheight="503" data-rawwidth="638" data-original="https://pic1.zhimg.com/94df9d25af1fff1987e5f9db7fcfe534_r.jpg" data-actualsrc="https://pic1.zhimg.com/94df9d25af1fff1987e5f9db7fcfe534_b.jpg"><br>
+<p><strong>五种通信模式的实现方式-异步点对点消息模式2</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/312b8ea9e93da3fdf610428f8d613369_b.jpg" alt="" width="864" data-rawheight="509" data-rawwidth="864" data-original="https://pic2.zhimg.com/312b8ea9e93da3fdf610428f8d613369_r.jpg" data-actualsrc="https://pic2.zhimg.com/312b8ea9e93da3fdf610428f8d613369_b.jpg"><br>
+<p><strong>五种通信模式的实现方式-异步广播消息模式</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/af5cf474d7574ba087a2e5c05e7bbba5_b.jpg" alt="" width="778" data-rawheight="485" data-rawwidth="778" data-original="https://pic2.zhimg.com/af5cf474d7574ba087a2e5c05e7bbba5_r.jpg" data-actualsrc="https://pic2.zhimg.com/af5cf474d7574ba087a2e5c05e7bbba5_b.jpg"><br>
+<p><strong>分布式架构下的服务治理</strong><br>服务治理是服务框架/服务总线的核心功能。所谓服务治理，是指服务的提供方和消费方达成一致的约定，保证服务的高质量。服务治理功能可以解决将某些特定流量引入某一批机器，以及限制某些非法消费者的恶意访问，并在提供者处理量达到一定程度是，拒绝接受新的访问。<br><br><strong>基于服务框架Dubbo的服务治理-服务管理</strong><br>道你的系统，对外提供了多少服务，可以对服务进行升级、降级、停用、权重调整等操作<br>可以知道你提供的服务，谁在使用，因业务需求，可以对该消费者实施屏蔽、停用等操作<br><br><strong>基于服务框架Dubbo的服务治理-服务监控</strong></p>
+
+<p><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/6920ec97cc12e220e234c0423ba52b7c_b.jpg" alt="" width="950" data-rawheight="316" data-rawwidth="950" data-original="https://pic1.zhimg.com/6920ec97cc12e220e234c0423ba52b7c_r.jpg" data-actualsrc="https://pic1.zhimg.com/6920ec97cc12e220e234c0423ba52b7c_b.jpg"><br>可以统计服务的每秒请求数、平均响应时间、调用量、峰值时间等，作为服务集群规划、性能调优的参考指标。</p>
+<p><strong>基于服务框架Dubbo的服务治理-服务路由</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/053c0060ad2ee373608bee75fb550486_b.jpg" alt="" width="485" data-rawheight="494" data-rawwidth="485" data-original="https://pic3.zhimg.com/053c0060ad2ee373608bee75fb550486_r.jpg" data-actualsrc="https://pic3.zhimg.com/053c0060ad2ee373608bee75fb550486_b.jpg"><br>
+<p><strong>基于服务框架Dubbo的服务治理-服务保护</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/67bd8f13a79c16ce80ae247e98ac5bd5_b.jpg" alt="" width="538" data-rawheight="474" data-rawwidth="538" data-original="https://pic2.zhimg.com/67bd8f13a79c16ce80ae247e98ac5bd5_r.jpg" data-actualsrc="https://pic2.zhimg.com/67bd8f13a79c16ce80ae247e98ac5bd5_b.jpg"><br>
+<p><strong>基于服务总线OSB的服务治理-功能介绍</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/9f5dd3e20262563604076397530beb60_b.jpg" alt="" width="653" data-rawheight="461" data-rawwidth="653" data-original="https://pic1.zhimg.com/9f5dd3e20262563604076397530beb60_r.jpg" data-actualsrc="https://pic1.zhimg.com/9f5dd3e20262563604076397530beb60_b.jpg"><br>
+<p><strong>基于服务总线OSB的服务治理</strong></p>
+<img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/b34ab3a4c21e813e4b0dfba15414b615_b.jpg" alt="" width="947" data-rawheight="559" data-rawwidth="947" data-original="https://pic2.zhimg.com/b34ab3a4c21e813e4b0dfba15414b615_r.jpg" data-actualsrc="https://pic2.zhimg.com/b34ab3a4c21e813e4b0dfba15414b615_b.jpg"><br>
+<p>Q：Dubbo到底是神马？<br>A：</p>
+<p>淘宝开源的高性能和透明化的RPC远程调用服务框架<br>SOA服务治理方案</p>
+<p>Q：Dubbo原理是？<br>A：</p>
+
+<p><img class="origin_image zh-lightbox-thumb lazy" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/9604489e2de6b2e67073434f9fd9add5_b.jpg" alt="" width="938" data-rawheight="614" data-rawwidth="938" data-original="https://pic2.zhimg.com/9604489e2de6b2e67073434f9fd9add5_r.jpg" data-actualsrc="https://pic2.zhimg.com/9604489e2de6b2e67073434f9fd9add5_b.jpg"></p>
+<p>-结束-</p>
+
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+参考资料：</div>
+
+</div>
+
+</div>
+<p class="contents_header">亿级Web系统搭建——单机到分布式集群：http://kb.cnblogs.com/page/509402/</p>
+</div>
+</div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6813321,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;b7d6e141-6c26-e711-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/my376908915/" target="_blank"><img src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/my376908915/">张俊鸿</a><br>
+            <a href="http://home.cnblogs.com/u/my376908915/followees">关注 - 1</a><br>
+            <a href="http://home.cnblogs.com/u/my376908915/followers">粉丝 - 42</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;b7d6e141-6c26-e711-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6813321,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">3</span>
+    </div>
+    <div class="buryit" onclick="votePost(6813321,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">2</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/my376908915/p/6813036.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/my376908915/p/6813036.html" title="发布于2017-05-05 14:58">深入理解java：4.3.1. 框架编程之MyBatis---SQL语句执行的完整流程</a><br><a href="https://www.cnblogs.com/my376908915/p/6825896.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/my376908915/p/6825896.html" title="发布于2017-05-08 16:59">Java 200道题</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-05-05 15:42</span> <a href="https://www.cnblogs.com/my376908915/">张俊鸿</a> 阅读(<span id="post_view_count">44227</span>) 评论(<span id="post_comment_count">1</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6813321" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/my376908915/p/6813321.html#" onclick="AddToWz(6813321);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=350406,cb_entryId=6813321,cb_blogApp=currentBlogApp,cb_blogUserGuid='b7d6e141-6c26-e711-9fc1-ac853d9f53cc',cb_entryCreatedDate='2017/5/5 15:42:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<!--done-->
+<br>
+<div class="feedback_area_title">评论</div>
+<div class="feedbackNoItems"></div>
+	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/my376908915/p/6813321.html#3694629" class="layer">#1楼</a><a name="3694629" id="comment_anchor_3694629"></a>[<span class="louzhu">楼主</span>]<span id="comment-maxId" style="display:none;">3694629</span><span id="comment-maxDate" style="display:none;">2017/5/17 17:13:16</span> <span class="comment_date">2017-05-17 17:13</span> | <a id="a_comment_author_3694629" href="https://www.cnblogs.com/my376908915/" target="_blank">张俊鸿</a> <a href="http://msg.cnblogs.com/send/%E5%BC%A0%E4%BF%8A%E9%B8%BF" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3694629" class="blog_comment_body">牛</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3694629,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3694629,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/my376908915/p/6813321.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/my376908915/p/6813321.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万C++/C#源码: 大型实时仿真HMI组态CAD\GIS图形源码！</a><br><a href="https://gitee.com/enterprises?from=bky-2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-gitee&#39;)">【推荐】专业便捷的企业级代码托管服务 - Gitee 码云</a><br></div>
+<div id="opt_under_post"></div>
+<script async="async" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c1" class="c_ad_block">
+    <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CP2PrNKc1OACFci0lgodLaQK4w"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/CarpenterLee/p/5488070.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">深入理解Java PriorityQueue</a><br>·  <a href="https://www.cnblogs.com/ITtangtang/p/3976820.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">深入理解Java：String</a><br>·  <a href="https://www.cnblogs.com/my376908915/p/6813321.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">深入理解java：5. Java分布式架构</a><br>·  <a href="https://www.cnblogs.com/exe19/p/5359885.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">深入理解Java之线程池</a><br>·  <a href="https://www.cnblogs.com/xiaoxi/p/6036701.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">深入理解Java中的String</a><br></div></div>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CLyQrNKc1OACFQGalgod7y0LDw"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/620211/" target="_blank">硅谷创业传奇：我对自己没能打造一家独角兽的思考</a><br> ·  <a href="https://news.cnblogs.com/n/620208/" target="_blank">高调宣布不裁员的阿里 为何不去清华招人？</a><br> ·  <a href="https://news.cnblogs.com/n/620210/" target="_blank">Linus Torvalds谈为什么ARM无法赢得服务器市场</a><br> ·  <a href="https://news.cnblogs.com/n/620209/" target="_blank">人人车困局：维权员工称1月提成绩效和2月工资都没发</a><br> ·  <a href="https://news.cnblogs.com/n/620207/" target="_blank">下一个世界级顶级湾区的科技未来</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/my376908915/">张俊鸿</a><br>园龄：<a href="https://home.cnblogs.com/u/my376908915/" title="入园时间：2017-04-21">1年10个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/my376908915/followers/">42</a><br>关注：<a href="https://home.cnblogs.com/u/my376908915/followees/">1</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;b7d6e141-6c26-e711-9fc1-ac853d9f53cc&#39;)">+加关注</a></div><script>getFollowStatus('b7d6e141-6c26-e711-9fc1-ac853d9f53cc')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/01/01&#39;);return false;">&lt;</a></td><td align="center">2019年2月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/03/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td class="CalWeekendDay" align="center">2</td></tr><tr><td class="CalWeekendDay" align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td class="CalWeekendDay" align="center">9</td></tr><tr><td class="CalWeekendDay" align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td class="CalWeekendDay" align="center">16</td></tr><tr><td class="CalWeekendDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td class="CalWeekendDay" align="center">23</td></tr><tr><td class="CalTodayDay" align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td></tr><tr><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/my376908915/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/my376908915/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/my376908915/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/my376908915/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/my376908915/tag/" title="我的博客的标签列表">我的标签</a></li>
+<li><a id="itemListLink" onclick="this.blur();WarpClass(&#39;itemListLink&#39;, &#39;itemListLin_con&#39;);return false;" href="https://www.cnblogs.com/my376908915/p/6813321.html#">更多链接</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div class="catListPostArchive">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/my376908915/archive/2017/06.html">2017年6月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/my376908915/archive/2017/05.html">2017年5月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/my376908915/archive/2017/04.html">2017年4月 (23)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/my376908915/p/6812666.html#4019598">1. Re:深入理解java：4.3. 框架编程之MyBatis原理深入解析</a></li>
+        <li class="recent_comment_body">你是怎么做到的？？？</li>
+        <li class="recent_comment_author">--dsger</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/my376908915/p/6812666.html#3947139">2. Re:深入理解java：4.3. 框架编程之MyBatis原理深入解析</a></li>
+        <li class="recent_comment_body">膜拜大佬</li>
+        <li class="recent_comment_author">--di与aop</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/my376908915/p/6757833.html#3761651">3. Re:深入理解java：2.2. 同步锁Synchronized及其实现原理</a></li>
+        <li class="recent_comment_body">收益匪浅</li>
+        <li class="recent_comment_author">--一步一步学</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/my376908915/p/6928537.html#3745148">4. Re:Java 架构师 -- 必读书单</a></li>
+        <li class="recent_comment_body">发现一个很靠谱的Java书单 [Java工程师的终极书单](<a href="https://www.cnblogs.com/my376908915/p/6813321.html" target="_blank"></a>)</li>
+        <li class="recent_comment_author">--liershui</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/my376908915/p/6744344.html#3728153">5. Re:技术类博客网站推荐</a></li>
+        <li class="recent_comment_body">谢谢推荐</li>
+        <li class="recent_comment_author">--Asa Wang</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/my376908915/p/6813321.html">1. 深入理解java：5. Java分布式架构(44225)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6757833.html">2. 深入理解java：2.2. 同步锁Synchronized及其实现原理(5520)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6763210.html">3. 深入理解java：2.4. 线程本地变量 java.lang.ThreadLocal类(2452)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6825896.html">4. Java 200道题(2079)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6758681.html">5. 深入理解java：2.3.2. 并发编程concurrent包  之重入锁/读写锁/条件锁(1850)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/my376908915/p/6812666.html">1. 深入理解java：4.3. 框架编程之MyBatis原理深入解析(3)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6928537.html">2. Java 架构师 -- 必读书单(3)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6928394.html">3. Java程序员的职业发展道路    附：大型网站 -- 架构技能图谱（Java版）(2)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6757833.html">4. 深入理解java：2.2. 同步锁Synchronized及其实现原理(2)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6757533.html">5. 深入理解java：2.1. volatile的使用及其原理(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/my376908915/p/6813321.html">1. 深入理解java：5. Java分布式架构(3)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6813036.html">2. 深入理解java：4.3.1. 框架编程之MyBatis---SQL语句执行的完整流程(1)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6928537.html">3. Java 架构师 -- 必读书单(1)</a></li><li><a href="https://www.cnblogs.com/my376908915/p/6757833.html">4. 深入理解java：2.2. 同步锁Synchronized及其实现原理(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2019 张俊鸿
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+
+<iframe id="google_osd_static_frame_8289471385460" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./深入理解java：5. Java分布式架构 - 张俊鸿 - 博客园_files/saved_resource(2).html"></iframe></body></html>

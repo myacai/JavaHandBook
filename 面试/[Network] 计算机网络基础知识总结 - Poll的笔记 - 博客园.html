@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)https://www.cnblogs.com/maybe2030/p/4781555.html#_label1 -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+    <title>[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园</title>
+<meta property="og:description" content="计算机网络学习的核心内容就是网络协议的学习。网络协议是为计算机网络中进行数据交换而建立的规则、标准或者说是约定的集合。因为不同用户的数据终端可能采取的字符集是不同的，两者需要进行通信，必须要在一定的标">
+    <link type="text/css" rel="stylesheet" href="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/bundle-SimpleGamboge.css">
+<link type="text/css" rel="stylesheet" href="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/229915.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/bundle-SimpleGamboge-mobile.css">
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/maybe2030/rss">
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/maybe2030/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/maybe2030/wlwmanifest.xml">
+    <script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/osd.js.下载"></script><script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/pubads_impl_rendering_299.js.下载"></script><script async="" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/analytics.js.下载"></script><script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+    <script>var currentBlogId=229915;var currentBlogApp='maybe2030',cb_enable_mathjax=true;var isLogined=false;</script>
+    <script type="text/x-mathjax-config;executed=true">
+    MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: { 
+            equationNumbers: { autoNumber: ['AMS'], useLabelIds: true }, 
+            extensions: ['extpfeil.js'],
+            Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script><script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/MathJax.js.下载"></script>
+<script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/f.txt"></script><script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/pubads_impl_299.js.下载" async=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-31/html/container.html"><script src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/share.js.下载"></script></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+<a name="top"></a>
+
+<div id="page_begin_html"><div class="scrollBtn" id="scrollBtn">
+    <ul class="clearfix">
+        <li class="sB-home">
+            <a href="http://www.cnblogs.com/maybe2030" class="ff-t" title="首页"></a>
+        </li>
+        <li class="sB-comment">
+            <a href="https://www.cnblogs.com/maybe2030/p/4781555.html#blog-comments-placeholder" onclick="$(&#39;#tbCommentBody&#39;).focus();" class="ff-t" title="添加评论"></a>
+        </li>
+        <li class="sB-share"><a onclick="if(cb_entryId !=undefined){AddToWz(cb_entryId)}" href="javascript:void(0);" title="收藏"></a></li>
+        <li class="sB-goTop" id="goTop" style="display: list-item;">
+            <a href="https://www.cnblogs.com/maybe2030/p/4781555.html#top" title="回顶部"></a>
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['2']();</script><script>window['__document_write_ajax_callbacks__']['1']();</script></div><script>load_page_begin_html();</script>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/maybe2030/"><img id="blogLogo" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/maybe2030/">Poll的笔记</a></h1>
+<h2>[三叶草精神] what hurts more,the pain of hard work or the pain of regret?</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/maybe2030/">首页</a></li>
+
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/Poll%E7%9A%84%E7%AC%94%E8%AE%B0">联系</a></li>
+
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+<li><a class="menu" href="http://www.cnblogs.com/">博客园</a></li></ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 74&nbsp; </span>
+<span id="stats_article_count">文章 - 1&nbsp; </span>
+<span id="stats-comment_count">评论 - 353</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+        <div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/maybe2030/p/4781555.html">[Network] 计算机网络基础知识总结</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><a name="_labelTop"></a><div id="navCategory"><p style="font-size:18px"><b>阅读目录</b></p><ul><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label0">1. 网络层次划分</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label1">2. OSI七层网络模型</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label2">3. IP地址</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label3">4. 子网掩码及网络划分</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label4">5. ARP/RARP协议</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label5">6. 路由选择协议</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label6">7. TCP/IP协议</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label7">8. UDP协议　</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label8">9. DNS协议</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label9">10. NAT协议</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label10">11. DHCP协议</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label11">12. HTTP协议</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_label12">13. 一个举例</a></li></ul></div><p><span style="font-size: 16px;">　　计算机网络学习的核心内容就是网络协议的学习。网络协议是为计算机网络中进行数据交换而建立的规则、标准或者说是约定的集合。因为不同用户的数据终端可能采取的字符集是不同的，两者需要进行通信，必须要在一定的标准上进行。一个很形象地比喻就是我们的语言，我们大天朝地广人多，地方性语言也非常丰富，而且方言之间差距巨大。A地区的方言可能B地区的人根本无法接受，所以我们要为全国人名进行沟通建立一个语言标准，这就是我们的普通话的作用。同样，放眼全球，我们与外国友人沟通的标准语言是英语，所以我们才要苦逼的学习英语。</span></p>
+<p><span style="font-size: 16px;">　　计算机网络协议同我们的语言一样，多种多样。而ARPA公司与1977年到1979年推出了一种名为ARPANET的网络协议受到了广泛的热捧，其中最主要的原因就是它推出了人尽皆知的TCP/IP标准网络协议。目前TCP/IP协议已经成为Internet中的“通用语言”，下图为不同计算机群之间利用TCP/IP进行通信的示意图。</span></p>
+<p><span style="font-size: 16px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/764050-20150904094424185-2018280216.gif" alt="" width="530" height="167"></span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label0"></a></div><h3 class="First"><strong><span style="font-size: 16px;">1. 网络层次划分</span></strong></h3>
+<div class="para"><span style="font-size: 16px;">　　为了使不同计算机厂家生产的计算机能够相互通信，以便在更大的范围内建立计算机网络，国际标准化组织（ISO）在1978年提出了“开放系统互联参考模型”，即著名的OSI/RM模型（Open System Interconnection/Reference Model）。它将计算机网络体系结构的通信协议划分为七层，自下而上依次为：物理层（Physics Layer）、数据链路层（Data Link Layer）、网络层（Network Layer）、传输层（Transport Layer）、会话层（Session Layer）、表示层（Presentation Layer）、应用层（Application Layer）。</span><span style="font-size: 16px;">其中第四层完成数据传送服务，上面三层面向用户。</span></div>
+<div class="para"><span style="font-size: 16px;">　　除了标准的OSI七层模型以外，常见的网络层次划分还有TCP/IP四层协议以及TCP/IP五层协议，它们之间的对应关系如下图所示：</span></div>
+<div class="para">&nbsp;</div>
+<div class="para"><span style="font-size: 16px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/764050-20150904094019903-1923900106.jpg" alt="" width="494" height="310"></span></div>
+<div class="para">&nbsp;</div>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label1"></a></div><h3 class="First">2. OSI七层网络模型</h3>
+<div class="para"><span style="font-size: 16px;">　　TCP/IP协议毫无疑问是互联网的基础协议，没有它就根本不可能上网，任何和互联网有关的操作都离不开TCP/IP协议。不管是OSI七层模型还是TCP/IP的四层、五层模型，每一层中都要自己的专属协议，完成自己相应的工作以及与上下层级之间进行沟通。由于OSI七层模型为网络的标准层次划分，所以我们以OSI七层模型为例从下向上进行一一介绍。</span></div>
+<div class="para"><span style="font-size: 16px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/764050-20150904095142060-1017190812.gif" alt="" width="510" height="273"></span></div>
+<div class="para">&nbsp;</div>
+<div class="para"><span style="font-size: 16px;">　　<strong>1）物理层（Physical Layer）</strong></span></div>
+<div class="para">
+<p><span style="font-size: 16px;">　　激活、维持、关闭通信端点之间的机械特性、电气特性、功能特性以及过程特性。<span style="color: #ff0000;"><strong>该层为上层协议提供了一个传输数据的可靠的物理媒体。简单的说，物理层确保原始的数据可在各种物理媒体上传输。</strong></span>物理层记住两个重要的设备名称，中继器（Repeater，也叫放大器）和集线器。<br></span></p>
+<p><span style="font-size: 16px;">　　<strong>2）数据链路层（Data Link Layer）</strong></span></p>
+<p><span style="font-size: 16px;">　　数据链路层在物理层提供的服务的基础上向网络层提供服务，其最基本的服务是将源自网络层来的数据可靠地传输到相邻节点的目标机网络层。为达到这一目的，数据链路必须具备一系列相应的功能，主要有：如何将数据组合成数据块，在数据链路层中称这种数据块为帧（frame），帧是数据链路层的传送单位；如何控制帧在物理信道上的传输，包括如何处理传输差错，如何调节发送速率以使与接收方相匹配；以及在两个网络实体之间提供数据链路通路的建立、维持和释放的管理。</span><span style="font-size: 16px;">数据链路层在不可靠的物理介质上提供可靠的传输。该层的作用包括：物理地址寻址、数据的成帧、流量控制、数据的检错、重发等。</span></p>
+<p><span style="font-size: 16px;">　　有关数据链路层的重要知识点：</span></p>
+<p><span style="font-size: 16px;">　　<strong><span style="color: #ff0000;">1&gt;&nbsp;</span><span style="color: #ff0000;">数据链路层为网络层提供可靠的数据传输；</span></strong></span></p>
+<p><span style="font-size: 16px;"><strong><span style="color: #ff0000;">　　2&gt;&nbsp;基本数据单位为帧；</span></strong></span></p>
+<p><span style="font-size: 16px;"><strong><span style="color: #ff0000;">　　3&gt; 主要的协议：以太网协议；</span></strong></span></p>
+<p><span style="font-size: 16px;"><strong><span style="color: #ff0000;">　　4&gt; 两个重要设备名称：网桥和交换机。</span></strong></span></p>
+<p><span style="font-size: 16px;">　　<strong>3）网络层（Network Layer）</strong></span></p>
+<p><span style="font-size: 16px;">　　网络层的目的是实现两个端系统之间的数据透明传送，具体功能包括寻址和路由选择、连接的建立、保持和终止等。它提供的服务使传输层不需要了解网络中的数据传输和交换技术。如果您想用尽量少的词来记住网络层，那就是“路径选择、路由及逻辑寻址”。</span></p>
+<p><span style="font-size: 16px;">　　网络层中涉及众多的协议，其中包括最重要的协议，也是TCP/IP的核心协议——IP协议。</span><span style="font-size: 16px;">IP协议非常简单，仅仅提供不可靠、无连接的传送服务。IP协议的主要功能有：无连接数据报传输、数据报路由选择和差错控制。与IP协议配套使用实现其功能的还有地址解析协议ARP、逆地址解析协议RARP、因特网报文协议ICMP、因特网组管理协议IGMP。具体的协议我们会在接下来的部分进行总结，有关网络层的重点为：</span></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　1&gt; 网络层负责对子网间的数据包进行路由选择。此外，网络层还可以实现拥塞控制、网际互连等功能；</span></strong></span></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　2&gt; 基本数据单位为IP数据报；</span></strong></span></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　3&gt; 包含的主要协议：</span></strong></span></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　IP协议（Internet Protocol，因特网互联协议）;</span></strong></span></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　</span></strong></span><span style="color: #ff0000;"><strong><span style="font-size: 16px;">ICMP协议（Internet Control Message Protocol，因特网控制报文协议）;</span></strong></span></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　</span></strong></span><span style="color: #ff0000;"><strong><span style="font-size: 16px;">ARP协议（Address Resolution Protocol，地址解析协议）;</span></strong></span></p>
+<p><strong style="color: #ff0000; line-height: 1.5;"><span style="font-size: 16px;">　　RARP协议（Reverse Address Resolution Protocol，逆地址解析协议）。</span></strong></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　4&gt; 重要的设备：路由器。</span></strong></span></p>
+<p><span style="font-size: 16px;">　　<strong>4）传输层（Transport Layer）</strong></span></p>
+<p><span style="font-size: 16px;">　　第一个端到端，即主机到主机的层次。传输层负责将上层数据分段并提供端到端的、可靠的或不可靠的传输。此外，传输层还要处理端到端的差错控制和流量控制问题。</span></p>
+<div class="para"><span style="font-size: 16px;">　　传输层的任务是根据通信子网的特性，最佳的利用网络资源，为两个端系统的会话层之间，提供建立、维护和取消传输连接的功能，负责端到端的可靠数据传输。在这一层，信息传送的协议数据单元称为段或报文。</span></div>
+<div class="para"><span style="font-size: 16px;">　　网络层只是根据网络地址将源结点发出的数据包传送到目的结点，而传输层则负责将数据可靠地传送到相应的端口。</span></div>
+<div class="para"><span style="font-size: 16px;">　　有关网络层的重点：</span></div>
+<div class="para"><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　1&gt;&nbsp;传输层负责将上层数据分段并提供端到端的、可靠的或不可靠的传输以及端到端的差错控制和流量控制问题；</span></strong></span></div>
+<div class="para"><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　2&gt; 包含的主要协议：TCP协议（Transmission Control Protocol，传输控制协议）、UDP协议（User Datagram Protocol，用户数据报协议）；</span></strong></span></div>
+<div class="para"><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　3&gt; 重要设备：网关。</span></strong></span></div>
+<p><span style="font-size: 16px;">　　<strong>5）会话层</strong></span></p>
+<p><span style="font-size: 16px;">　　会话层管理主机之间的会话进程，即负责建立、管理、终止进程之间的会话。会话层还利用在数据中插入校验点来实现数据的同步。</span></p>
+<p><span style="font-size: 16px;">　　<strong>6）表示层</strong></span></p>
+<p><span style="font-size: 16px;">　　表示层对上层数据或信息进行变换以保证一个主机应用层信息可以被另一个主机的应用程序理解。表示层的数据转换包括数据的加密、压缩、格式转换等。</span></p>
+<p><span style="font-size: 16px;">　　<strong>7）应用层</strong></span></p>
+<p><span style="font-size: 16px;">　　为操作系统或网络应用程序提供访问网络服务的接口。</span></p>
+<p><span style="font-size: 16px;">　　会话层、表示层和应用层重点：</span></p>
+<p><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>1&gt; 数据传输基本单位为报文；</strong></span></span></p>
+<p><span style="color: #ff0000;"><strong><span style="font-size: 16px;">　　2&gt; 包含的主要协议：FTP（文件传送协议）、Telnet（远程登录协议）、DNS（域名解析协议）、SMTP（邮件传送协议），POP3协议（邮局协议），HTTP协议（Hyper Text Transfer Protocol）。</span></strong></span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label2"></a></div><h3 class="First"><span style="font-size: 16px;">3. IP地址</span></h3>
+<p><span style="font-size: 16px;">　　<strong>1）网络地址</strong></span></p>
+<p><span style="font-size: 16px;">　　IP地址由网络号（包括子网号）和主机号组成，网络地址的主机号为全0，网络地址代表着整个网络。</span></p>
+<p><span style="font-size: 16px;">　　<strong>2）广播地址</strong></span></p>
+<p><span style="font-size: 16px;">　　广播地址通常称为直接广播地址，是为了区分受限广播地址。</span></p>
+<p><span style="font-size: 16px;">　　广播地址与网络地址的主机号正好相反，广播地址中，主机号为全1。当向某个网络的广播地址发送消息时，该网络内的所有主机都能收到该广播消息。</span></p>
+<p><span style="font-size: 16px;">　　<strong>3）组播地址</strong></span></p>
+<p><span style="font-size: 16px;">　　D类地址就是组播地址。</span></p>
+<p><span style="font-size: 16px;">　　先回忆下A，B，C，D类地址吧：</span></p>
+<p><span style="font-size: 16px;">　　A类地址以0开头，第一个字节作为网络号，地址范围为：0.0.0.0~127.255.255.255；(<span style="color: #ff0000;"><strong>modified @2016.05.31</strong></span>)</span></p>
+<p><span style="font-size: 16px;">　　B类地址以10开头，前两个字节作为网络号，地址范围是：128.0.0.0~191.255.255.255;</span></p>
+<p><span style="font-size: 16px;">　　C类地址以110开头，前三个字节作为网络号，地址范围是：192.0.0.0~223.255.255.255。</span></p>
+<p><span style="font-size: 16px;">　　D类地址以1110开头，地址范围是224.0.0.0~239.255.255.255，D类地址作为组播地址（一对多的通信）；</span></p>
+<p><span style="font-size: 16px;">　　E类地址以1111开头，地址范围是240.0.0.0~255.255.255.255，E类地址为保留地址，供以后使用。</span></p>
+<p><span style="font-size: 16px;">　　注：只有A,B,C有网络号和主机号之分，D类地址和E类地址没有划分网络号和主机号。</span></p>
+<p><span style="font-size: 16px;">　　<strong>4）255.255.255.255</strong></span></p>
+<p><span style="font-size: 16px;">　　该IP地址指的是受限的广播地址。受限广播地址与一般广播地址（直接广播地址）的区别在于，受限广播地址只能用于本地网络，路由器不会转发以受限广播地址为目的地址的分组；一般广播地址既可在本地广播，也可跨网段广播。例如：主机192.168.1.1/30上的直接广播数据包后，另外一个网段192.168.1.5/30也能收到该数据报；若发送受限广播数据报，则不能收到。</span></p>
+<p><span style="font-size: 16px;">　　注：一般的广播地址（直接广播地址）能够通过某些路由器（当然不是所有的路由器），而受限的广播地址不能通过路由器。</span></p>
+<p><span style="font-size: 16px;">　　<strong>5）0.0.0.0</strong></span></p>
+<p><span style="font-size: 16px;">　　常用于寻找自己的IP地址，例如在我们的RARP，BOOTP和DHCP协议中，若某个未知IP地址的无盘机想要知道自己的IP地址，它就以255.255.255.255为目的地址，向本地范围（具体而言是被各个路由器屏蔽的范围内）的服务器发送IP请求分组。</span></p>
+<p><span style="font-size: 16px;">　　<strong>6）回环地址</strong></span></p>
+<p><span style="font-size: 16px;">　　127.0.0.0/8被用作回环地址，回环地址表示本机的地址，常用于对本机的测试，用的最多的是127.0.0.1。</span></p>
+<p><span style="font-size: 16px;">　　<strong>7）A、B、C类私有地址</strong></span></p>
+<p><span style="font-size: 16px;">　　私有地址(private address)也叫专用地址，它们不会在全球使用，只具有本地意义。</span></p>
+<p><span style="font-size: 16px;">　　A类私有地址：10.0.0.0/8，范围是：10.0.0.0~10.255.255.255</span></p>
+<p><span style="font-size: 16px;">　　B类私有地址：172.16.0.0/12，范围是：172.16.0.0~172.31.255.255</span></p>
+<p><span style="font-size: 16px;">　　C类私有地址：192.168.0.0/16，范围是：192.168.0.0~192.168.255.255</span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label3"></a></div><h3 class="First"><span style="font-size: 16px;">4. 子网掩码及网络划分</span></h3>
+<p><span style="font-size: 16px;">　　</span><span style="font-size: 16px;">随着互连网应用的不断扩大，原先的IPv4的弊端也逐渐暴露出来，即网络号占位太</span><span style="font-size: 16px;">多，而主机号位太少，所以其能提供的主机地址也越来越稀缺，目前除了使用NAT</span><span style="font-size: 16px;">在企业内部利用保留地址自行分配以外，通常都对一个高类别的IP地址进行再划</span><span style="font-size: 16px;">分，以形成多个子网，提供给不同规模的用户群使用。</span></p>
+<p><span style="font-size: 16px;">　　这里主要是为了在网络分段情况下有效地利用IP地址，通过对主机号的高位部分取</span><span style="font-size: 16px;">作为子网号，从通常的网络位界限中扩展或压缩子网掩码，用来创建某类地址的更</span><span style="font-size: 16px;">多子网。但创建更多的子网时，在每个子网上的可用主机地址数目会比原先减少。</span></p>
+<p><span style="font-size: 16px;">　　<strong>什么是子网掩码？</strong></span></p>
+<p><span style="font-size: 16px;">　　子网掩码是标志两个IP地址是否同属于一个子网的，也是32位二进制地址，其每一个为1代表该位是网络位，为0代表主机位。它和IP地址一样也是使用点式十进制来表示的。如果两个IP地址在子网掩码的按位与的计算下所得结果相同，即表明它们共属于同一子网中。</span></p>
+<p><span style="font-size: 16px;">　　<strong><span style="color: #ff0000;">在计算子网掩码时，我们要注意IP地址中的保留地址，即“ 0”地址和广播地址，它们是指主机地址或网络地址全为“ 0”或“ 1”时的IP地址，它们代表着本网络地址和广播地址，一般是不能被计算在内的。</span></strong></span></p>
+<p><span style="font-size: 16px;">　　<strong>子网掩码的计算：</strong></span><span style="font-size: 16px;"><br></span></p>
+<p><span style="font-size: 16px;">　　对于无须再划分成子网的IP地址来说，其子网掩码非常简单，即按照其定义即可写出：如某B类IP地址为 10.12.3.0，无须再分割子网，则该IP地址的子网掩码255.255.0.0。如果它是一个C类地址，则其子网掩码为 255.255.255.0。其它类推，不再详述。下面我们关键要介绍的是一个IP地址，还需要将其高位主机位再作为划分出的子网网络号，剩下的是每个子网的主机号，这时该如何进行每个子网的掩码计算。</span></p>
+<p><span style="font-size: 16px;">　　下面总结一下有关子网掩码和网络划分常见的面试考题：</span></p>
+<p><strong>　　<span style="font-size: 16px;">1）利用子网数来计算</span></strong></p>
+<p><span style="font-size: 16px;">　　在求子网掩码之前必须先搞清楚要划分的子网数目，以及每个子网内的所需主机数</span><span style="font-size: 16px;">目。</span></p>
+<p><span style="font-size: 16px;">　　(1) 将子网数目转化为二进制来表示;</span></p>
+<p><span style="font-size: 16px;">　　如欲将B类IP地址168.195.0.0划分成27个子网：27=11011；</span></p>
+<p><span style="font-size: 16px;">　　(2) 取得该二进制的位数，为N；</span></p>
+<p><span style="font-size: 16px;">　　该二进制为五位数，N = 5</span></p>
+<p><span style="font-size: 16px;">　　(3) 取得该IP地址的类子网掩码，将其主机地址部分的的前N位置1即得出该IP地址</span><span style="font-size: 16px;">划分子网的子网掩码。</span></p>
+<p><span style="font-size: 16px;">　　将B类地址的子网掩码255.255.0.0的主机地址前5位置 1，得到 255.255.248.0</span></p>
+<p><span style="font-size: 16px;">　　<strong>2）利用主机数来计算</strong></span></p>
+<p><span style="font-size: 16px;">　　如欲将B类IP地址168.195.0.0划分成若干子网，每个子网内有主机700台：</span></p>
+<p><span style="font-size: 16px;">　　(1) 将主机数目转化为二进制来表示；</span></p>
+<p><span style="font-size: 16px;">　　700=1010111100；</span></p>
+<p><span style="font-size: 16px;">　　(2) 如果主机数小于或等于254（注意去掉保留的两个IP地址），则取得该主机的二</span><span style="font-size: 16px;">进制位数，为N，这里肯定 N&lt;8。如果大于254，则 N&gt;8，这就是说主机地址将占</span><span style="font-size: 16px;">据不止8位；</span></p>
+<p><span style="font-size: 16px;">　　该二进制为十位数，N=10；</span></p>
+<p><span style="font-size: 16px;">　　(3) 使用255.255.255.255来将该类IP地址的主机地址位数全部置1，然后从后向前的</span><span style="font-size: 16px;">将N位全部置为 0，即为子网掩码值。</span></p>
+<p><span style="font-size: 16px;">　　将该B类地址的子网掩码255.255.0.0的主机地址全部置1，得到255.255.255.255，然后再从后向前将后 10位置0,即为：11111111.11111111.11111100.00000000，即255.255.252.0。这就是该欲划分成主机为700台的B类IP地址 168.195.0.0的子网掩码。</span></p>
+<p><span style="font-size: 16px;">　　<strong>3）还有一种题型，要你根据每个网络的主机数量进行子网地址的规划和</strong></span><strong><span style="font-size: 16px;">计算子网掩码。这也可按上述原则进行计算。</span></strong></p>
+<p><span style="font-size: 16px;">　　比如一个子网有10台主机，那么对于</span><span style="font-size: 16px;">这个子网需要的IP地址是：</span></p>
+<p><span style="font-size: 16px;">　　10＋1＋1＋1＝13</span></p>
+<p><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>注意：加的第一个1是指这个网络连接时所需的网关地址，接着的两个1分别是指网</strong></span></span><span style="color: #ff0000;"><strong><span style="font-size: 16px;">络地址和广播地址。</span></strong></span></p>
+<p><span style="font-size: 16px;">　　因为13小于16（16等于2的4次方），所以主机位为4位。而</span><span style="font-size: 16px;">256－16＝240，</span><span style="font-size: 16px;">所以该子网掩码为255.255.255.240。</span></p>
+<p><span style="font-size: 16px;">　　如果一个子网有14台主机，不少人常犯的错误是：依然分配具有16个地址空间的子</span><span style="font-size: 16px;">网，而忘记了给网关分配地址。这样就错误了，因为</span><span style="font-size: 16px; line-height: 1.5;">14＋1＋1＋1＝17</span><span style="font-size: 16px;">，</span><span style="font-size: 16px;">17大于16，所以我们只能分配具有32个地址（32等于2的5次方）空间的子网。这时</span><span style="font-size: 16px;">子网掩码为：255.255.255.224。</span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label4"></a></div><h3 class="First"><span style="font-size: 16px;">5. ARP/RARP协议</span></h3>
+<p><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP/IP协议。</strong></span>主机发送信息时将包含目标IP地址的ARP请求广播到网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回消息后将该IP地址和物理地址存入本机ARP缓存中并保留一定时间，下次请求时直接查询ARP缓存以节约资源。地址解析协议是建立在网络中各个主机互相信任的基础上的，网络上的主机可以自主发送ARP应答消息，其他主机收到应答报文时不会检测该报文的真实性就会将其记入本机ARP缓存；由此攻击者就可以向某一主机发送伪ARP应答报文，使其发送的信息无法到达预期的主机或到达错误的主机，这就构成了一个ARP欺骗。<span style="color: #ff0000;"><strong>ARP命令可用于查询本机ARP缓存中IP地址和MAC地址的对应关系、添加或删除静态对应关系等。</strong></span></span></p>
+<p><span style="font-size: 16px;">　　ARP工作流程举例：</span></p>
+<div class="para"><span style="font-size: 16px;">　　主机A的IP地址为192.168.1.1，MAC地址为0A-11-22-33-44-01；</span></div>
+<div class="para"><span style="font-size: 16px;">　　主机B的IP地址为192.168.1.2，MAC地址为0A-11-22-33-44-02；</span></div>
+<div class="para"><span style="font-size: 16px;">　　当主机A要与主机B通信时，地址解析协议可以将主机B的IP地址（192.168.1.2）解析成主机B的MAC地址，以下为工作流程：</span></div>
+<div class="para"><span style="font-size: 16px;">　　（1）根据主机A上的路由表内容，IP确定用于访问主机B的转发IP地址是192.168.1.2。然后A主机在自己的本地ARP缓存中检查主机B的匹配MAC地址。</span></div>
+<div class="para"><span style="font-size: 16px;">　　（2）如果主机A在ARP缓存中没有找到映射，它将询问192.168.1.2的硬件地址，从而将ARP请求帧广播到本地网络上的所有主机。源主机A的IP地址和MAC地址都包括在ARP请求中。本地网络上的每台主机都接收到ARP请求并且检查是否与自己的IP地址匹配。如果主机发现请求的IP地址与自己的IP地址不匹配，它将丢弃ARP请求。</span></div>
+<div class="para"><span style="font-size: 16px;">　　（3）主机B确定ARP请求中的IP地址与自己的IP地址匹配，则将主机A的IP地址和MAC地址映射添加到本地ARP缓存中。</span></div>
+<div class="para"><span style="font-size: 16px;">　　（4）主机B将包含其MAC地址的ARP回复消息直接发送回主机A。</span></div>
+<div class="para"><span style="font-size: 16px;">　　（5）当主机A收到从主机B发来的ARP回复消息时，会用主机B的IP和MAC地址映射更新ARP缓存。本机缓存是有生存期的，生存期结束后，将再次重复上面的过程。主机B的MAC地址一旦确定，主机A就能向主机B发送IP通信了。</span></div>
+<p><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>逆地址解析协议，即RARP，功能和ARP协议相对，其将局域网中某个主机的物理地址转换为IP地址</strong></span>，比如局域网中有一台主机只知道物理地址而不知道IP地址，那么可以通过RARP协议发出征求自身IP地址的广播请求，然后由RARP服务器负责回答。</span></p>
+<p><span style="font-size: 16px;">　　RARP协议工作流程：</span></p>
+<p><span style="font-size: 16px;">　　</span><span style="font-size: 16px;">（1）给主机发送一个本地的RARP广播，在此广播包中，声明自己的MAC地址并且请求任何收到此请求的RARP服务器分配一个IP地址；</span></p>
+<p><span style="font-size: 16px;">　　</span><span style="font-size: 16px;">（2）本地网段上的RARP服务器收到此请求后，检查其RARP列表，查找该MAC地址对应的IP地址；</span></p>
+<div class="para"><span style="font-size: 16px;">　　（3）如果存在，RARP服务器就给源主机发送一个响应数据包并将此IP地址提供给对方主机使用；</span></div>
+<div class="para"><span style="font-size: 16px;">　　（4）如果不存在，RARP服务器对此不做任何的响应；</span></div>
+<div class="para"><span style="font-size: 16px;">　　（5）源主机收到从RARP服务器的响应信息，就利用得到的IP地址进行通讯；如果一直没有收到RARP服务器的响应信息，表示初始化失败。</span></div>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label5"></a></div><h3 class="First"><span style="font-size: 16px;">6. 路由选择协议</span></h3>
+<div class="para">
+<p><span style="font-size: 16px;">　　常见的路由选择协议有：RIP协议、OSPF协议。</span></p>
+<p><span style="font-size: 16px;"><strong>　　RIP</strong><strong>协议</strong>&nbsp;：底层是贝尔曼福特算法，它选择路由的度量标准（metric)是跳数，最大跳数是15跳，如果大于15跳，它就会丢弃数据包。</span></p>
+
+
+
+<span style="font-size: 16px;">
+　　<strong>OSPF</strong><strong>协议</strong>&nbsp;：Open Shortest Path First开放式最短路径优先，底层是迪杰斯特拉算法，是链路状态路由选择协议，它选择路由的度量标准是带宽，延迟。</span></div>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label6"></a></div><h3 class="First"><span style="font-size: 16px;">7. TCP/IP协议</span></h3>
+<div class="para"><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>TCP/IP协议是Internet最基本的协议、Internet国际互联网络的基础，由网络层的IP协议和传输层的TCP协议组成。通俗而言：TCP负责发现传输的问题，一有问题就发出信号，要求重新传输，直到所有数据安全正确地传输到目的地。而IP是给因特网的每一台联网设备规定一个地址。</strong></span></span></div>
+<div class="para"><span style="font-size: 16px;">　　IP层接收由更低层（网络接口层例如以太网设备驱动程序）发来的数据包，并把该数据包发送到更高层---TCP或UDP层；相反，IP层也把从TCP或UDP层接收来的数据包传送到更低层。IP数据包是不可靠的，因为IP并没有做任何事情来确认数据包是否按顺序发送的或者有没有被破坏，IP数据包中含有发送它的主机的地址（源地址）和接收它的主机的地址（目的地址）。</span></div>
+<p>&nbsp;　　<span style="font-size: 16px;">TCP是面向连接的通信协议，通过三次握手建立连接，通讯完成时要拆除连接，由于TCP是面向连接的所以只能用于端到端的通讯。</span><span style="font-size: 16px;">TCP提供的是一种可靠的数据流服务，采用“带重传的肯定确认”技术来实现传输的可靠性。TCP还采用一种称为“滑动窗口”的方式进行流量控制，所谓窗口实际表示接收能力，用以限制发送方的发送速度。</span></p>
+<p><span style="font-size: 16px;">　　<strong>TCP报文首部格式：</strong></span></p>
+<p><span style="font-size: 16px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/764050-20150904110054856-961661137.png" alt="" width="528" height="389"></span></p>
+<p><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>TCP协议的三次握手和四次挥手：</strong></span></span></p>
+<p style="text-align: left;"><span style="font-size: 16px;"><img style="display: block; margin-left: auto; margin-right: auto;" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/764050-20150904110008388-1768388886.gif" alt=""></span></p>
+<p style="text-align: left;">&nbsp;</p>
+<p style="text-align: left;"><span style="font-size: 16px;"><strong>　　注：seq</strong>:"sequance"序列号；<strong>ack</strong>:"acknowledge"确认号；<strong>SYN</strong>:"synchronize"请求同步标志；<strong>；ACK</strong>:"acknowledge"确认标志"<strong>；</strong><strong>FIN</strong>："Finally"结束标志。</span></p>
+<p style="text-align: left;"><span style="font-size: 16px;">　　<strong>TCP连接建立过程：</strong>首先Client端发送连接请求报文，Server段接受连接后回复ACK报文，并为这次连接分配资源。Client端接收到ACK报文后也向Server段发生ACK报文，并分配资源，这样TCP连接就建立了。</span></p>
+<p style="text-align: left;"><span style="font-size: 16px;">　　<strong>TCP连接断开过程：</strong>假设Client端发起中断连接请求，也就是发送FIN报文。Server端接到FIN报文后，意思是说"<span style="text-decoration: underline;">我Client端没有数据要发给你了</span>"，但是如果你还有数据没有发送完成，则不必急着关闭Socket，可以继续发送数据。所以你先发送ACK，"<span style="text-decoration: underline;">告诉Client端，你的请求我收到了，但是我还没准备好，请继续你等我的消息</span>"。这个时候Client端就进入FIN_WAIT状态，继续等待Server端的FIN报文。当Server端确定数据已发送完成，则向Client端发送FIN报文，"<span style="text-decoration: underline;">告诉Client端，好了，我这边数据发完了，准备好关闭连接了</span>"。Client端收到FIN报文后，"<span style="text-decoration: underline;">就知道可以关闭连接了，但是他还是不相信网络，怕Server端不知道要关闭，所以发送ACK后进入TIME_WAIT状态，如果Server端没有收到ACK则可以重传</span>。“，Server端收到ACK后，"<span style="text-decoration: underline;">就知道可以断开连接了</span>"。Client端等待了2MSL后依然没有收到回复，则证明<span style="text-decoration: underline;">Server端已正常关闭，那好，我Client端也可以关闭连接了</span>。Ok，TCP连接就这样关闭了！</span></p>
+<p style="text-align: left;"><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>为什么要三次挥手？</strong></span></span></p>
+<p style="text-align: left;"><span style="font-size: 16px;">　　在只有两次“握手”的情形下，假设Client想跟Server建立连接，但是却因为中途连接请求的数据报丢失了，故Client端不得不重新发送一遍；这个时候Server端仅收到一个连接请求，因此可以正常的建立连接。但是，有时候Client端重新发送请求不是因为数据报丢失了，而是有可能数据传输过程因为网络并发量很大在某结点被阻塞了，这种情形下Server端将先后收到2次请求，并持续等待两个Client请求向他发送数据...问题就在这里，Cient端实际上只有一次请求，而Server端却有2个响应，极端的情况可能由于Client端多次重新发送请求数据而导致Server端最后建立了N多个响应在等待，因而造成极大的资源浪费！所以，“三次握手”很有必要！</span></p>
+<p style="text-align: left;"><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>为什么要四次挥手？</strong></span></span></p>
+<p style="text-align: left;"><span style="font-size: 16px;">　　试想一下，假如现在你是客户端你想断开跟Server的所有连接该怎么做？第一步，你自己先停止向Server端发送数据，并等待Server的回复。但事情还没有完，虽然你自身不往Server发送数据了，但是因为你们之前已经建立好平等的连接了，所以此时他也有主动权向你发送数据；故Server端还得终止主动向你发送数据，并等待你的确认。其实，说白了就是保证双方的一个合约的完整执行！</span></p>
+<p style="text-align: left;"><span style="font-size: 16px;">　　使用TCP的协议：FTP（文件传输协议）、Telnet（远程登录协议）、SMTP（简单邮件传输协议）、POP3（和SMTP相对，用于接收邮件）、HTTP协议等。</span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label7"></a></div><h3 class="First"><span style="font-size: 16px;">8. UDP协议</span><span style="font-size: 16px;">　</span></h3>
+<div class="para"><span style="font-size: 16px;">　　<span style="color: #ff0000;"><strong>UDP用户数据报协议，是面向无连接的通讯协议，UDP数据包括目的端口号和源端口号信息，由于通讯不需要连接，所以可以实现广播发送。</strong></span></span><span style="color: #ff0000;"><strong><span style="font-size: 16px;">UDP通讯时不需要接收方确认，属于不可靠的传输，可能会出现丢包现象，实际应用中要求程序员编程验证。</span></strong></span></div>
+<div class="para"><span style="font-size: 16px;">　　</span><span style="font-size: 16px;">UDP与TCP位于同一层，但它不管数据包的顺序、错误或重发。因此，UDP不被应用于那些使用虚电路的面向连接的服务，UDP主要用于那些面向查询---应答的服务，例如NFS。相对于FTP或Telnet，这些服务需要交换的信息量较小。</span></div>
+<div class="para">
+<div class="para"><span style="font-size: 16px;">　　每个UDP报文分UDP报头和UDP数据区两部分。报头由四个16位长（2字节）字段组成，分别说明该报文的源端口、目的端口、报文长度以及校验值。UDP报头由4个域组成，其中每个域各占用2个字节，具体如下：<br></span><span style="font-size: 16px;">　　（1）源端口号；</span></div>
+<div class="para"><span style="font-size: 16px;">　　（2）目标端口号；</span></div>
+<div class="para"><span style="font-size: 16px;">　　（3）数据报长度；</span></div>
+<div class="para"><span style="font-size: 16px;">　　（4）校验值。</span></div>
+<div class="para"><span style="font-size: 16px;">　　使用UDP协议包括：TFTP（简单文件传输协议）、SNMP（简单网络管理协议）、DNS（域名解析协议）</span><span style="font-size: 16px; line-height: 1.5;">、</span><span style="font-size: 16px; line-height: 24px;">NFS、</span><span style="font-size: 16px; line-height: 1.5;">BOOTP。</span></div>
+<div class="para"><span style="font-size: 16px; line-height: 1.5;"><span style="font-size: 16px; line-height: 1.5;">　　</span></span><span style="color: #ff0000;"><span style="font-size: 16px;"><strong>TCP</strong><strong>&nbsp;</strong><strong>与</strong><strong>&nbsp;</strong><strong>UDP</strong><strong>&nbsp;</strong><strong>的区别：</strong></span><span style="font-size: 16px;">TCP是面向连接的，可靠的字节流服务；UDP是面向无连接的，不可靠的数据报服务。</span></span></div>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label8"></a></div><h3 class="First"><span style="font-size: 16px;">9. DNS协议</span></h3>
+<div class="para"><span style="font-size: 16px;">　　DNS是域名系统(DomainNameSystem)的缩写，该系统用于命名组织到域层次结构中的计算机和网络服务，<span style="color: #ff0000;"><strong>可以简单地理解为将URL转换为IP地址</strong></span>。域名是由圆点分开一串单词或缩写组成的，每一个域名都对应一个惟一的IP地址，在Internet上域名与IP地址之间是一一对应的，DNS就是进行域名解析的服务器。DNS命名用于Internet等TCP/IP网络中，通过用户友好的名称查找计算机和服务。</span></div>
+<div class="para">
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label9"></a></div><h3 class="First"><span style="font-size: 16px;"><span style="font-size: 16px;">10. NAT协议</span></span></h3>
+<p><span style="font-size: 16px;"><strong>　　</strong>NAT网络地址转换(Network Address Translation)属接入广域网(WAN)技术，是一种将私有（保留）地址转化为合法IP地址的转换技术，它被广泛应用于各种类型Internet接入方式和各种类型的网络中。原因很简单，NAT不仅完美地解决了lP地址不足的问题，而且还能够有效地避免来自网络外部的攻击，隐藏并保护网络内部的计算机。</span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label10"></a></div><h3 class="First"><span style="font-size: 16px;">11. DHCP协议</span></h3>
+<p><span style="font-size: 16px;">　　DHCP动态主机设置协议（Dynamic Host Configuration Protocol）是一个局域网的网络协议，使用UDP协议工作，主要有两个用途：给内部网络或网络服务供应商自动分配IP地址，给用户或者内部网络管理员作为对所有计算机作中央管理的手段。</span></p>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label11"></a></div><h3 class="First"><span style="font-size: 16px;">12. HTTP协议</span></h3>
+<div class="para"><span style="font-size: 16px;"><span style="font-size: 16px;">　　超文本传输协议（HTTP，HyperText Transfer Protocol)是互联网上应用最为广泛的一种网络协议。所有的WWW文件都必须遵守这个标准。</span></span>
+<p><span style="font-size: 16px;"><strong>　　HTTP</strong><strong>&nbsp;</strong><strong>协议包括哪些请求？</strong></span></p>
+<p><span style="font-size: 16px;">　　GET：请求读取由URL所标志的信息。</span></p>
+<p><span style="font-size: 16px;">　　POST：给服务器添加信息（如注释）。</span></p>
+<p><span style="font-size: 16px;">　　PUT：在给定的URL下存储一个文档。</span></p>
+<p><span style="font-size: 16px;">　　DELETE：删除给定的URL所标志的资源。</span></p>
+<p><span style="font-size: 16px;"><strong>　　HTTP</strong><strong>&nbsp;</strong><strong>中，</strong><strong>&nbsp;</strong><strong>POST</strong><strong>&nbsp;</strong><strong>与</strong><strong>&nbsp;</strong><strong>GET</strong><strong>&nbsp;</strong><strong>的区别</strong></span></p>
+<p><span style="font-size: 16px;">　　1）Get是从服务器上获取数据，Post是向服务器传送数据。</span></p>
+<p><span style="font-size: 16px;">　　2）Get是把参数数据队列加到提交表单的Action属性所指向的URL中，值和表单内各个字段一一对应，在URL中可以看到。</span></p>
+<p><span style="font-size: 16px;">　　3）Get传送的数据量小，不能大于2KB；Post传送的数据量较大，一般被默认为不受限制。</span></p>
+<p><span style="font-size: 16px;">　　4）根据HTTP规范，GET用于信息获取，而且应该是安全的和幂等的。</span></p>
+<p><span style="font-size: 16px;">　　I. 所谓&nbsp;<strong>安全的</strong>&nbsp;意味着该操作用于获取信息而非修改信息。换句话说，GET请求一般不应产生副作用。就是说，它仅仅是获取资源信息，就像数据库查询一样，不会修改，增加数据，不会影响资源的状态。</span></p>
+<p><span style="font-size: 16px;">　　II.&nbsp;<strong>幂等</strong>&nbsp;的意味着对同一URL的多个请求应该返回同样的结果。</span></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div style="text-align: right"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#_labelTop">回到顶部</a><a name="_label12"></a></div><h3 class="First"><span style="font-size: 16px;">13. 一个举例</span></h3>
+<div class="para">
+<p><span style="font-size: 16px;"><strong>　　在浏览器中输入</strong><strong>&nbsp;</strong><a href="http://www.baidu.com/" target="_blank"><strong>www.baidu.com</strong><strong><em>&nbsp;</em></strong></a>&nbsp;<strong>后执行的全部过程</strong></span></p>
+<p><span style="font-size: 16px;">　　现在假设如果我们在客户端（客户端）浏览器中输入http://www.baidu.com,而baidu.com为要访问的服务器（服务器），下面详细分析客户端为了访问服务器而执行的一系列关于协议的操作：</span></p>
+<p><span style="font-size: 16px;">　　1）客户端浏览器通过DNS解析到www.baidu.com的IP地址220.181.27.48，通过这个IP地址找到客户端到服务器的路径。客户端浏览器发起一个HTTP会话到220.161.27.48，然后通过TCP进行封装数据包，输入到网络层。</span></p>
+<p><span style="font-size: 16px;">　　2）在客户端的传输层，把HTTP会话请求分成报文段，添加源和目的端口，如服务器使用80端口监听客户端的请求，客户端由系统随机选择一个端口如5000，与服务器进行交换，服务器把相应的请求返回给客户端的5000端口。然后使用IP层的IP地址查找目的端。</span></p>
+<p><span style="font-size: 16px;">　　3）客户端的网络层不用关系应用层或者传输层的东西，主要做的是通过查找路由表确定如何到达服务器，期间可能经过多个路由器，这些都是由路由器来完成的工作，不作过多的描述，无非就是通过查找路由表决定通过那个路径到达服务器。</span></p>
+<p><span style="font-size: 16px;">　　4）客户端的链路层，包通过链路层发送到路由器，通过邻居协议查找给定IP地址的MAC地址，然后发送ARP请求查找目的地址，如果得到回应后就可以使用ARP的请求应答交换的IP数据包现在就可以传输了，然后发送IP数据包到达服务器的地址。</span></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></div><div id="MySignature" style="display: block;"><p style="background: rgb(89,195,228); padding: 10px 10px 10px 10px; border: 1px dashed rgb(255,255,255); font-family: 幼圆; front-size: 16px;">
+作者：<a href="http://www.cnblogs.com/maybe2030/" target="_blank">Poll的笔记</a>
+<br>
+博客出处：<a href="http://www.cnblogs.com/maybe2030/" target="_blank">http://www.cnblogs.com/maybe2030/</a>
+<br>
+本文版权归作者和博客园所有，欢迎转载，转载请标明出处。
+<br>
+&lt;如果你觉得本文还不错，对你的学习带来了些许帮助，请帮忙点击右下角的推荐&gt;
+</p></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/maybe2030/category/698646.html" target="_blank">Network</a></div>
+<div id="EntryTag">标签: <a href="https://www.cnblogs.com/maybe2030/tag/Network/">Network</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(4781555,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;d806c0a7-6907-e511-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/maybe2030/" target="_blank"><img src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/20150531155648.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/maybe2030/">Poll的笔记</a><br>
+            <a href="http://home.cnblogs.com/u/maybe2030/followees">关注 - 14</a><br>
+            <a href="http://home.cnblogs.com/u/maybe2030/followers">粉丝 - 1564</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;d806c0a7-6907-e511-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(4781555,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">298</span>
+    </div>
+    <div class="buryit" onclick="votePost(4781555,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">6</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/maybe2030/p/4778134.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/maybe2030/p/4778134.html" title="发布于2015-09-04 00:33">[Search Engine] 搜索引擎技术之网络爬虫</a><br><a href="https://www.cnblogs.com/maybe2030/p/4781930.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/maybe2030/p/4781930.html" title="发布于2015-09-05 09:55">[Operate System &amp; Algorithm] 页面置换算法</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2015-09-04 12:21</span> <a href="https://www.cnblogs.com/maybe2030/">Poll的笔记</a> 阅读(<span id="post_view_count">183001</span>) 评论(<span id="post_comment_count">23</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=4781555" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/maybe2030/p/4781555.html#" onclick="AddToWz(4781555);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=229915,cb_entryId=4781555,cb_blogApp=currentBlogApp,cb_blogUserGuid='d806c0a7-6907-e511-b908-9dcfd8948a71',cb_entryCreatedDate='2015/9/4 12:21:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3260135" class="layer">#1楼</a><a name="3260135" id="comment_anchor_3260135"></a>  <span class="comment_date">2015-09-05 13:41</span> <a id="a_comment_author_3260135" href="https://www.cnblogs.com/vajoy/" target="_blank">vajoy</a> <a href="http://msg.cnblogs.com/send/vajoy" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3260135" class="blog_comment_body">赞一个，总结的很清晰</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3260135,&#39;Digg&#39;,this)">支持(2)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3260135,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3260135_avatar" style="display:none;">http://pic.cnblogs.com/face/561179/20140803163107.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3260138" class="layer">#2楼</a><a name="3260138" id="comment_anchor_3260138"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2015-09-05 13:53</span> <a id="a_comment_author_3260138" href="https://www.cnblogs.com/maybe2030/" target="_blank">Poll的笔记</a> <a href="http://msg.cnblogs.com/send/Poll%E7%9A%84%E7%AC%94%E8%AE%B0" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3260138" class="blog_comment_body"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3260135" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3260135);">@</a>
+vajoy<br>多谢支持！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3260138,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3260138,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3260138_avatar" style="display:none;">http://pic.cnblogs.com/face/764050/20150531155648.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3264749" class="layer">#3楼</a><a name="3264749" id="comment_anchor_3264749"></a>  <span class="comment_date">2015-09-11 11:16</span> <a id="a_comment_author_3264749" href="http://home.cnblogs.com/u/771674/" target="_blank">VastStarry</a> <a href="http://msg.cnblogs.com/send/VastStarry" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3264749" class="blog_comment_body">还可以，凑合</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3264749,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3264749,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3315257" class="layer">#4楼</a><a name="3315257" id="comment_anchor_3315257"></a>  <span class="comment_date">2015-11-26 21:56</span> <a id="a_comment_author_3315257" href="http://home.cnblogs.com/u/794718/" target="_blank">Alan_Lee</a> <a href="http://msg.cnblogs.com/send/Alan_Lee" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3315257" class="blog_comment_body">mark!过了一遍</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3315257,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3315257,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3409283" class="layer">#5楼</a><a name="3409283" id="comment_anchor_3409283"></a>  <span class="comment_date">2016-04-15 16:05</span> <a id="a_comment_author_3409283" href="http://home.cnblogs.com/u/892048/" target="_blank">JSRGFJZ6</a> <a href="http://msg.cnblogs.com/send/JSRGFJZ6" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3409283" class="blog_comment_body"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3260138" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3260138);">@</a>
+Poll的笔记<br>把这些都背下来就能够应付笔试了吧</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3409283,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3409283,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3409284" class="layer">#6楼</a><a name="3409284" id="comment_anchor_3409284"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2016-04-15 16:06</span> <a id="a_comment_author_3409284" href="https://www.cnblogs.com/maybe2030/" target="_blank">Poll的笔记</a> <a href="http://msg.cnblogs.com/send/Poll%E7%9A%84%E7%AC%94%E8%AE%B0" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3409284" class="blog_comment_body">不敢保证，对于不是计算机专业的足够了，如果是计算机专业的要学深一点~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3409284,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3409284,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3409284_avatar" style="display:none;">http://pic.cnblogs.com/face/764050/20150531155648.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3443097" class="layer">#7楼</a><a name="3443097" id="comment_anchor_3443097"></a>  <span class="comment_date">2016-05-31 19:57</span> <a id="a_comment_author_3443097" href="https://www.cnblogs.com/midhillzhou/" target="_blank">midhillzhou</a> <a href="http://msg.cnblogs.com/send/midhillzhou" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3443097" class="blog_comment_body">博主，文章很好，存在一个小问题，第3章IP地址第3小节组播地址中A类地址的前缀是“0”</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3443097,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3443097,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3443097_avatar" style="display:none;">http://pic.cnblogs.com/face/957144/20161231163230.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3443099" class="layer">#8楼</a><a name="3443099" id="comment_anchor_3443099"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2016-05-31 20:00</span> <a id="a_comment_author_3443099" href="https://www.cnblogs.com/maybe2030/" target="_blank">Poll的笔记</a> <a href="http://msg.cnblogs.com/send/Poll%E7%9A%84%E7%AC%94%E8%AE%B0" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3443099" class="blog_comment_body"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3443097" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3443097);">@</a>
+midhillzhou<br>多谢@midhillzhou指出问题，已修改，thx~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3443099,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3443099,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3443099_avatar" style="display:none;">http://pic.cnblogs.com/face/764050/20150531155648.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3504475" class="layer">#9楼</a><a name="3504475" id="comment_anchor_3504475"></a>  <span class="comment_date">2016-09-06 17:10</span> <a id="a_comment_author_3504475" href="http://home.cnblogs.com/u/615325/" target="_blank">天王星的故事</a> <a href="http://msg.cnblogs.com/send/%E5%A4%A9%E7%8E%8B%E6%98%9F%E7%9A%84%E6%95%85%E4%BA%8B" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3504475" class="blog_comment_body">您好，我有个疑问想请教一下。<br>第四章子网掩码及网络划分第1节利用子网数来计算，其中假定子网数有27个，取主机数的前五位作为子网号，那么从00000~11010就可以表示27个子网，所以计算的时候应该是求（27-1） = 26的二进制吧。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3504475,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3504475,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3511565" class="layer">#10楼</a><a name="3511565" id="comment_anchor_3511565"></a>  <span class="comment_date">2016-09-16 20:40</span> <a id="a_comment_author_3511565" href="https://www.cnblogs.com/autoria/" target="_blank">autoria</a> <a href="http://msg.cnblogs.com/send/autoria" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3511565" class="blog_comment_body">blog左侧那个推荐博友-静逸-专注Wed，应该是Web。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3511565,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3511565,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3610761" class="layer">#11楼</a><a name="3610761" id="comment_anchor_3610761"></a>  <span class="comment_date">2017-02-01 20:44</span> <a id="a_comment_author_3610761" href="http://home.cnblogs.com/u/1100279/" target="_blank">apple2017</a> <a href="http://msg.cnblogs.com/send/apple2017" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3610761" class="blog_comment_body">传输层部分有点笔误：原文中的“有关网络层的重点”应该改为“有关传输层的重点”。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3610761,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3610761,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3622244" class="layer">#12楼</a><a name="3622244" id="comment_anchor_3622244"></a>  <span class="comment_date">2017-02-20 14:00</span> <a id="a_comment_author_3622244" href="https://www.cnblogs.com/duxuebing/" target="_blank">小冰~</a> <a href="http://msg.cnblogs.com/send/%E5%B0%8F%E5%86%B0~" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3622244" class="blog_comment_body">博主的文章很好哦！谢谢<br>那么博主是从事什么工作呢？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3622244,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3622244,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3622244_avatar" style="display:none;">http://pic.cnblogs.com/face/1109263/20180523220312.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3696836" class="layer">#13楼</a><a name="3696836" id="comment_anchor_3696836"></a>  <span class="comment_date">2017-05-20 17:43</span> <a id="a_comment_author_3696836" href="https://www.cnblogs.com/ab-12/" target="_blank">aliaa</a> <a href="http://msg.cnblogs.com/send/aliaa" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3696836" class="blog_comment_body">学习了！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3696836,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3696836,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3696836_avatar" style="display:none;">http://pic.cnblogs.com/face/1169351/20170520173738.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3699163" class="layer">#14楼</a><a name="3699163" id="comment_anchor_3699163"></a>  <span class="comment_date">2017-05-23 19:12</span> <a id="a_comment_author_3699163" href="https://www.cnblogs.com/cylovelpp/" target="_blank">南幕南影bit</a> <a href="http://msg.cnblogs.com/send/%E5%8D%97%E5%B9%95%E5%8D%97%E5%BD%B1bit" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3699163" class="blog_comment_body">楼主做得太棒啦！！但是我有一个问题想请教您！<br><br>就是，最后举例的那个，我用抓包软件，抓取了一个数据包，发现百度返回给我的数据包，目的IP是：192.168.1.3这个是我局域网的内网IP，这个IP不是应该有很多吗？为什么会直接就把数据包发送给我呢</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3699163,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3699163,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3699163_avatar" style="display:none;">http://pic.cnblogs.com/face/931963/20160408205335.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3706936" class="layer">#15楼</a><a name="3706936" id="comment_anchor_3706936"></a>  <span class="comment_date">2017-06-04 22:00</span> <a id="a_comment_author_3706936" href="https://www.cnblogs.com/coolalan/" target="_blank">coolAlan</a> <a href="http://msg.cnblogs.com/send/coolAlan" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3706936" class="blog_comment_body">楼主，请问10.12.3.0为什么是B类IP地址呢？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3706936,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3706936,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3706936_avatar" style="display:none;">http://pic.cnblogs.com/face/672740/20140929210411.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3713871" class="layer">#16楼</a><a name="3713871" id="comment_anchor_3713871"></a>  <span class="comment_date">2017-06-14 08:52</span> <a id="a_comment_author_3713871" href="https://www.cnblogs.com/stu-happy/" target="_blank">我的世界我做主啦</a> <a href="http://msg.cnblogs.com/send/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C%E6%88%91%E5%81%9A%E4%B8%BB%E5%95%A6" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3713871" class="blog_comment_body">楼主，我是非计算机专业的，想学习计算机专业的操作系统、数据库、网络等知识，应该如何从何学起。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3713871,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3713871,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3781990" class="layer">#17楼</a><a name="3781990" id="comment_anchor_3781990"></a>  <span class="comment_date">2017-09-12 14:34</span> <a id="a_comment_author_3781990" href="https://www.cnblogs.com/alexprogramer/" target="_blank">文水煮火</a> <a href="http://msg.cnblogs.com/send/%E6%96%87%E6%B0%B4%E7%85%AE%E7%81%AB" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3781990" class="blog_comment_body">学习了，谢谢分享~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3781990,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3781990,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3781990_avatar" style="display:none;">http://pic.cnblogs.com/face/803217/20170425170327.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3813717" class="layer">#18楼</a><a name="3813717" id="comment_anchor_3813717"></a>  <span class="comment_date">2017-10-17 22:17</span> <a id="a_comment_author_3813717" href="http://home.cnblogs.com/u/1259211/" target="_blank">荼布</a> <a href="http://msg.cnblogs.com/send/%E8%8D%BC%E5%B8%83" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3813717" class="blog_comment_body">楼主真是抱歉，因为你的笔记对我很有帮助，所以准备打印出来仔细再看一遍的，但是右下角的这个评价框总是去不掉，手误点击了反对，想取消还取消不掉，对不起哦</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3813717,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3813717,&#39;Bury&#39;,this)">反对(2)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#3889304" class="layer">#19楼</a><a name="3889304" id="comment_anchor_3889304"></a>  <span class="comment_date">2018-01-15 16:42</span> <a id="a_comment_author_3889304" href="http://home.cnblogs.com/u/1316585/" target="_blank">proplume</a> <a href="http://msg.cnblogs.com/send/proplume" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3889304" class="blog_comment_body">最后的例子中，邻居协议（懵）是RIP协议么</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3889304,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3889304,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#4016327" class="layer">#20楼</a><a name="4016327" id="comment_anchor_4016327"></a>  <span class="comment_date">2018-07-09 17:07</span> <a id="a_comment_author_4016327" href="http://home.cnblogs.com/u/1418699/" target="_blank">xxnn</a> <a href="http://msg.cnblogs.com/send/xxnn" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4016327" class="blog_comment_body">腻害腻害，楼主真是好人呀，对我这种非计算机专业的帮助很大</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4016327,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4016327,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#4016758" class="layer">#21楼</a><a name="4016758" id="comment_anchor_4016758"></a>  <span class="comment_date">2018-07-10 10:05</span> <a id="a_comment_author_4016758" href="https://www.cnblogs.com/wendyy/" target="_blank">Wendyy</a> <a href="http://msg.cnblogs.com/send/Wendyy" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4016758" class="blog_comment_body">条理很清晰，感谢分享，有个小小的问题想请教一下<br>4. 子网掩码及网络划分中的 2）利用主机数计算<br>ip地址的数量是不是也为700+1+1+1呢？ <br>是不是应该计算703的二进制的位数N，然后将后N位置为0？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4016758,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4016758,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_4016758_avatar" style="display:none;">http://pic.cnblogs.com/face/1437831/20180710093045.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#4043557" class="layer">#22楼</a><a name="4043557" id="comment_anchor_4043557"></a>  <span class="comment_date">2018-08-15 15:16</span> <a id="a_comment_author_4043557" href="http://home.cnblogs.com/u/1423684/" target="_blank">坏坏62</a> <a href="http://msg.cnblogs.com/send/%E5%9D%8F%E5%9D%8F62" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4043557" class="blog_comment_body"><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#4016758" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,4016758);">@</a>
+Wendyy<br>按照博主文章的意思 应该是这样的 两个保留地址再加一个网关地址，就是703  表示成二进制，得到位数 然后将IP地址的主机号全部表示成1 然后从后往前数出N位，将这些位全部变成0 就可以得到子网掩码了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4043557,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4043557,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/maybe2030/p/4781555.html#4100135" class="layer">#23楼</a><a name="4100135" id="comment_anchor_4100135"></a><span id="comment-maxId" style="display:none;">4100135</span><span id="comment-maxDate" style="display:none;">2018/10/28 10:41:35</span>  <span class="comment_date">2018-10-28 10:41</span> <a id="a_comment_author_4100135" href="http://home.cnblogs.com/u/1521658/" target="_blank">不回头的浪子</a> <a href="http://msg.cnblogs.com/send/%E4%B8%8D%E5%9B%9E%E5%A4%B4%E7%9A%84%E6%B5%AA%E5%AD%90" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4100135" class="blog_comment_body">B类IP地址为 10.12.3.0。这是在开玩笑吧。有些地方讲的太模糊了。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4100135,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4100135,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/maybe2030/p/4781555.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://www.cnblogs.com/xhload3d/p/10328669.html" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-图扑&#39;)">【推荐】基于 HTML5 的 WebGL 楼宇自控 3D 可视化监控</a><br><a href="https://gitee.com/enterprises?from=bky-2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-gitee&#39;)">【推荐】专业便捷的企业级代码托管服务 - Gitee 码云</a><br></div>
+<div id="opt_under_post"></div>
+<script async="async" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c1" class="c_ad_block" style="">
+    <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CMSN37D3qOACFZiblgodxCQO8A"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/ranyonsue/p/9724987.html" target="_blank" onclick="clickRecomItmem(9724987,&#39;Er47Bz3U/kwHXh1/3dOq5Kp4pki0t8n3v5pLCOsIFTgH9mOXlOAMnk2uGcsoS9bjb3CjrQTfQ33BFH5R5PyYP+36dnAHIcuqNjewry4Kq5r5rxSY2G5QelR4rh6m8hRO25fnczWQrT4niJGRimDvAzd19qkWonld++pbBvtIgtoBdQuMn1pEehRwtzx+y6jkoPY=&#39;)">计算机网络基础知识总结</a><br>·  <a href="https://www.cnblogs.com/tianyiliang/p/7774241.html" target="_blank" onclick="clickRecomItmem(7774241,&#39;xdcZuOn1uKhcxBzgXZXhptaTO+vHihbu3+2nswtuvqFkWgn1qBb5R1hgPqo9N6P+iH1HynbxcUypH8E7h76uzjmnQhZgy5WsBA0hT1/N6+yRCoEf+xdMZXFs6O56IJd0mctCGX/0RGC7w31zfoj3Km6OZ5Si9pz/2HF6NQIGiOZ34yCD2iSXLsXa/evE&#39;)">计算机网络基础知识</a><br>·  <a href="https://www.cnblogs.com/sheropan/p/5179238.html" target="_blank" onclick="clickRecomItmem(5179238,&#39;dwm87CyimJKKdYUPRuYEu70xFJIa7Tvd0rrmcwEk74tKWI17OauBdG8j80PnjUMXOwuVa5zrLksMGd5IDbaG3xPnSL379jCAqJo5IdxbhIE9e3goH8TK791SIu1dsaOAIeDyxer/tU6/vNJmhQoUhxrmmSaYSfyGU/Zxb46pk3lj1A==&#39;)">计算机网络——计算机网络基础知识总结</a><br>·  <a href="https://www.cnblogs.com/chenjianshi/p/10004085.html" target="_blank" onclick="clickRecomItmem(10004085,&#39;1EcoKy7GwebVbPTFXlam/1zanaF3MIj3/AshdQVtxkDstYSAaiUYsDUO0HZw7BGjhyyPRO+imc79h3XoZf8/tjGwBShKu4n4WlmPoP+bd3IyEqBiI6pVEUN+1O+rrejU8yGJozXlSVKPh74YLzkFJbRzc2sKTxigxikBWsoFOoATJWALJP0fzfwmQl3o7oe+0Q==&#39;)">计算机组成原理基础</a><br>·  <a href="https://www.cnblogs.com/tan2016/p/5750106.html" target="_blank" onclick="clickRecomItmem(5750106,&#39;7tBiB2rbH+YHxkSlshXGob9sj7D3eFSE//zJchg2t8on8TX7EIrvQLSw3aXRPVPcVR1Fvk00YLrWeaFsnDZzYC2t5FjJLgMqb6anDbUm24oxHIsPXMb2/EyJVLI24nSPF2/23mhuYaGLkuIrm2dkwSCajtx8eAJtCjIE2J/avb1mHQ0gJl4FA/0ZGxkDCFGT&#39;)">计算机网络基础知识整理</a><br></div></div>
+<div id="cnblogs_c2" class="c_ad_block" style="">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CJ2M37D3qOACFYGclgodxv0COA"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/618971/" target="_blank">Windows 95 Electron应用程序更新 怀旧变得更容易</a><br> ·  <a href="https://news.cnblogs.com/n/618970/" target="_blank">Raspberry Pi在英国开出首家零售店</a><br> ·  <a href="https://news.cnblogs.com/n/618969/" target="_blank">苹果从最新的Safari Beta版本中删除了“Do Not Track”功能</a><br> ·  <a href="https://news.cnblogs.com/n/618968/" target="_blank">Snapchat母公司Snap首次将抖音列为竞争对手</a><br> ·  <a href="https://news.cnblogs.com/n/618967/" target="_blank">Ubuntu 14.04将于4月30日停止支持，但可以购买“延保”</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><!-- Start of StatCounter Code for Default Guide -->
+<span class="statcounter"><a class="statcounter" href="http://www.statcounter.com/" target="_blank"><img src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/t.php" alt="StatCounter - Free Web Tracker and Counter" border="0"></a></span>
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['6']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['7']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['5']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['4']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['1']();</script>
+<noscript><div class="statcounter"><a title="shopify stats"
+href="http://statcounter.com/shopify/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/10500913/0/47e32f49/0/"
+alt="shopify stats"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+<a href="http://statcounter.com/p10500913/?guest=1"></a>
+
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['8']();</script><script>window['__document_write_ajax_callbacks__']['2']();</script><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/maybe2030/">Poll的笔记</a><br>园龄：<a href="https://home.cnblogs.com/u/maybe2030/" title="入园时间：2015-05-31">3年8个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/maybe2030/followers/">1561</a><br>关注：<a href="https://home.cnblogs.com/u/maybe2030/followees/">14</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;d806c0a7-6907-e511-b908-9dcfd8948a71&#39;)">+加关注</a></div><script type="text/javascript">window['__document_write_ajax_callbacks__']['9']();</script><script>window['__document_write_ajax_callbacks__']['3']();</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/01/01&#39;);return false;">&lt;</a></td><td align="center">2019年2月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/03/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td class="CalWeekendDay" align="center">2</td></tr><tr><td class="CalWeekendDay" align="center">3</td><td class="CalTodayDay" align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td class="CalWeekendDay" align="center">9</td></tr><tr><td class="CalWeekendDay" align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td class="CalWeekendDay" align="center">16</td></tr><tr><td class="CalWeekendDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td class="CalWeekendDay" align="center">23</td></tr><tr><td class="CalWeekendDay" align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td></tr><tr><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block"></div><div id="sidebar_recentposts" class="sidebar-block">
+<div class="catListEssay">
+<h3 class="catListTitle">最新随笔</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/maybe2030/p/9894568.html">1. [Reinforcement Learning] Policy Gradient Methods</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9887506.html">2. [Reinforcement Learning] Value Function Approximation</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9875015.html">3. [Reinforcement Learning] Model-Free Control</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9868799.html">4. [Reinforcement Learning] Model-Free Prediction</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9865562.html">5. [Reinforcement Learning] 动态规划(Planning)</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9862585.html">6. [Reinforcement Learning] 马尔可夫决策过程</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9862353.html">7. [Reinforcement Learning] 强化学习介绍</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9571326.html">8. [Reinforcement Learning] Cross-entropy Method</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9231231.html">9. [Deep Learning] 正则化</a></li><li><a href="https://www.cnblogs.com/maybe2030/p/9220921.html">10. [Deep Learning] 常用的Active functions &amp; Optimizers</a></li>
+</ul>
+</div>
+</div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/maybe2030/category/709560.html">Algorithm(34)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/maybe2030/category/764596.html">Bash(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/maybe2030/category/697575.html">C/C++(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/maybe2030/category/755924.html">Computational Advertising(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/maybe2030/category/709561.html">Data Structure(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/maybe2030/category/705175.html">Database(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/maybe2030/category/714382.html">Evolutionary Algorithm(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/maybe2030/category/703274.html">Hadoop(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/maybe2030/category/699187.html">Linux(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/maybe2030/category/697574.html">Machine Learning(25)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/maybe2030/category/726727.html">Math(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/maybe2030/category/698646.html">Network(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/maybe2030/category/731172.html">Operate System</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/maybe2030/category/697576.html">Python(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/maybe2030/category/710022.html">Recommendation System(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/maybe2030/category/730622.html">Search Engine(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/maybe2030/category/714381.html">Social Network Analysis(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/maybe2030/category/705322.html">Web Development(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/maybe2030/category/703364.html">生活杂谈(1)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/maybe2030/archive/2018/11.html">2018年11月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/maybe2030/archive/2018/10.html">2018年10月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/maybe2030/archive/2018/09.html">2018年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/maybe2030/archive/2018/06.html">2018年6月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/maybe2030/archive/2017/01.html">2017年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/maybe2030/archive/2016/07.html">2016年7月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/maybe2030/archive/2016/06.html">2016年6月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/maybe2030/archive/2016/05.html">2016年5月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/maybe2030/archive/2016/04.html">2016年4月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/maybe2030/archive/2016/03.html">2016年3月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/maybe2030/archive/2016/02.html">2016年2月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/maybe2030/archive/2016/01.html">2016年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/maybe2030/archive/2015/12.html">2015年12月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/maybe2030/archive/2015/11.html">2015年11月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/maybe2030/archive/2015/10.html">2015年10月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/maybe2030/archive/2015/09.html">2015年9月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/maybe2030/archive/2015/08.html">2015年8月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/maybe2030/archive/2015/07.html">2015年7月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/maybe2030/archive/2015/06.html">2015年6月 (19)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_links697577" class="catList sidebar-block">
+<h3 class="catListTitle">常用链接</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="http://www.autonlab.org/tutorials/" rel="nofollow">[Andrew Moore] Statistical Data Mining Tutorials</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_1" href="http://www.tutorialspoint.com/codingground.htm" rel="nofollow">[Online Terminals] tutorialspoint</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_2" href="http://www.acmerblog.com/" rel="nofollow">ACM之家</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_3" href="http://ml.memect.com/weekly/2015-03-01/index.html#3813390969803116" rel="nofollow">机器学习周报</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_4" href="http://www.oschina.net/" rel="nofollow">开源中国</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_5" href="http://database.51cto.com/art/201407/444810.htm" rel="nofollow">漫谈机器学习算法</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_6" href="http://vbird.dic.ksu.edu.tw/linux_basic/linux_basic.php" rel="nofollow">鸟哥的Linux私房菜</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_7" href="http://cos.name/" rel="nofollow">统计之都</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_8" href="http://www.tuicool.com/" rel="nofollow">推酷</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_9" href="http://52opencourse.com/" rel="nofollow">我爱公开课</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_10" href="http://www.52ml.net/" rel="nofollow">我爱机器学习</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_11" href="http://www.52nlp.cn/" rel="nofollow">我爱自然语言处理</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_links702884" class="catList sidebar-block">
+<h3 class="catListTitle">推荐博友</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_3_Link_0" href="http://www.52caml.com/home/" rel="nofollow">CAML</a> </li>
+<li class="c_b_p_link_desc">计算广告与机器学习－技术共享平台</li>
+<li><a id="CatList_LinkList_3_Link_1" href="http://semocean.com/" rel="nofollow">Dustinsea</a> </li>
+<li class="c_b_p_link_desc">百度关键词搜索推荐系统maker</li>
+<li><a id="CatList_LinkList_3_Link_2" href="http://www.jianshu.com/users/2bd9b48f6ea8/latest_articles" rel="nofollow">JasonDing</a> </li>
+<li class="c_b_p_link_desc">机器学习、算法、Spark</li>
+<li><a id="CatList_LinkList_3_Link_3" href="http://blog.csdn.net/v_july_v/article/details/6543438" rel="nofollow">July的博客</a> </li>
+<li class="c_b_p_link_desc">结构之法，算法之道。</li>
+<li><a id="CatList_LinkList_3_Link_4" href="https://tech.uc.cn/" rel="nofollow">uc技术博客</a> </li>
+<li class="c_b_p_link_desc">UC企业技术博客</li>
+<li><a id="CatList_LinkList_3_Link_5" href="https://www.cnblogs.com/vamei/" rel="nofollow">Vamei</a> </li>
+<li class="c_b_p_link_desc">文艺地讲解编程、数学和设计</li>
+<li><a id="CatList_LinkList_3_Link_6" href="http://ahalei.blog.51cto.com/" rel="nofollow">阿哈磊</a> </li>
+<li class="c_b_p_link_desc">图文并茂的阿哈磊算法讲解，简单易懂</li>
+<li><a id="CatList_LinkList_3_Link_7" href="http://dongxicheng.org/" rel="nofollow">董的博客</a> </li>
+<li class="c_b_p_link_desc">关注大规模数据处理</li>
+<li><a id="CatList_LinkList_3_Link_8" href="https://www.cnblogs.com/yangecnu/category/548373.html">寒江独钓</a> </li>
+<li class="c_b_p_link_desc">详细的数据结构和算法讲解</li>
+<li><a id="CatList_LinkList_3_Link_9" href="http://www.flickering.cn/category/ads/">火光摇曳</a> </li>
+<li class="c_b_p_link_desc">机器学习、分布式计算、计算广告学</li>
+<li><a id="CatList_LinkList_3_Link_10" href="http://cuiqingcai.com/tag/%E7%88%AC%E8%99%AB" rel="nofollow">静觅</a> </li>
+<li class="c_b_p_link_desc">python爬虫系列教程</li>
+<li><a id="CatList_LinkList_3_Link_11" href="https://www.cnblogs.com/liyunhua/" rel="nofollow">静逸</a> </li>
+<li class="c_b_p_link_desc">专注于wed前端</li>
+<li><a id="CatList_LinkList_3_Link_12" href="http://coolshell.cn/" rel="nofollow">酷壳</a> </li>
+<li class="c_b_p_link_desc">程序员必看，涉及面很广，也很有深度</li>
+<li><a id="CatList_LinkList_3_Link_13" href="http://blog.niubua.com/" rel="nofollow">牛吧大数据</a> </li>
+<li class="c_b_p_link_desc">大数据、机器学习、R语言</li>
+<li><a id="CatList_LinkList_3_Link_14" href="http://www.ruanyifeng.com/blog/" rel="nofollow">阮一峰的网络日志</a> </li>
+<li class="c_b_p_link_desc">算法，数学，文学，科技，创业... ...</li>
+<li><a id="CatList_LinkList_3_Link_15" href="https://www.cnblogs.com/shishanyuan/category/709023.html">石山园</a> </li>
+<li class="c_b_p_link_desc">Hadoop入门进阶课程系列</li>
+<li><a id="CatList_LinkList_3_Link_16" href="http://rdc.taobao.org/" rel="nofollow">淘宝技术部</a> </li>
+<li class="c_b_p_link_desc">淘宝技术介绍</li>
+<li><a id="CatList_LinkList_3_Link_17" href="http://www.wangluqing.com/2014/05/17/hadoop-research-articles-sum/" rel="nofollow">王路情</a> </li>
+<li class="c_b_p_link_desc">Hadoop研究和R实战</li>
+<li><a id="CatList_LinkList_3_Link_18" href="https://www.cnblogs.com/TankXiao/" rel="nofollow">小坦克</a> </li>
+<li class="c_b_p_link_desc">网络协议介绍</li>
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	183884
+	</li>
+	<li class="liRank">
+		排名 -	1804
+	</li>
+</ul>
+</div>
+
+
+</div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2019 Poll的笔记
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+<!--PageEndHtml Block Begin-->
+<script language="javascript" type="text/javascript">
+//生成目录索引列表
+function GenerateContentList()
+{
+    var jquery_h1_list = $('#cnblogs_post_body h1');//如果你的章节标题不是h1,只需要将这里的h1换掉即可
+    if(jquery_h1_list.length>0)
+    {
+        var content = '<a name="_labelTop"></a>';
+        content    += '<div id="navCategory">';
+        content    += '<p style="font-size:22px"><b>阅读目录</b></p>';
+        content    += '<ul>';
+        for(var i =0;i<jquery_h1_list.length;i++)
+        {
+            var go_to_top = '<div style="text-align: right"><a href="#_labelTop">回到顶部</a><a name="_label' + i + '"></a></div>';
+            $(jquery_h1_list[i]).before(go_to_top);
+            var li_content = '<li><a href="#_label' + i + '">' + $(jquery_h1_list[i]).text() + '</a></li>';
+            content += li_content;
+        }
+        content    += '</ul>';
+        content    += '</div>';
+        if($('#cnblogs_post_body').length != 0 )
+        {
+            $($('#cnblogs_post_body')[0]).prepend(content);
+        }
+    } else {
+        var jquery_h2_list = $('#cnblogs_post_body h2');//如果你的章节标题不是h2,只需要将这里的h2换掉即可
+        if(jquery_h2_list.length>0)
+        {
+            var content = '<a name="_labelTop"></a>';
+            content    += '<div id="navCategory">';
+            content    += '<p style="font-size:20px"><b>阅读目录</b></p>';
+            content    += '<ul>';
+            for(var i =0;i<jquery_h2_list.length;i++)
+            {
+                var go_to_top = '<div style="text-align: right"><a href="#_labelTop">回到顶部</a><a name="_label' + i + '"></a></div>';
+                $(jquery_h2_list[i]).before(go_to_top);
+                var li_content = '<li><a href="#_label' + i + '">' + $(jquery_h2_list[i]).text() + '</a></li>';
+                content += li_content;
+            }
+            content    += '</ul>';
+            content    += '</div>';
+            if($('#cnblogs_post_body').length != 0 )
+            {
+                $($('#cnblogs_post_body')[0]).prepend(content);
+            }
+        }  else {
+            var jquery_h3_list = $('#cnblogs_post_body h3');//如果你的章节标题不是h3,只需要将这里的h3换掉即可
+            if(jquery_h3_list.length>0)
+            {
+                var content = '<a name="_labelTop"></a>';
+                content    += '<div id="navCategory">';
+                content    += '<p style="font-size:18px"><b>阅读目录</b></p>';
+                content    += '<ul>';
+                for(var i =0;i<jquery_h3_list.length;i++)
+                {
+                    var go_to_top = '<div style="text-align: right"><a href="#_labelTop">回到顶部</a><a name="_label' + i + '"></a></div>';
+                    $(jquery_h3_list[i]).before(go_to_top);
+                    var li_content = '<li><a href="#_label' + i + '">' + $(jquery_h3_list[i]).text() + '</a></li>';
+                    content += li_content;
+                }
+                content    += '</ul>';
+                content    += '</div>';
+                if($('#cnblogs_post_body').length != 0 )
+                {
+                    $($('#cnblogs_post_body')[0]).prepend(content);
+                }
+            }
+        }
+    }
+
+    
+}
+GenerateContentList();
+</script>
+<!--PageEndHtml Block End-->
+
+
+<script type="text/javascript">
+/*运行代码*/
+function runCode(id){
+    var obj = document.getElementById(id); 
+    var TestWin=open('');  
+    TestWin.opener = null;
+    TestWin.document.write(obj.value); 
+    TestWin.document.close(); 
+}
+
+/*加载脚本*/
+function loader(name){
+    var elem=document.createElement('script');
+    elem.src='http://www.cnblogs.com/maybe2030/'+name;
+    document.getElementsByTagName('head')[0].appendChild(elem);
+}
+
+/*回到顶部*/
+$(function(){
+    // hide #back-top first
+    $("#back-top").hide();
+    // fade in #back-top
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 500) {
+            $('#back-top').fadeIn();
+        } else {
+            $('#back-top').fadeOut();
+        }
+    });
+    // scroll body to 0px on click
+    $('#back-top a').click(function () {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 800);
+        return false;
+    });
+});
+
+/*自定义导航*/
+$(function(){
+    $("#navList").append('<li><a class="menu" href="http://www.cnblogs.com/">博客园</a></li>');
+    $("#MyLinks1_XMLLink").parent().appendTo($("#navList"));
+    $("#navList li").eq(2).remove();
+    $("#navList li").eq(3).remove();
+    $("#MyLinks1_Syndication").append('<div style="position:relative;left:-10px;top:-45px"><img src="http://cdn1.iconfinder.com/data/icons/supra_rss/png/32%20x%2032/rss2_1-20.png"/></div>');
+    $("#navList li").eq(0).remove();
+});
+</script><script type="text/javascript">
+var sc_project=10500913; 
+var sc_invisible=0; 
+var sc_security="47e32f49"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script><iframe id="google_osd_static_frame_6746509755329" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./[Network] 计算机网络基础知识总结 - Poll的笔记 - 博客园_files/saved_resource(2).html"></iframe><script type="text/javascript">window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"6","bdPos":"right","bdTop":"100"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script><script type="text/javascript">getFollowStatus('d806c0a7-6907-e511-b908-9dcfd8948a71')</script></body></html>

@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.cnblogs.com/xdp-gacl/p/4264440.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+    <title>MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园</title>
+<meta property="og:description" content="一、一对一关联1.1、提出需求 根据班级id查询班级信息(带老师的信息)1.2、创建表和数据 创建一张教师表和班级表，这里我们假设一个老师只负责教一个班，那么老师和班级之间的关系就是一种一对一的关系。">
+    <link type="text/css" rel="stylesheet" href="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/bundle-SimpleClear.css">
+<link type="text/css" rel="stylesheet" href="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/133816.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/bundle-SimpleClear-mobile.css">
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/xdp-gacl/rss">
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/xdp-gacl/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/xdp-gacl/wlwmanifest.xml">
+    <script src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/osd.js"></script><script src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/amp4ads-host-v0.js"></script><script src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/rum.js"></script><script src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/pubads_impl_rendering_307.js"></script><script async="" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/analytics.js"></script><script type="text/javascript" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/encoder.js"></script><script src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script>var currentBlogId=133816;var currentBlogApp='xdp-gacl',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/blog-common.js" type="text/javascript"></script>
+<link rel="preload" href="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/integrator.js" as="script"><script type="text/javascript" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/integrator.js"></script><script src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/pubads_impl_307.js" async=""></script></head>
+<body>
+<a name="top"></a>
+
+<div id="page_begin_html"><!-- Baidu Button BEGIN -->
+<!--<div style="display: none" id="__document_write_ajax_div-1"></div><script type="text/javascript" id="bdshare_js" data="type=slide&amp;img=0&amp;pos=right&amp;uid=6507240" >window['__document_write_ajax_callbacks__']['1']();</script>
+<div style="display: none" id="__document_write_ajax_div-2"></div><script type="text/javascript" id="bdshell_js">window['__document_write_ajax_callbacks__']['2']();</script>
+<div style="display: none" id="__document_write_ajax_div-3"></div><script type="text/javascript">window['__document_write_ajax_callbacks__']['3']();</script>-->
+<!-- Baidu Button END -->
+
+<!--添加博客目录-->
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['6']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['4']();</script>
+
+<!--
+<head>
+
+DIY 博客全文界面的推荐、反对、加关注、返回顶部、快速评论等小功能的集成
+
+<div style="display: none" id="__document_write_ajax_div-5"></div><script type="text/javascript">window['__document_write_ajax_callbacks__']['5']();</script>
+</head>
+--></div><script>load_page_begin_html();</script>
+
+<div id="main">
+<div id="header">
+<h1><a id="Header1_HeaderTitle" href="https://www.cnblogs.com/xdp-gacl/">孤傲苍狼</a></h1>
+<p id="tagline">只为成功找方法，不为失败找借口！</p></div>
+
+        <div id="post_detail">
+<div class="post">
+    <h2 class="postTitle"><a id="cb_post_title_url" href="https://www.cnblogs.com/xdp-gacl/p/4264440.html">MyBatis学习总结(五)——实现关联表查询</a></h2>
+    <div class="postText"><div id="cnblogs_post_body" class="blogpost-body"><h2 id="blogTitle0">一、一对一关联</h2>
+<h3 id="blogTitle1">&nbsp;1.1、提出需求</h3>
+<p>　　根据班级id查询班级信息(带老师的信息)</p>
+<h3 id="blogTitle2">1.2、创建表和数据</h3>
+<p>　　创建一张教师表和班级表，这里我们假设一个老师只负责教一个班，那么老师和班级之间的关系就是一种一对一的关系。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> teacher(
+</span><span style="color: #008080;"> 2</span>     t_id <span style="color: #0000ff;">INT</span> <span style="color: #0000ff;">PRIMARY</span> <span style="color: #0000ff;">KEY</span><span style="color: #000000;"> AUTO_INCREMENT, 
+</span><span style="color: #008080;"> 3</span>     t_name <span style="color: #0000ff;">VARCHAR</span>(<span style="color: #800000; font-weight: bold;">20</span><span style="color: #000000;">)
+</span><span style="color: #008080;"> 4</span> <span style="color: #000000;">);
+</span><span style="color: #008080;"> 5</span> <span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> class(
+</span><span style="color: #008080;"> 6</span>     c_id <span style="color: #0000ff;">INT</span> <span style="color: #0000ff;">PRIMARY</span> <span style="color: #0000ff;">KEY</span><span style="color: #000000;"> AUTO_INCREMENT, 
+</span><span style="color: #008080;"> 7</span>     c_name <span style="color: #0000ff;">VARCHAR</span>(<span style="color: #800000; font-weight: bold;">20</span><span style="color: #000000;">), 
+</span><span style="color: #008080;"> 8</span>     teacher_id <span style="color: #0000ff;">INT</span>
+<span style="color: #008080;"> 9</span> <span style="color: #000000;">);
+</span><span style="color: #008080;">10</span> <span style="color: #0000ff;">ALTER</span> <span style="color: #0000ff;">TABLE</span> class <span style="color: #0000ff;">ADD</span> <span style="color: #0000ff;">CONSTRAINT</span> fk_teacher_id <span style="color: #0000ff;">FOREIGN</span> <span style="color: #0000ff;">KEY</span> (teacher_id) <span style="color: #0000ff;">REFERENCES</span><span style="color: #000000;"> teacher(t_id);    
+</span><span style="color: #008080;">11</span> 
+<span style="color: #008080;">12</span> <span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> teacher(t_name) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">teacher1</span><span style="color: #ff0000;">'</span><span style="color: #000000;">);
+</span><span style="color: #008080;">13</span> <span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> teacher(t_name) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">teacher2</span><span style="color: #ff0000;">'</span><span style="color: #000000;">);
+</span><span style="color: #008080;">14</span> 
+<span style="color: #008080;">15</span> <span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> class(c_name, teacher_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">class_a</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">);
+</span><span style="color: #008080;">16</span> <span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> class(c_name, teacher_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">class_b</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">2</span>);</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　表之间的关系如下：</p>
+<p>　　<img style="border: 1px solid black;" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/011119505663513.png" alt=""></p>
+<h3 id="blogTitle3">1.3、定义实体类</h3>
+<p>　　1、Teacher类，Teacher类是teacher表对应的实体类。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">package</span><span style="color: #000000;"> me.gacl.domain;
+</span><span style="color: #008080;"> 2</span> 
+<span style="color: #008080;"> 3</span> <span style="color: #008000;">/**</span>
+<span style="color: #008080;"> 4</span> <span style="color: #008000;"> * </span><span style="color: #808080;">@author</span><span style="color: #008000;"> gacl
+</span><span style="color: #008080;"> 5</span> <span style="color: #008000;"> * 定义teacher表对应的实体类
+</span><span style="color: #008080;"> 6</span>  <span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 7</span> <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Teacher {
+</span><span style="color: #008080;"> 8</span> 
+<span style="color: #008080;"> 9</span>     <span style="color: #008000;">//</span><span style="color: #008000;">定义实体类的属性，与teacher表中的字段对应</span>
+<span style="color: #008080;">10</span>     <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">int</span> id;            <span style="color: #008000;">//</span><span style="color: #008000;">id===&gt;t_id</span>
+<span style="color: #008080;">11</span>     <span style="color: #0000ff;">private</span> String name;    <span style="color: #008000;">//</span><span style="color: #008000;">name===&gt;t_name</span>
+<span style="color: #008080;">12</span> 
+<span style="color: #008080;">13</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span><span style="color: #000000;"> getId() {
+</span><span style="color: #008080;">14</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> id;
+</span><span style="color: #008080;">15</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">16</span> 
+<span style="color: #008080;">17</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> setId(<span style="color: #0000ff;">int</span><span style="color: #000000;"> id) {
+</span><span style="color: #008080;">18</span>         <span style="color: #0000ff;">this</span>.id =<span style="color: #000000;"> id;
+</span><span style="color: #008080;">19</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">20</span> 
+<span style="color: #008080;">21</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String getName() {
+</span><span style="color: #008080;">22</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> name;
+</span><span style="color: #008080;">23</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">24</span> 
+<span style="color: #008080;">25</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setName(String name) {
+</span><span style="color: #008080;">26</span>         <span style="color: #0000ff;">this</span>.name =<span style="color: #000000;"> name;
+</span><span style="color: #008080;">27</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">28</span> 
+<span style="color: #008080;">29</span> <span style="color: #000000;">    @Override
+</span><span style="color: #008080;">30</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String toString() {
+</span><span style="color: #008080;">31</span>         <span style="color: #0000ff;">return</span> "Teacher [id=" + id + ", name=" + name + "]"<span style="color: #000000;">;
+</span><span style="color: #008080;">32</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">33</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　2、Classes类，Classes类是class表对应的实体类</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">package</span><span style="color: #000000;"> me.gacl.domain;
+</span><span style="color: #008080;"> 2</span> 
+<span style="color: #008080;"> 3</span> <span style="color: #008000;">/**</span>
+<span style="color: #008080;"> 4</span> <span style="color: #008000;"> * </span><span style="color: #808080;">@author</span><span style="color: #008000;"> gacl
+</span><span style="color: #008080;"> 5</span> <span style="color: #008000;"> * 定义class表对应的实体类
+</span><span style="color: #008080;"> 6</span>  <span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 7</span> <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Classes {
+</span><span style="color: #008080;"> 8</span> 
+<span style="color: #008080;"> 9</span>     <span style="color: #008000;">//</span><span style="color: #008000;">定义实体类的属性，与class表中的字段对应</span>
+<span style="color: #008080;">10</span>     <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">int</span> id;            <span style="color: #008000;">//</span><span style="color: #008000;">id===&gt;c_id</span>
+<span style="color: #008080;">11</span>     <span style="color: #0000ff;">private</span> String name;    <span style="color: #008000;">//</span><span style="color: #008000;">name===&gt;c_name</span>
+<span style="color: #008080;">12</span>     
+<span style="color: #008080;">13</span>     <span style="color: #008000;">/**</span>
+<span style="color: #008080;">14</span> <span style="color: #008000;">     * class表中有一个teacher_id字段，所以在Classes类中定义一个teacher属性，
+</span><span style="color: #008080;">15</span> <span style="color: #008000;">     * 用于维护teacher和class之间的一对一关系，通过这个teacher属性就可以知道这个班级是由哪个老师负责的
+</span><span style="color: #008080;">16</span>      <span style="color: #008000;">*/</span>
+<span style="color: #008080;">17</span>     <span style="color: #0000ff;">private</span><span style="color: #000000;"> Teacher teacher;
+</span><span style="color: #008080;">18</span> 
+<span style="color: #008080;">19</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span><span style="color: #000000;"> getId() {
+</span><span style="color: #008080;">20</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> id;
+</span><span style="color: #008080;">21</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">22</span> 
+<span style="color: #008080;">23</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> setId(<span style="color: #0000ff;">int</span><span style="color: #000000;"> id) {
+</span><span style="color: #008080;">24</span>         <span style="color: #0000ff;">this</span>.id =<span style="color: #000000;"> id;
+</span><span style="color: #008080;">25</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">26</span> 
+<span style="color: #008080;">27</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String getName() {
+</span><span style="color: #008080;">28</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> name;
+</span><span style="color: #008080;">29</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">30</span> 
+<span style="color: #008080;">31</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setName(String name) {
+</span><span style="color: #008080;">32</span>         <span style="color: #0000ff;">this</span>.name =<span style="color: #000000;"> name;
+</span><span style="color: #008080;">33</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">34</span> 
+<span style="color: #008080;">35</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> Teacher getTeacher() {
+</span><span style="color: #008080;">36</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> teacher;
+</span><span style="color: #008080;">37</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">38</span> 
+<span style="color: #008080;">39</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setTeacher(Teacher teacher) {
+</span><span style="color: #008080;">40</span>         <span style="color: #0000ff;">this</span>.teacher =<span style="color: #000000;"> teacher;
+</span><span style="color: #008080;">41</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">42</span> 
+<span style="color: #008080;">43</span> <span style="color: #000000;">    @Override
+</span><span style="color: #008080;">44</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String toString() {
+</span><span style="color: #008080;">45</span>         <span style="color: #0000ff;">return</span> "Classes [id=" + id + ", name=" + name + ", teacher=" + teacher+ "]"<span style="color: #000000;">;
+</span><span style="color: #008080;">46</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">47</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3 id="blogTitle4">1.4、定义sql映射文件classMapper.xml</h3>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">&lt;?</span><span style="color: #ff00ff;">xml version="1.0" encoding="UTF-8" </span><span style="color: #0000ff;">?&gt;</span>
+<span style="color: #008080;"> 2</span> <span style="color: #0000ff;">&lt;!</span><span style="color: #ff00ff;">DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;"> 3</span> <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+</span><span style="color: #008080;"> 4</span> <span style="color: #008000;">例如namespace="me.gacl.mapping.classMapper"就是me.gacl.mapping(包名)+classMapper(classMapper.xml文件去除后缀)
+</span><span style="color: #008080;"> 5</span>  <span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;"> 6</span> <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">mapper </span><span style="color: #ff0000;">namespace</span><span style="color: #0000ff;">="me.gacl.mapping.classMapper"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span>     <span style="color: #008000;">&lt;!--</span> 
+<span style="color: #008080;"> 9</span> <span style="color: #008000;">        根据班级id查询班级信息(带老师的信息)
+</span><span style="color: #008080;">10</span> <span style="color: #008000;">        ##1. 联表查询
+</span><span style="color: #008080;">11</span> <span style="color: #008000;">        SELECT * FROM class c,teacher t WHERE c.teacher_id=t.t_id AND c.c_id=1;
+</span><span style="color: #008080;">12</span>         
+<span style="color: #008080;">13</span> <span style="color: #008000;">        ##2. 执行两次查询
+</span><span style="color: #008080;">14</span> <span style="color: #008000;">        SELECT * FROM class WHERE c_id=1;  //teacher_id=1
+</span><span style="color: #008080;">15</span> <span style="color: #008000;">        SELECT * FROM teacher WHERE t_id=1;//使用上面得到的teacher_id
+</span><span style="color: #008080;">16</span>      <span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;">17</span> 
+<span style="color: #008080;">18</span>     <span style="color: #008000;">&lt;!--</span> 
+<span style="color: #008080;">19</span> <span style="color: #008000;">    方式一：嵌套结果：使用嵌套结果映射来处理重复的联合结果的子集
+</span><span style="color: #008080;">20</span> <span style="color: #008000;">             封装联表查询的数据(去除重复的数据)
+</span><span style="color: #008080;">21</span> <span style="color: #008000;">        select * from class c, teacher t where c.teacher_id=t.t_id and c.c_id=1
+</span><span style="color: #008080;">22</span>     <span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;">23</span>     <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">select </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="getClass"</span><span style="color: #ff0000;"> parameterType</span><span style="color: #0000ff;">="int"</span><span style="color: #ff0000;"> resultMap</span><span style="color: #0000ff;">="ClassResultMap"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">24</span> <span style="color: #000000;">        select * from class c, teacher t where c.teacher_id=t.t_id and c.c_id=#{id}
+</span><span style="color: #008080;">25</span>     <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">select</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">26</span>     <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 使用resultMap映射实体类和字段之间的一一对应关系 </span><span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;">27</span>     <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">resultMap </span><span style="color: #ff0000;">type</span><span style="color: #0000ff;">="me.gacl.domain.Classes"</span><span style="color: #ff0000;"> id</span><span style="color: #0000ff;">="ClassResultMap"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">28</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="id"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_id"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">29</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">result </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_name"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">30</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">association </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="teacher"</span><span style="color: #ff0000;"> javaType</span><span style="color: #0000ff;">="me.gacl.domain.Teacher"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">31</span>             <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="id"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="t_id"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">32</span>             <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">result </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="t_name"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">33</span>         <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">association</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">34</span>     <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">resultMap</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">35</span>     
+<span style="color: #008080;">36</span>     <span style="color: #008000;">&lt;!--</span> 
+<span style="color: #008080;">37</span> <span style="color: #008000;">    方式二：嵌套查询：通过执行另外一个SQL映射语句来返回预期的复杂类型
+</span><span style="color: #008080;">38</span> <span style="color: #008000;">        SELECT * FROM class WHERE c_id=1;
+</span><span style="color: #008080;">39</span> <span style="color: #008000;">        SELECT * FROM teacher WHERE t_id=1   //1 是上一个查询得到的teacher_id的值
+</span><span style="color: #008080;">40</span>     <span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;">41</span>      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">select </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="getClass2"</span><span style="color: #ff0000;"> parameterType</span><span style="color: #0000ff;">="int"</span><span style="color: #ff0000;"> resultMap</span><span style="color: #0000ff;">="ClassResultMap2"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">42</span> <span style="color: #000000;">        select * from class where c_id=#{id}
+</span><span style="color: #008080;">43</span>      <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">select</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">44</span>      <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 使用resultMap映射实体类和字段之间的一一对应关系 </span><span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;">45</span>      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">resultMap </span><span style="color: #ff0000;">type</span><span style="color: #0000ff;">="me.gacl.domain.Classes"</span><span style="color: #ff0000;"> id</span><span style="color: #0000ff;">="ClassResultMap2"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">46</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="id"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_id"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">47</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">result </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_name"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">48</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">association </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="teacher"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="teacher_id"</span><span style="color: #ff0000;"> select</span><span style="color: #0000ff;">="getTeacher"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">49</span>      <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">resultMap</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">50</span>      
+<span style="color: #008080;">51</span>      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">select </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="getTeacher"</span><span style="color: #ff0000;"> parameterType</span><span style="color: #0000ff;">="int"</span><span style="color: #ff0000;"> resultType</span><span style="color: #0000ff;">="me.gacl.domain.Teacher"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">52</span> <span style="color: #000000;">        SELECT t_id id, t_name name FROM teacher WHERE t_id=#{id}
+</span><span style="color: #008080;">53</span>      <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">select</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">54</span> 
+<span style="color: #008080;">55</span> <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">mapper</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　在conf.xml文件中注册classMapper.xml</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">mappers</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 注册classMapper.xml文件， 
+        classMapper.xml位于me.gacl.mapping这个包下，所以resource写成me/gacl/mapping/classMapper.xml</span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">mapper </span><span style="color: #ff0000;">resource</span><span style="color: #0000ff;">="me/gacl/mapping/classMapper.xml"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">mappers</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3 id="blogTitle5">1.5、编写单元测试代码</h3>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">package</span><span style="color: #000000;"> me.gacl.test;
+</span><span style="color: #008080;"> 2</span> 
+<span style="color: #008080;"> 3</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> me.gacl.domain.Classes;
+</span><span style="color: #008080;"> 4</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> me.gacl.util.MyBatisUtil;
+</span><span style="color: #008080;"> 5</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> org.apache.ibatis.session.SqlSession;
+</span><span style="color: #008080;"> 6</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> org.junit.Test;
+</span><span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span> <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Test3 {
+</span><span style="color: #008080;"> 9</span>     
+<span style="color: #008080;">10</span> <span style="color: #000000;">    @Test
+</span><span style="color: #008080;">11</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> testGetClass(){
+</span><span style="color: #008080;">12</span>         SqlSession sqlSession =<span style="color: #000000;"> MyBatisUtil.getSqlSession();
+</span><span style="color: #008080;">13</span>         <span style="color: #008000;">/**</span>
+<span style="color: #008080;">14</span> <span style="color: #008000;">         * 映射sql的标识字符串，
+</span><span style="color: #008080;">15</span> <span style="color: #008000;">         * me.gacl.mapping.classMapper是classMapper.xml文件中mapper标签的namespace属性的值，
+</span><span style="color: #008080;">16</span> <span style="color: #008000;">         * getClass是select标签的id属性值，通过select标签的id属性值就可以找到要执行的SQL
+</span><span style="color: #008080;">17</span>          <span style="color: #008000;">*/</span>
+<span style="color: #008080;">18</span>         String statement = "me.gacl.mapping.classMapper.getClass";<span style="color: #008000;">//</span><span style="color: #008000;">映射sql的标识字符串
+</span><span style="color: #008080;">19</span>         <span style="color: #008000;">//</span><span style="color: #008000;">执行查询操作，将查询结果自动封装成Classes对象返回</span>
+<span style="color: #008080;">20</span>         Classes clazz = sqlSession.selectOne(statement,1);<span style="color: #008000;">//</span><span style="color: #008000;">查询class表中id为1的记录
+</span><span style="color: #008080;">21</span>         <span style="color: #008000;">//</span><span style="color: #008000;">使用SqlSession执行完SQL之后需要关闭SqlSession</span>
+<span style="color: #008080;">22</span> <span style="color: #000000;">        sqlSession.close();
+</span><span style="color: #008080;">23</span>         System.out.println(clazz);<span style="color: #008000;">//</span><span style="color: #008000;">打印结果：Classes [id=1, name=class_a, teacher=Teacher [id=1, name=teacher1]]</span>
+<span style="color: #008080;">24</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">25</span>     
+<span style="color: #008080;">26</span> <span style="color: #000000;">    @Test
+</span><span style="color: #008080;">27</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> testGetClass2(){
+</span><span style="color: #008080;">28</span>         SqlSession sqlSession =<span style="color: #000000;"> MyBatisUtil.getSqlSession();
+</span><span style="color: #008080;">29</span>         <span style="color: #008000;">/**</span>
+<span style="color: #008080;">30</span> <span style="color: #008000;">         * 映射sql的标识字符串，
+</span><span style="color: #008080;">31</span> <span style="color: #008000;">         * me.gacl.mapping.classMapper是classMapper.xml文件中mapper标签的namespace属性的值，
+</span><span style="color: #008080;">32</span> <span style="color: #008000;">         * getClass2是select标签的id属性值，通过select标签的id属性值就可以找到要执行的SQL
+</span><span style="color: #008080;">33</span>          <span style="color: #008000;">*/</span>
+<span style="color: #008080;">34</span>         String statement = "me.gacl.mapping.classMapper.getClass2";<span style="color: #008000;">//</span><span style="color: #008000;">映射sql的标识字符串
+</span><span style="color: #008080;">35</span>         <span style="color: #008000;">//</span><span style="color: #008000;">执行查询操作，将查询结果自动封装成Classes对象返回</span>
+<span style="color: #008080;">36</span>         Classes clazz = sqlSession.selectOne(statement,1);<span style="color: #008000;">//</span><span style="color: #008000;">查询class表中id为1的记录
+</span><span style="color: #008080;">37</span>         <span style="color: #008000;">//</span><span style="color: #008000;">使用SqlSession执行完SQL之后需要关闭SqlSession</span>
+<span style="color: #008080;">38</span> <span style="color: #000000;">        sqlSession.close();
+</span><span style="color: #008080;">39</span>         System.out.println(clazz);<span style="color: #008000;">//</span><span style="color: #008000;">打印结果：Classes [id=1, name=class_a, teacher=Teacher [id=1, name=teacher1]]</span>
+<span style="color: #008080;">40</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">41</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3 id="blogTitle6">&nbsp;1.6、MyBatis一对一关联查询总结</h3>
+<p>　　MyBatis中使用association标签来解决一对一的关联查询，association标签可用的属性如下：</p>
+<ul>
+<li>property:对象属性的名称</li>
+<li>javaType:对象属性的类型</li>
+<li>column:所对应的外键字段名称</li>
+<li>select:使用另一个查询封装的结果</li>
+</ul>
+<h2 id="blogTitle7">二、一对多关联</h2>
+<h3 id="blogTitle8">2.1、提出需求</h3>
+<p>　　根据classId查询对应的班级信息,包括学生,老师</p>
+<h3 id="blogTitle9">2.2、创建表和数据</h3>
+<p>　　在上面的一对一关联查询演示中，我们已经创建了班级表和教师表，因此这里再创建一张学生表</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> student(
+    s_id </span><span style="color: #0000ff;">INT</span> <span style="color: #0000ff;">PRIMARY</span> <span style="color: #0000ff;">KEY</span><span style="color: #000000;"> AUTO_INCREMENT, 
+    s_name </span><span style="color: #0000ff;">VARCHAR</span>(<span style="color: #800000; font-weight: bold;">20</span><span style="color: #000000;">), 
+    class_id </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">
+);
+</span><span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> student(s_name, class_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">student_A</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> student(s_name, class_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">student_B</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> student(s_name, class_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">student_C</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> student(s_name, class_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">student_D</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">2</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> student(s_name, class_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">student_E</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">2</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">INSERT</span> <span style="color: #0000ff;">INTO</span> student(s_name, class_id) <span style="color: #0000ff;">VALUES</span>(<span style="color: #ff0000;">'</span><span style="color: #ff0000;">student_F</span><span style="color: #ff0000;">'</span>, <span style="color: #800000; font-weight: bold;">2</span>);</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　<img style="border: 1px solid black;" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/011530596753478.png" alt=""></p>
+<h3 id="blogTitle10">2.3、定义实体类</h3>
+<p>　　1、Student类</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">package</span><span style="color: #000000;"> me.gacl.domain;
+</span><span style="color: #008080;"> 2</span> 
+<span style="color: #008080;"> 3</span> <span style="color: #008000;">/**</span>
+<span style="color: #008080;"> 4</span> <span style="color: #008000;"> * </span><span style="color: #808080;">@author</span><span style="color: #008000;"> gacl
+</span><span style="color: #008080;"> 5</span> <span style="color: #008000;"> * 定义student表所对应的实体类
+</span><span style="color: #008080;"> 6</span>  <span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 7</span> <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Student {
+</span><span style="color: #008080;"> 8</span> 
+<span style="color: #008080;"> 9</span>     <span style="color: #008000;">//</span><span style="color: #008000;">定义属性，和student表中的字段对应</span>
+<span style="color: #008080;">10</span>     <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">int</span> id;            <span style="color: #008000;">//</span><span style="color: #008000;">id===&gt;s_id</span>
+<span style="color: #008080;">11</span>     <span style="color: #0000ff;">private</span> String name;    <span style="color: #008000;">//</span><span style="color: #008000;">name===&gt;s_name</span>
+<span style="color: #008080;">12</span>     
+<span style="color: #008080;">13</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span><span style="color: #000000;"> getId() {
+</span><span style="color: #008080;">14</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> id;
+</span><span style="color: #008080;">15</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">16</span> 
+<span style="color: #008080;">17</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> setId(<span style="color: #0000ff;">int</span><span style="color: #000000;"> id) {
+</span><span style="color: #008080;">18</span>         <span style="color: #0000ff;">this</span>.id =<span style="color: #000000;"> id;
+</span><span style="color: #008080;">19</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">20</span> 
+<span style="color: #008080;">21</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String getName() {
+</span><span style="color: #008080;">22</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> name;
+</span><span style="color: #008080;">23</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">24</span> 
+<span style="color: #008080;">25</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setName(String name) {
+</span><span style="color: #008080;">26</span>         <span style="color: #0000ff;">this</span>.name =<span style="color: #000000;"> name;
+</span><span style="color: #008080;">27</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">28</span> 
+<span style="color: #008080;">29</span> <span style="color: #000000;">    @Override
+</span><span style="color: #008080;">30</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String toString() {
+</span><span style="color: #008080;">31</span>         <span style="color: #0000ff;">return</span> "Student [id=" + id + ", name=" + name + "]"<span style="color: #000000;">;
+</span><span style="color: #008080;">32</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">33</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>　　2、修改Classes类，添加一个List&lt;Student&gt; students属性，使用一个List&lt;Student&gt;集合属性表示班级拥有的学生，如下：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">package</span><span style="color: #000000;"> me.gacl.domain;
+</span><span style="color: #008080;"> 2</span> 
+<span style="color: #008080;"> 3</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> java.util.List;
+</span><span style="color: #008080;"> 4</span> 
+<span style="color: #008080;"> 5</span> <span style="color: #008000;">/**</span>
+<span style="color: #008080;"> 6</span> <span style="color: #008000;"> * </span><span style="color: #808080;">@author</span><span style="color: #008000;"> gacl
+</span><span style="color: #008080;"> 7</span> <span style="color: #008000;"> * 定义class表对应的实体类
+</span><span style="color: #008080;"> 8</span>  <span style="color: #008000;">*/</span>
+<span style="color: #008080;"> 9</span> <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Classes {
+</span><span style="color: #008080;">10</span> 
+<span style="color: #008080;">11</span>     <span style="color: #008000;">//</span><span style="color: #008000;">定义实体类的属性，与class表中的字段对应</span>
+<span style="color: #008080;">12</span>     <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">int</span> id;            <span style="color: #008000;">//</span><span style="color: #008000;">id===&gt;c_id</span>
+<span style="color: #008080;">13</span>     <span style="color: #0000ff;">private</span> String name;    <span style="color: #008000;">//</span><span style="color: #008000;">name===&gt;c_name</span>
+<span style="color: #008080;">14</span>     
+<span style="color: #008080;">15</span>     <span style="color: #008000;">/**</span>
+<span style="color: #008080;">16</span> <span style="color: #008000;">     * class表中有一个teacher_id字段，所以在Classes类中定义一个teacher属性，
+</span><span style="color: #008080;">17</span> <span style="color: #008000;">     * 用于维护teacher和class之间的一对一关系，通过这个teacher属性就可以知道这个班级是由哪个老师负责的
+</span><span style="color: #008080;">18</span>      <span style="color: #008000;">*/</span>
+<span style="color: #008080;">19</span>     <span style="color: #0000ff;">private</span><span style="color: #000000;"> Teacher teacher;
+</span><span style="color: #008080;">20</span>     <span style="color: #008000;">//</span><span style="color: #008000;">使用一个List&lt;Student&gt;集合属性表示班级拥有的学生</span>
+<span style="color: #008080;">21</span>     <span style="color: #0000ff;">private</span> List&lt;Student&gt;<span style="color: #000000;"> students;
+</span><span style="color: #008080;">22</span> 
+<span style="color: #008080;">23</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span><span style="color: #000000;"> getId() {
+</span><span style="color: #008080;">24</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> id;
+</span><span style="color: #008080;">25</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">26</span> 
+<span style="color: #008080;">27</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> setId(<span style="color: #0000ff;">int</span><span style="color: #000000;"> id) {
+</span><span style="color: #008080;">28</span>         <span style="color: #0000ff;">this</span>.id =<span style="color: #000000;"> id;
+</span><span style="color: #008080;">29</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">30</span> 
+<span style="color: #008080;">31</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String getName() {
+</span><span style="color: #008080;">32</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> name;
+</span><span style="color: #008080;">33</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">34</span> 
+<span style="color: #008080;">35</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setName(String name) {
+</span><span style="color: #008080;">36</span>         <span style="color: #0000ff;">this</span>.name =<span style="color: #000000;"> name;
+</span><span style="color: #008080;">37</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">38</span> 
+<span style="color: #008080;">39</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> Teacher getTeacher() {
+</span><span style="color: #008080;">40</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> teacher;
+</span><span style="color: #008080;">41</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">42</span> 
+<span style="color: #008080;">43</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> setTeacher(Teacher teacher) {
+</span><span style="color: #008080;">44</span>         <span style="color: #0000ff;">this</span>.teacher =<span style="color: #000000;"> teacher;
+</span><span style="color: #008080;">45</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">46</span> 
+<span style="color: #008080;">47</span>     <span style="color: #0000ff;">public</span> List&lt;Student&gt;<span style="color: #000000;"> getStudents() {
+</span><span style="color: #008080;">48</span>         <span style="color: #0000ff;">return</span><span style="color: #000000;"> students;
+</span><span style="color: #008080;">49</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">50</span> 
+<span style="color: #008080;">51</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> setStudents(List&lt;Student&gt;<span style="color: #000000;"> students) {
+</span><span style="color: #008080;">52</span>         <span style="color: #0000ff;">this</span>.students =<span style="color: #000000;"> students;
+</span><span style="color: #008080;">53</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">54</span> 
+<span style="color: #008080;">55</span> <span style="color: #000000;">    @Override
+</span><span style="color: #008080;">56</span>     <span style="color: #0000ff;">public</span><span style="color: #000000;"> String toString() {
+</span><span style="color: #008080;">57</span>         <span style="color: #0000ff;">return</span> "Classes [id=" + id + ", name=" + name + ", teacher=" +<span style="color: #000000;"> teacher
+</span><span style="color: #008080;">58</span>                 + ", students=" + students + "]"<span style="color: #000000;">;
+</span><span style="color: #008080;">59</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">60</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3 id="blogTitle11">2.4、修改<span lang="EN-US">sql映射文件c<span lang="EN-US">lassMapper.xml</span></span></h3>
+<p><span lang="EN-US"><span lang="EN-US">　　添加如下的SQL映射信息</span></span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #008000;">&lt;!--</span> 
+<span style="color: #008080;"> 2</span> <span style="color: #008000;">        根据classId查询对应的班级信息,包括学生,老师
+</span><span style="color: #008080;"> 3</span>      <span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;"> 4</span>     <span style="color: #008000;">&lt;!--</span> 
+<span style="color: #008080;"> 5</span> <span style="color: #008000;">    方式一: 嵌套结果: 使用嵌套结果映射来处理重复的联合结果的子集
+</span><span style="color: #008080;"> 6</span> <span style="color: #008000;">    SELECT * FROM class c, teacher t,student s WHERE c.teacher_id=t.t_id AND c.C_id=s.class_id AND  c.c_id=1
+</span><span style="color: #008080;"> 7</span>      <span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;"> 8</span>     <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">select </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="getClass3"</span><span style="color: #ff0000;"> parameterType</span><span style="color: #0000ff;">="int"</span><span style="color: #ff0000;"> resultMap</span><span style="color: #0000ff;">="ClassResultMap3"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;"> 9</span> <span style="color: #000000;">        select * from class c, teacher t,student s where c.teacher_id=t.t_id and c.C_id=s.class_id and  c.c_id=#{id}
+</span><span style="color: #008080;">10</span>     <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">select</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">11</span>     <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">resultMap </span><span style="color: #ff0000;">type</span><span style="color: #0000ff;">="me.gacl.domain.Classes"</span><span style="color: #ff0000;"> id</span><span style="color: #0000ff;">="ClassResultMap3"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">12</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="id"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_id"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">13</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">result </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_name"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">14</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">association </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="teacher"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="teacher_id"</span><span style="color: #ff0000;"> javaType</span><span style="color: #0000ff;">="me.gacl.domain.Teacher"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">15</span>             <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="id"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="t_id"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">16</span>             <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">result </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="t_name"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">17</span>         <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">association</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">18</span>         <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> ofType指定students集合中的对象类型 </span><span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;">19</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">collection </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="students"</span><span style="color: #ff0000;"> ofType</span><span style="color: #0000ff;">="me.gacl.domain.Student"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">20</span>             <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="id"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="s_id"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">21</span>             <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">result </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="s_name"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">22</span>         <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">collection</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">23</span>     <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">resultMap</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">24</span>     
+<span style="color: #008080;">25</span>     <span style="color: #008000;">&lt;!--</span> 
+<span style="color: #008080;">26</span> <span style="color: #008000;">        方式二：嵌套查询：通过执行另外一个SQL映射语句来返回预期的复杂类型
+</span><span style="color: #008080;">27</span> <span style="color: #008000;">            SELECT * FROM class WHERE c_id=1;
+</span><span style="color: #008080;">28</span> <span style="color: #008000;">            SELECT * FROM teacher WHERE t_id=1   //1 是上一个查询得到的teacher_id的值
+</span><span style="color: #008080;">29</span> <span style="color: #008000;">            SELECT * FROM student WHERE class_id=1  //1是第一个查询得到的c_id字段的值
+</span><span style="color: #008080;">30</span>      <span style="color: #008000;">--&gt;</span>
+<span style="color: #008080;">31</span>      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">select </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="getClass4"</span><span style="color: #ff0000;"> parameterType</span><span style="color: #0000ff;">="int"</span><span style="color: #ff0000;"> resultMap</span><span style="color: #0000ff;">="ClassResultMap4"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">32</span> <span style="color: #000000;">        select * from class where c_id=#{id}
+</span><span style="color: #008080;">33</span>      <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">select</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">34</span>      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">resultMap </span><span style="color: #ff0000;">type</span><span style="color: #0000ff;">="me.gacl.domain.Classes"</span><span style="color: #ff0000;"> id</span><span style="color: #0000ff;">="ClassResultMap4"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">35</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">id </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="id"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_id"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">36</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">result </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="name"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_name"</span><span style="color: #0000ff;">/&gt;</span>
+<span style="color: #008080;">37</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">association </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="teacher"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="teacher_id"</span><span style="color: #ff0000;"> javaType</span><span style="color: #0000ff;">="me.gacl.domain.Teacher"</span><span style="color: #ff0000;"> select</span><span style="color: #0000ff;">="getTeacher2"</span><span style="color: #0000ff;">&gt;&lt;/</span><span style="color: #800000;">association</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">38</span>         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">collection </span><span style="color: #ff0000;">property</span><span style="color: #0000ff;">="students"</span><span style="color: #ff0000;"> ofType</span><span style="color: #0000ff;">="me.gacl.domain.Student"</span><span style="color: #ff0000;"> column</span><span style="color: #0000ff;">="c_id"</span><span style="color: #ff0000;"> select</span><span style="color: #0000ff;">="getStudent"</span><span style="color: #0000ff;">&gt;&lt;/</span><span style="color: #800000;">collection</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">39</span>      <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">resultMap</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">40</span>      
+<span style="color: #008080;">41</span>      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">select </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="getTeacher2"</span><span style="color: #ff0000;"> parameterType</span><span style="color: #0000ff;">="int"</span><span style="color: #ff0000;"> resultType</span><span style="color: #0000ff;">="me.gacl.domain.Teacher"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">42</span> <span style="color: #000000;">        SELECT t_id id, t_name name FROM teacher WHERE t_id=#{id}
+</span><span style="color: #008080;">43</span>      <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">select</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">44</span>      
+<span style="color: #008080;">45</span>      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">select </span><span style="color: #ff0000;">id</span><span style="color: #0000ff;">="getStudent"</span><span style="color: #ff0000;"> parameterType</span><span style="color: #0000ff;">="int"</span><span style="color: #ff0000;"> resultType</span><span style="color: #0000ff;">="me.gacl.domain.Student"</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #008080;">46</span> <span style="color: #000000;">        SELECT s_id id, s_name name FROM student WHERE class_id=#{id}
+</span><span style="color: #008080;">47</span>      <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">select</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3 id="blogTitle12"><span lang="EN-US"><span lang="EN-US">2.5、编写单元测试代码</span></span></h3>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #008080;"> 1</span> <span style="color: #0000ff;">package</span><span style="color: #000000;"> me.gacl.test;
+</span><span style="color: #008080;"> 2</span> 
+<span style="color: #008080;"> 3</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> me.gacl.domain.Classes;
+</span><span style="color: #008080;"> 4</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> me.gacl.util.MyBatisUtil;
+</span><span style="color: #008080;"> 5</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> org.apache.ibatis.session.SqlSession;
+</span><span style="color: #008080;"> 6</span> <span style="color: #0000ff;">import</span><span style="color: #000000;"> org.junit.Test;
+</span><span style="color: #008080;"> 7</span> 
+<span style="color: #008080;"> 8</span> <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> Test4 {
+</span><span style="color: #008080;"> 9</span>     
+<span style="color: #008080;">10</span> <span style="color: #000000;">    @Test
+</span><span style="color: #008080;">11</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> testGetClass3(){
+</span><span style="color: #008080;">12</span>         SqlSession sqlSession =<span style="color: #000000;"> MyBatisUtil.getSqlSession();
+</span><span style="color: #008080;">13</span>         <span style="color: #008000;">/**</span>
+<span style="color: #008080;">14</span> <span style="color: #008000;">         * 映射sql的标识字符串，
+</span><span style="color: #008080;">15</span> <span style="color: #008000;">         * me.gacl.mapping.classMapper是classMapper.xml文件中mapper标签的namespace属性的值，
+</span><span style="color: #008080;">16</span> <span style="color: #008000;">         * getClass3是select标签的id属性值，通过select标签的id属性值就可以找到要执行的SQL
+</span><span style="color: #008080;">17</span>          <span style="color: #008000;">*/</span>
+<span style="color: #008080;">18</span>         String statement = "me.gacl.mapping.classMapper.getClass3";<span style="color: #008000;">//</span><span style="color: #008000;">映射sql的标识字符串
+</span><span style="color: #008080;">19</span>         <span style="color: #008000;">//</span><span style="color: #008000;">执行查询操作，将查询结果自动封装成Classes对象返回</span>
+<span style="color: #008080;">20</span>         Classes clazz = sqlSession.selectOne(statement,1);<span style="color: #008000;">//</span><span style="color: #008000;">查询class表中id为1的记录
+</span><span style="color: #008080;">21</span>         <span style="color: #008000;">//</span><span style="color: #008000;">使用SqlSession执行完SQL之后需要关闭SqlSession</span>
+<span style="color: #008080;">22</span> <span style="color: #000000;">        sqlSession.close();
+</span><span style="color: #008080;">23</span>         <span style="color: #008000;">//</span><span style="color: #008000;">打印结果：Classes [id=1, name=class_a, teacher=Teacher [id=1, name=teacher1], students=[Student [id=1, name=student_A], Student [id=2, name=student_B], Student [id=3, name=student_C]]]</span>
+<span style="color: #008080;">24</span> <span style="color: #000000;">        System.out.println(clazz);
+</span><span style="color: #008080;">25</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">26</span>     
+<span style="color: #008080;">27</span> <span style="color: #000000;">    @Test
+</span><span style="color: #008080;">28</span>     <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> testGetClass4(){
+</span><span style="color: #008080;">29</span>         SqlSession sqlSession =<span style="color: #000000;"> MyBatisUtil.getSqlSession();
+</span><span style="color: #008080;">30</span>         <span style="color: #008000;">/**</span>
+<span style="color: #008080;">31</span> <span style="color: #008000;">         * 映射sql的标识字符串，
+</span><span style="color: #008080;">32</span> <span style="color: #008000;">         * me.gacl.mapping.classMapper是classMapper.xml文件中mapper标签的namespace属性的值，
+</span><span style="color: #008080;">33</span> <span style="color: #008000;">         * getClass4是select标签的id属性值，通过select标签的id属性值就可以找到要执行的SQL
+</span><span style="color: #008080;">34</span>          <span style="color: #008000;">*/</span>
+<span style="color: #008080;">35</span>         String statement = "me.gacl.mapping.classMapper.getClass4";<span style="color: #008000;">//</span><span style="color: #008000;">映射sql的标识字符串
+</span><span style="color: #008080;">36</span>         <span style="color: #008000;">//</span><span style="color: #008000;">执行查询操作，将查询结果自动封装成Classes对象返回</span>
+<span style="color: #008080;">37</span>         Classes clazz = sqlSession.selectOne(statement,1);<span style="color: #008000;">//</span><span style="color: #008000;">查询class表中id为1的记录
+</span><span style="color: #008080;">38</span>         <span style="color: #008000;">//</span><span style="color: #008000;">使用SqlSession执行完SQL之后需要关闭SqlSession</span>
+<span style="color: #008080;">39</span> <span style="color: #000000;">        sqlSession.close();
+</span><span style="color: #008080;">40</span>         <span style="color: #008000;">//</span><span style="color: #008000;">打印结果：Classes [id=1, name=class_a, teacher=Teacher [id=1, name=teacher1], students=[Student [id=1, name=student_A], Student [id=2, name=student_B], Student [id=3, name=student_C]]]</span>
+<span style="color: #008080;">41</span> <span style="color: #000000;">        System.out.println(clazz);
+</span><span style="color: #008080;">42</span> <span style="color: #000000;">    }
+</span><span style="color: #008080;">43</span> }</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h3 id="blogTitle13">&nbsp;2.6、MyBatis一对多关联查询总结</h3>
+<p>　　MyBatis中使用collection标签来解决一对多的关联查询，ofType属性指定集合中元素的对象类型。</p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/xdp-gacl/category/655890.html" target="_blank">Mybatis</a></div>
+<div id="EntryTag">标签: <a href="https://www.cnblogs.com/xdp-gacl/tag/MyBatis%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">MyBatis学习总结</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(4264440,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;f1774468-815f-e011-a53f-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/xdp-gacl/" target="_blank"><img src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/20160221223904.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/xdp-gacl/">孤傲苍狼</a><br>
+            <a href="http://home.cnblogs.com/u/xdp-gacl/followees">关注 - 92</a><br>
+            <a href="http://home.cnblogs.com/u/xdp-gacl/followers">粉丝 - 17214</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;f1774468-815f-e011-a53f-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(4264440,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">89</span>
+    </div>
+    <div class="buryit" onclick="votePost(4264440,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">2</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/xdp-gacl/p/4264425.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/xdp-gacl/p/4264425.html" title="发布于2015-01-31 18:15">MyBatis学习总结(四)——解决字段名与实体类属性名不相同的冲突</a><br><a href="https://www.cnblogs.com/xdp-gacl/p/4270352.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/xdp-gacl/p/4270352.html" title="发布于2015-02-03 16:44">MyBatis学习总结(六)——调用存储过程</a><br></div>
+</div>
+
+</div>
+    <p class="postfoot">posted on <span id="post-date">2015-02-01 16:27</span> <a href="https://www.cnblogs.com/xdp-gacl/">孤傲苍狼</a> 阅读(<span id="post_view_count">293064</span>) 评论(<span id="post_comment_count">63</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=4264440" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#" onclick="AddToWz(4264440);return false;">收藏</a></p>
+</div>
+<script type="text/javascript">var allowComments=true,cb_blogId=133816,cb_entryId=4264440,cb_blogApp=currentBlogApp,cb_blogUserGuid='f1774468-815f-e011-a53f-842b2b196315',cb_entryCreatedDate='2015/2/1 16:27:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"><div class="pager"><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#!comments" onclick="commentManager.renderComments(1,50);return false;">&lt; Prev</a><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#!comments" onclick="commentManager.renderComments(1,50);return false;">1</a><span class="current">2</span></div></div>
+<a name="评论"></a>
+<div id="comments">
+<h3>评论</h3>
+	
+	
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3719317" class="layer">#51楼</a><a name="3719317" id="comment_anchor_3719317"></a>
+					<span>
+						 <span class="comment_date">2017-06-21 11:51</span>
+					</span>
+				<a id="a_comment_author_3719317" href="http://home.cnblogs.com/u/823718/" target="_blank">erhuven</a> <a href="http://msg.cnblogs.com/send/erhuven" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3719317" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3716709" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3716709);">@</a>
+刘彻<br>才学10分钟就随便下结论???</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3719317,&#39;Digg&#39;,this)">支持(2)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3719317,&#39;Bury&#39;,this)">反对(1)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3744033" class="layer">#52楼</a><a name="3744033" id="comment_anchor_3744033"></a>
+					<span>
+						 <span class="comment_date">2017-07-26 17:28</span>
+					</span>
+				<a id="a_comment_author_3744033" href="https://www.cnblogs.com/hhx1228/" target="_blank">虾米小主</a> <a href="http://msg.cnblogs.com/send/%E8%99%BE%E7%B1%B3%E5%B0%8F%E4%B8%BB" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3744033" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p>感觉还是挺麻烦的，很容易出错，哈哈</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3744033,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3744033,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3758869" class="layer">#53楼</a><a name="3758869" id="comment_anchor_3758869"></a>
+					<span>
+						 <span class="comment_date">2017-08-15 23:45</span>
+					</span>
+				<a id="a_comment_author_3758869" href="https://www.cnblogs.com/yunai/" target="_blank">芋艿</a> <a href="http://msg.cnblogs.com/send/%E8%8A%8B%E8%89%BF" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3758869" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p>不错，收藏了<br><br>推荐下，分表分库数据库中间件 Sharding-JDBC 源码分析 17篇：<a href="http://www.yunai.me/categories/Sharding-JDBC/?cnblogs" target="_blank">http://www.yunai.me/categories/Sharding-JDBC/?cnblogs</a>&amp;602</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3758869,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3758869,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3774123" class="layer">#54楼</a><a name="3774123" id="comment_anchor_3774123"></a>
+					<span>
+						 <span class="comment_date">2017-09-03 22:46</span>
+					</span>
+				<a id="a_comment_author_3774123" href="https://www.cnblogs.com/laoxiong/" target="_blank">行走的老熊</a> <a href="http://msg.cnblogs.com/send/%E8%A1%8C%E8%B5%B0%E7%9A%84%E8%80%81%E7%86%8A" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3774123" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3719317" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3719317);">@</a>
+erhuven<br>对啊，开发中你的项目经理让你用JDBC?</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3774123,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3774123,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3782475" class="layer">#55楼</a><a name="3782475" id="comment_anchor_3782475"></a>
+					<span>
+						 <span class="comment_date">2017-09-12 19:52</span>
+					</span>
+				<a id="a_comment_author_3782475" href="http://home.cnblogs.com/u/1152640/" target="_blank">xanthuim</a> <a href="http://msg.cnblogs.com/send/xanthuim" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3782475" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p>请问如果没有id参数的情况怎么关联？比如用户表和订单表，我想列出每个用户下订单信息。<br><br>张三<br>-订单1<br>-订单2<br>李四<br>-订单1<br>-订单2<br>-订单3<br>王五<br>-订单1<br>-订单2<br><br>就是查询所有的数据，这样怎么写映射文件？</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3782475,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3782475,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3799525" class="layer">#56楼</a><a name="3799525" id="comment_anchor_3799525"></a>
+					<span>
+						 <span class="comment_date">2017-09-28 15:42</span>
+					</span>
+				<a id="a_comment_author_3799525" href="http://home.cnblogs.com/u/1249001/" target="_blank">dbstar</a> <a href="http://msg.cnblogs.com/send/dbstar" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3799525" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3716709" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3716709);">@</a>
+刘彻<br>对于一个刚接触编程语言的学生而言,你的说法没有很大毛病,等你工作了就知道了,直接使用jdbc是有多么的不可取,祝你好运</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3799525,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3799525,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3799574" class="layer">#57楼</a><a name="3799574" id="comment_anchor_3799574"></a>
+					<span>
+						 <span class="comment_date">2017-09-28 16:08</span>
+					</span>
+				<a id="a_comment_author_3799574" href="http://home.cnblogs.com/u/1249001/" target="_blank">dbstar</a> <a href="http://msg.cnblogs.com/send/dbstar" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3799574" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3288105" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3288105);">@</a>
+BraveSpringer<br>基于注解的方式<br>因为你建的数据库表字段名和实体类的属性不一样,所以mybatis无法调用对象的set方法,所以会得到null,基于注解有个弊端, <a href="http://home.cnblogs.com/u/149044/" target="_blank">@Select</a>  要求返回的记录只有一条,如果多条的话会抛出org.apache.ibatis.exceptions.TooManyResultsException 异常的,<br><br>所以你的问题原因在于:@Select("")写的不对.<br>@Select("select c.class_id  id from class") 需要给列名取个和实体类一样的别名,这样mybatis才可以会对象注入值</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3799574,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3799574,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3854358" class="layer">#58楼</a><a name="3854358" id="comment_anchor_3854358"></a>
+					<span>
+						 <span class="comment_date">2017-11-30 12:13</span>
+					</span>
+				<a id="a_comment_author_3854358" href="https://www.cnblogs.com/lunge-blog/" target="_blank">我的锅</a> <a href="http://msg.cnblogs.com/send/%E6%88%91%E7%9A%84%E9%94%85" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3854358" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3799574" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3799574);">@</a>
+dbstar<br>我就说我想用注解查询一对多的所有结果报这个异常，注解是真的不能查询多个吗？而且我网上看到别人一对多注解建了好多接口，感觉还不如直接配置xml</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3854358,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3854358,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3854589" class="layer">#59楼</a><a name="3854589" id="comment_anchor_3854589"></a>
+					<span>
+						 <span class="comment_date">2017-11-30 15:28</span>
+					</span>
+				<a id="a_comment_author_3854589" href="http://home.cnblogs.com/u/1249001/" target="_blank">dbstar</a> <a href="http://msg.cnblogs.com/send/dbstar" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3854589" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3854358" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3854358);">@</a>
+我的锅<br>对啊,实际项目用的时候,大家还都是配置XML的,这样便于管理的,自己练习的话可以练习下,多了解了解</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3854589,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3854589,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3879467" class="layer">#60楼</a><a name="3879467" id="comment_anchor_3879467"></a>
+					<span>
+						 <span class="comment_date">2018-01-02 15:11</span>
+					</span>
+				<a id="a_comment_author_3879467" href="https://www.cnblogs.com/africancu/" target="_blank">非洲铜</a> <a href="http://msg.cnblogs.com/send/%E9%9D%9E%E6%B4%B2%E9%93%9C" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3879467" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3716709" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3716709);">@</a>
+刘彻<br>牛逼了，学10分钟就能看出这个框架怎么样？至少也要学20分钟啊，哥。</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3879467,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3879467,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3879467_avatar" style="display:none;">http://pic.cnblogs.com/face/1133643/20180428233157.png</span>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3896057" class="layer">#61楼</a><a name="3896057" id="comment_anchor_3896057"></a>
+					<span>
+						 <span class="comment_date">2018-01-23 23:45</span>
+					</span>
+				<a id="a_comment_author_3896057" href="http://home.cnblogs.com/u/355575/" target="_blank">hacker浩浩</a> <a href="http://msg.cnblogs.com/send/hacker%E6%B5%A9%E6%B5%A9" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3896057" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3330217" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3330217);">@</a>
+xiaoxiaojiang<br>肯定是设置不对，他这个是分解sql，查老师时候需要用上一步得出的teacher_id,所以那个一对一那个地方需要将column设置成teacher_id,否则出来就是null</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3896057,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3896057,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3934771" class="layer">#62楼</a><a name="3934771" id="comment_anchor_3934771"></a>
+					<span>
+						 <span class="comment_date">2018-03-27 14:26</span>
+					</span>
+				<a id="a_comment_author_3934771" href="http://home.cnblogs.com/u/662643/" target="_blank">shl1988012</a> <a href="http://msg.cnblogs.com/send/shl1988012" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_3934771" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#3716709" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3716709);">@</a>
+刘彻<br>加油 不要用哟~~~</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3934771,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3934771,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+			<h4>
+				<a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#4161830" class="layer">#63楼</a><a name="4161830" id="comment_anchor_4161830"></a><span id="comment-maxId" style="display:none;">4161830</span><span id="comment-maxDate" style="display:none;">2019/1/13 17:29:14</span>
+					<span>
+						 <span class="comment_date">2019-01-13 17:29</span>
+					</span>
+				<a id="a_comment_author_4161830" href="http://home.cnblogs.com/u/1563565/" target="_blank">sdlkfjlsdkfj</a> <a href="http://msg.cnblogs.com/send/sdlkfjlsdkfj" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</h4>
+			<p>
+				</p><div id="comment_body_4161830" class="blog_comment_body"><div class="list"><table class="out" border="0" cellspacing="0" cellpadding="0"> <tbody><tr><td class="icontd" align="right" valign="bottom"><img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"></td><td align="left" valign="bottom" class="q"><table border="0" cellpadding="0" cellspacing="0" style=""> <tbody><tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> <tr><td class="left"></td> <td align="left" class="conmts"><p>代码很好 都能用  <br>大家如果有返回空值的情况可以看看resultmap里的对应有没有写对 还有 sql里面搜索的列名有没有命名为跟model里的一样</p> </td> <td class="right"></td></tr> <tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> </tbody></table></td> </tr> </tbody></table> </div></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4161830,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4161830,&#39;Bury&#39;,this)">反对(0)</a></div>
+				&nbsp;&nbsp;<span class="comment_actions"></span>
+			<p></p>
+		
+</div><div id="comments_pager_bottom"><div class="pager"><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#!comments" onclick="commentManager.renderComments(1,50);return false;">&lt; Prev</a><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#!comments" onclick="commentManager.renderComments(1,50);return false;">1</a><span class="current">2</span></div></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万C++/C#源码: 大型实时仿真HMI组态CAD\GIS图形源码！</a><br><a href="https://gitee.com/enterprises?from=bky-2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-gitee&#39;)">【推荐】专业便捷的企业级代码托管服务 - Gitee 码云</a><br></div>
+<div id="opt_under_post"></div>
+<script async="async" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/gpt.js"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c1" class="c_ad_block">
+    <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CObHose8zOACFU0vlgodAnMNzw"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/tufujie/p/5729500.html" target="_blank" onclick="clickRecomItmem(5729500,&#39;N5wANNi2LaHpH1Lheo/EOmdMKUBnKmf3PzSOKHv1T+L/AHZ28OJ7Sba+OUEEzYbKfM1giYefTL9/teeRYou60oT+reYKpCLPN/7t5gCnmbjjyTbLYqu0ePIlfBOlvYgT+jovhFclcz3zRAxJ+eU=&#39;)">MyBatis学习总结(5)——实现关联表查询</a><br>·  <a href="https://www.cnblogs.com/zhangpan1244/p/5436999.html" target="_blank" onclick="clickRecomItmem(5436999,&#39;WyK4hakAQDv53HMoO81DXu5Qp7q5bOraqGQDY/4Y6eNQ3VG4lwBwJsRdX/fbCCG2G8QsqT3bgDU0/hr+a0HzbLKKDuHvVii+pawFMYSOLUGLmohmSfY8nEjHDUTHRLgP0SsmYbQU1YMJlIgM9tk=&#39;)">MyBatis实现关联表查询</a><br>·  <a href="https://www.cnblogs.com/coshaho/p/4825078.html" target="_blank" onclick="clickRecomItmem(4825078,&#39;DcriO4ZXPHxO/bgKMGYMry/J0HwJkS5H9pt3QkH4nVYNvsIlO1yavddBNDuMQbvcNwyFTO41PjawwVLxNupVXrxad/f7onytnfpPxYLEAYlPn1p3LUIctHS5RmS9RHBLR2fwGsQWVBPFBBTLGms=&#39;)">MyBatis学习笔记(五)——实现关联表查询</a><br>·  <a href="https://www.cnblogs.com/kluan/p/5934371.html" target="_blank" onclick="clickRecomItmem(5934371,&#39;DHHUIH/uKbarzqX286XZGOxikWSY6RIK9NmWwo0yGc9HZub5OjGGvyaHtea6I+qHSq45W2hsIdN9cRxgFkmKL9/D4F0FEEfYSAxt2Nf9aUTCS7UoM+NSeQkapSgKgOKcw9FnIoQXe8WeXZYE1q0=&#39;)">MyBatis学习总结_05_实现关联表查询</a><br>·  <a href="https://www.cnblogs.com/chenrunlin/p/5446879.html" target="_blank" onclick="clickRecomItmem(5446879,&#39;8XdI2ZDWzwqY2h1PlNkXDFFi63HMoYgEb+RP3teal8rPPCm27tABYa2scr9vDK3zpl3MgFpv7oEoGs8xNCUFqxSJhJ/13Ct0Chqse/7K4e5Pn3MipIengND77N2F4QbMENjLfj9GlDhtBn0gMhQ=&#39;)">mybatis---实现关联表查询</a><br></div></div>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CNbHose8zOACFZO3lgodSsoLCw"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/620012/" target="_blank">永不造车？拆解华为拥有的自动驾驶和电动汽车关键技术</a><br> ·  <a href="https://news.cnblogs.com/n/620010/" target="_blank">6天面试、斩获6家硅谷巨头Offer，我是如何做到的？</a><br> ·  <a href="https://news.cnblogs.com/n/620007/" target="_blank">IBM成Z代人最青睐科技公司 谷歌和亚马逊分列第二三名</a><br> ·  <a href="https://news.cnblogs.com/n/619925/" target="_blank">为什么我们更像是在为抖音筛选内容，而非消费内容？</a><br> ·  <a href="https://news.cnblogs.com/n/619894/" target="_blank">人人车变脸：曾经想干掉黄牛，如今成了“黄牛公司”</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+</div>
+<div id="rightmenu">
+	
+		
+<div id="my_links">
+<h3>导航</h3>
+<ul>
+<li><a id="blog_nav_sitehome" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" href="https://www.cnblogs.com/xdp-gacl/">首页</a></li>
+<!--<li><a id="blog_nav_newpost" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>-->
+<li><a id="blog_nav_contact" rel="nofollow" href="https://msg.cnblogs.com/send/%E5%AD%A4%E5%82%B2%E8%8B%8D%E7%8B%BC">联系</a></li>
+<li><a id="blog_nav_rss" href="https://www.cnblogs.com/xdp-gacl/rss">订阅</a></li><!--<a id="blog_nav_rss_image" href="https://www.cnblogs.com/xdp-gacl/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>-->
+<li><a id="blog_nav_admin" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+</div>
+		<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/01/01&#39;);return false;">&lt;</a></td><td align="center">2019年2月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/03/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td class="CalWeekendDay" align="center">2</td></tr><tr><td class="CalWeekendDay" align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td class="CalWeekendDay" align="center">9</td></tr><tr><td class="CalWeekendDay" align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td class="CalWeekendDay" align="center">16</td></tr><tr><td class="CalWeekendDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td class="CalTodayDay" align="center">21</td><td align="center">22</td><td class="CalWeekendDay" align="center">23</td></tr><tr><td class="CalWeekendDay" align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td></tr><tr><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+		
+<h3>公告</h3>
+<div class="newsItem">
+	<div id="blog-news"><script type="text/javascript">window['__document_write_ajax_callbacks__']['4']();</script><script>window['__document_write_ajax_callbacks__']['1']();</script>
+<div style="display: none" id="__document_write_ajax_div-2"></div><script>window['__document_write_ajax_callbacks__']['2']();</script><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/xdp-gacl/">孤傲苍狼</a><br>园龄：<a href="https://home.cnblogs.com/u/xdp-gacl/" title="入园时间：2011-04-05">7年10个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/xdp-gacl/followers/">17214</a><br>关注：<a href="https://home.cnblogs.com/u/xdp-gacl/followees/">92</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;f1774468-815f-e011-a53f-842b2b196315&#39;)">+加关注</a></div><script type="text/javascript">window['__document_write_ajax_callbacks__']['5']();</script><script>window['__document_write_ajax_callbacks__']['3']();</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>		
+		<div id="blog_stats">
+<div id="blog_stats">
+<h3>统计</h3>
+<ul>
+<li>随笔 - 275
+</li><li>文章 - 0
+</li><li>评论 - 3286
+<!--<li>引用 - 0-->
+</li>
+</ul>
+</div></div>
+		<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/xdp-gacl/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<h3 class="catListTitle">我的标签</h3>
+<div id="MyTag">
+<ul>
+<li><a href="https://www.cnblogs.com/xdp-gacl/tag/JavaWeb%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">JavaWeb学习总结</a>(63)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/java%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/">java基础总结</a>(29)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/Javascript%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Javascript学习总结</a>(27)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/Snmp%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Snmp学习总结</a>(15)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/MyEclipse%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">MyEclipse使用总结</a>(13)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/Android%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Android开发学习总结</a>(13)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/Maven%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Maven学习总结</a>(12)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/MySQL%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">MySQL学习总结</a>(9)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/WebLogic%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">WebLogic使用总结</a>(9)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/NginX%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">NginX学习总结</a>(8)</li><li><a href="https://www.cnblogs.com/xdp-gacl/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+		<h3>随笔分类</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/xdp-gacl/category/431986.html">AJAX(2)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/xdp-gacl/category/663970.html">Android开发(12)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/xdp-gacl/category/431983.html">ASP.NET(2)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/xdp-gacl/category/431981.html">C#(8)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/xdp-gacl/category/647917.html">CSS学习总结</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/xdp-gacl/category/557089.html">C语言学习总结</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/xdp-gacl/category/605855.html">FusionCharts</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/xdp-gacl/category/641669.html">H2数据库学习使用总结(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/xdp-gacl/category/601788.html">Hessian(2)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/xdp-gacl/category/557131.html">Hibernate</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/xdp-gacl/category/602554.html">Highcharts</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/xdp-gacl/category/544383.html">HTML(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/xdp-gacl/category/791376.html">html5学习使用总结</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/xdp-gacl/category/647915.html">Html学习总结</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/xdp-gacl/category/431984.html">Java(13)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/xdp-gacl/category/431982.html">JavaScript(27)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/xdp-gacl/category/574705.html">JavaWeb学习总结(55)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/xdp-gacl/category/563691.html">Java基础加强总结(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/xdp-gacl/category/566451.html">java基础面试题(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/xdp-gacl/category/563690.html">java基础总结(28)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/xdp-gacl/category/595905.html">Java监控</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/xdp-gacl/category/607504.html">Java事务处理</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/xdp-gacl/category/600539.html">java字节码的处理技术</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/xdp-gacl/category/636007.html">JFinal学习研究</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/xdp-gacl/category/609326.html">JNDI(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/xdp-gacl/category/571424.html">Jquery EasyUI学习使用总结(7)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_26" href="https://www.cnblogs.com/xdp-gacl/category/600080.html">jwebap</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_27" href="https://www.cnblogs.com/xdp-gacl/category/599454.html">kafka</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_28" href="https://www.cnblogs.com/xdp-gacl/category/590574.html">LDAP</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_29" href="https://www.cnblogs.com/xdp-gacl/category/620197.html">Linux学习总结(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_30" href="https://www.cnblogs.com/xdp-gacl/category/544719.html">Maven(10)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_31" href="https://www.cnblogs.com/xdp-gacl/category/599453.html">Mina</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_32" href="https://www.cnblogs.com/xdp-gacl/category/655890.html">Mybatis(8)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_33" href="https://www.cnblogs.com/xdp-gacl/category/544414.html">MyEclipse(11)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_34" href="https://www.cnblogs.com/xdp-gacl/category/557132.html">MySQL(2)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_35" href="https://www.cnblogs.com/xdp-gacl/category/576035.html">Nginx(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_36" href="https://www.cnblogs.com/xdp-gacl/category/567838.html">Oracle学习使用总结</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_37" href="https://www.cnblogs.com/xdp-gacl/category/562877.html">PowerDesigner使用总结(5)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_38" href="https://www.cnblogs.com/xdp-gacl/category/640475.html">redis</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_39" href="https://www.cnblogs.com/xdp-gacl/category/591218.html">RESTful架构(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_40" href="https://www.cnblogs.com/xdp-gacl/category/649781.html">Servlet3.0(4)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_41" href="https://www.cnblogs.com/xdp-gacl/category/613358.html">Snmp学习总结(8)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_42" href="https://www.cnblogs.com/xdp-gacl/category/544380.html">Spring(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_43" href="https://www.cnblogs.com/xdp-gacl/category/654626.html">SpringMVC学习总结</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_44" href="https://www.cnblogs.com/xdp-gacl/category/543327.html">SQLServer(4)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_45" href="https://www.cnblogs.com/xdp-gacl/category/543338.html">Struts2(4)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_46" href="https://www.cnblogs.com/xdp-gacl/category/737796.html">SVN</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_47" href="https://www.cnblogs.com/xdp-gacl/category/544377.html">VB.NET(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_48" href="https://www.cnblogs.com/xdp-gacl/category/637206.html">WebLogic使用总结(8)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_49" href="https://www.cnblogs.com/xdp-gacl/category/629559.html">WebService学习总结(4)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_50" href="https://www.cnblogs.com/xdp-gacl/category/787823.html">WebSocket(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_51" href="https://www.cnblogs.com/xdp-gacl/category/554263.html">WinForm学习总结</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_52" href="https://www.cnblogs.com/xdp-gacl/category/602889.html">XML学习总结(2)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_53" href="https://www.cnblogs.com/xdp-gacl/category/551491.html">插件化开发</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_54" href="https://www.cnblogs.com/xdp-gacl/category/598077.html">创业知识(5)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_55" href="https://www.cnblogs.com/xdp-gacl/category/651090.html">大数据/hadoop(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_56" href="https://www.cnblogs.com/xdp-gacl/category/645953.html">代码注释(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_57" href="https://www.cnblogs.com/xdp-gacl/category/588156.html">单点登录(Yale_CAS_SSO)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_58" href="https://www.cnblogs.com/xdp-gacl/category/710266.html">电脑基本技能</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_59" href="https://www.cnblogs.com/xdp-gacl/category/636430.html">读书笔记</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_60" href="https://www.cnblogs.com/xdp-gacl/category/635429.html">负载均衡(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_61" href="https://www.cnblogs.com/xdp-gacl/category/543351.html">互联网基础(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_62" href="https://www.cnblogs.com/xdp-gacl/category/644775.html">缓存框架</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_63" href="https://www.cnblogs.com/xdp-gacl/category/801455.html">架构设计</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_64" href="https://www.cnblogs.com/xdp-gacl/category/661363.html">框架整合(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_65" href="https://www.cnblogs.com/xdp-gacl/category/810590.html">敏捷开发(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_66" href="https://www.cnblogs.com/xdp-gacl/category/1325914.html">区块链</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_67" href="https://www.cnblogs.com/xdp-gacl/category/591507.html">权限设计</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_68" href="https://www.cnblogs.com/xdp-gacl/category/431985.html">生活感悟(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_69" href="https://www.cnblogs.com/xdp-gacl/category/589802.html">数据库Sharding(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_70" href="https://www.cnblogs.com/xdp-gacl/category/562913.html">数据库理论基础(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_71" href="https://www.cnblogs.com/xdp-gacl/category/608526.html">微信开发(3)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_72" href="https://www.cnblogs.com/xdp-gacl/category/811446.html">我的开发框架</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_73" href="https://www.cnblogs.com/xdp-gacl/category/806539.html">项目管理(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_74" href="https://www.cnblogs.com/xdp-gacl/category/654566.html">英语学习</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_75" href="https://www.cnblogs.com/xdp-gacl/category/578277.html">原创小工具(1)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_76" href="https://www.cnblogs.com/xdp-gacl/category/594056.html">云计算(2)</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_77" href="https://www.cnblogs.com/xdp-gacl/category/598078.html">哲学人生</a> </li>
+			
+				<li><a id="CatList_LinkList_0_Link_78" href="https://www.cnblogs.com/xdp-gacl/category/596451.html">职场感悟(3)</a> </li>
+			
+				</ul>
+			
+	
+		<h3>随笔档案</h3>
+		
+				<ul>
+			
+				<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/xdp-gacl/archive/2016/04.html">2016年4月 (5)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/xdp-gacl/archive/2016/03.html">2016年3月 (5)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/xdp-gacl/archive/2016/02.html">2016年2月 (3)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/xdp-gacl/archive/2016/01.html">2016年1月 (2)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/xdp-gacl/archive/2015/07.html">2015年7月 (11)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/xdp-gacl/archive/2015/03.html">2015年3月 (12)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/xdp-gacl/archive/2015/02.html">2015年2月 (6)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/xdp-gacl/archive/2015/01.html">2015年1月 (40)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/xdp-gacl/archive/2014/12.html">2014年12月 (17)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/xdp-gacl/archive/2014/11.html">2014年11月 (12)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/xdp-gacl/archive/2014/10.html">2014年10月 (31)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/xdp-gacl/archive/2014/08.html">2014年8月 (10)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/xdp-gacl/archive/2014/07.html">2014年7月 (25)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/xdp-gacl/archive/2014/06.html">2014年6月 (6)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/xdp-gacl/archive/2014/05.html">2014年5月 (10)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/xdp-gacl/archive/2014/04.html">2014年4月 (22)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/xdp-gacl/archive/2014/03.html">2014年3月 (28)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/xdp-gacl/archive/2014/02.html">2014年2月 (11)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/xdp-gacl/archive/2014/01.html">2014年1月 (2)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_19" href="https://www.cnblogs.com/xdp-gacl/archive/2013/12.html">2013年12月 (16)</a> </li>
+			
+				<li><a id="CatList_LinkList_1_Link_20" href="https://www.cnblogs.com/xdp-gacl/archive/2012/11.html">2012年11月 (1)</a> </li>
+			
+				</ul>
+			
+	</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<h3 class="catListTitle">最新评论</h3>
+<div class="RecentComment" id="RecentComments">
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/3624100.html#4184741">1. Re:java基础学习总结——面向对象1</a></li>
+        <li class="recent_comment_body">楼主有没有啥java或者javaweb方面的学习资料推荐呀</li>
+        <li class="recent_comment_author">--一山雨</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/3952405.html#4182849">2. Re:javaweb学习总结(四十三)——Filter高级开发</a></li>
+        <li class="recent_comment_body">大神的发型很酷啊</li>
+        <li class="recent_comment_author">--tinyLove</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/4088198.html#4182464">3. Re:EasyUI学习总结(六)——EasyUI布局</a></li>
+        <li class="recent_comment_body">大佬好厉害，经常搜索的问题都是指向你的答案，太佩服了，不知道什么时候能像你一样优秀</li>
+        <li class="recent_comment_author">--tingmen</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/4259481.html#4182239">4. Re:WebService学习总结(三)——使用JDK开发WebService</a></li>
+        <li class="recent_comment_body">很好的栗子 学习了</li>
+        <li class="recent_comment_author">--sdlkfjlsdkfj</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/4270352.html#4182085">5. Re:MyBatis学习总结(六)——调用存储过程</a></li>
+        <li class="recent_comment_body">照抄博主代码的同志们如果发现执行报错时，检查一下userMapper.xml中的getUserCount，把调用存储过程的那句SQL最后加个分号，改成这样再试试：CALL mybatis.ges_us......</li>
+        <li class="recent_comment_author">--willxiang</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/3622275.html#4182034">6. Re:Java基础加强总结(一)——注解(Annotation)</a></li>
+        <li class="recent_comment_body">好文章！</li>
+        <li class="recent_comment_author">--DiscretＯrz</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/3764991.html#4181926">7. Re:javaweb学习总结(十四)——JSP原理</a></li>
+        <li class="recent_comment_body">偶像……</li>
+        <li class="recent_comment_author">--风^太^大</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/5294181.html#4181784">8. Re:创业公司一年工作总结</a></li>
+        <li class="recent_comment_body">看着右侧的日历，想想楼主已经快三年没写技术文了，从上个月因为他开通了博客，每天看看他的文章，真的是一种艺术品，这么久没更博了，想必楼主在做更重要的事，想想马上要步入社会的自己，不知是不是也得面临楼主的......</li>
+        <li class="recent_comment_author">--神码~</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/5151857.html#4181768">9. Re:微信开发学习总结（二）——微信开发入门</a></li>
+        <li class="recent_comment_body">@Steven Lei格式：网址 / 项目名 / servlet名比如：作者在输入网址时与我们现在是有些不同的1、作者可以命名自己的网址，现在只有vip才可以2、就是这个填入的URL，作者应该配置了s......</li>
+        <li class="recent_comment_author">--神码~</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/xdp-gacl/p/4002804.html#4181424">10. Re:javaweb学习总结(三十九)——数据库连接池</a></li>
+        <li class="recent_comment_body">动态代理那一段我在《Java并发编程的艺术》里面也看见了！我觉得还得去补一补这个方面的知识了哈哈哈</li>
+        <li class="recent_comment_author">--琴_酒</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/xdp-gacl/p/4261895.html">1. MyBatis学习总结(一)——MyBatis快速入门(676776)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3760336.html">2. javaweb学习总结(五)——Servlet开发(一)(533248)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4200090.html">3. JavaWeb学习总结(五十)——文件上传和下载(456964)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3729033.html">4. JavaWeb学习总结(一)——JavaWeb开发入门(305174)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3855702.html">5. JavaWeb学习总结(十二)——Session(303572)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4264440.html">6. MyBatis学习总结(五)——实现关联表查询(293061)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3497016.html">7. MyEclipse使用总结——MyEclipse10安装SVN插件(281108)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4322165.html">8. Android开发学习总结(一)——搭建最新版本的Android开发环境(273443)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4097608.html">9. Linux下安装Tomcat服务器和部署Web应用(255636)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3495887.html">10. Spring常用注解(247123)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/xdp-gacl/p/4200090.html">1. JavaWeb学习总结(五十)——文件上传和下载(177)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4261895.html">2. MyBatis学习总结(一)——MyBatis快速入门(118)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3760336.html">3. javaweb学习总结(五)——Servlet开发(一)(96)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3902537.html">4. javaweb学习总结(二十二)——基于Servlet+JSP+JavaBean开发模式的用户登录注册(91)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4271627.html">5. MyBatis学习总结(八)——Mybatis3.x与Spring4.x整合(78)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4262895.html">6. MyBatis学习总结(二)——使用MyBatis对表执行CRUD操作(73)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3729033.html">7. JavaWeb学习总结(一)——JavaWeb开发入门(73)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4249939.html">8. 谈谈对Spring IOC的理解(68)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/5294181.html">9. 创业公司一年工作总结(67)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3751277.html">10. javaweb学习总结(四)——Http协议(66)</a></li></ul></div>
+</div></div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/xdp-gacl/p/3760336.html">1. javaweb学习总结(五)——Servlet开发(一)(235)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4261895.html">2. MyBatis学习总结(一)——MyBatis快速入门(188)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3729033.html">3. JavaWeb学习总结(一)——JavaWeb开发入门(167)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4200090.html">4. JavaWeb学习总结(五十)——文件上传和下载(147)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/4249939.html">5. 谈谈对Spring IOC的理解(128)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3777987.html">6. Java基础学习总结——Java对象的序列化和反序列化(113)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3789624.html">7. javaweb学习总结(七)——HttpServletResponse对象(一)(107)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3902537.html">8. javaweb学习总结(二十二)——基于Servlet+JSP+JavaBean开发模式的用户登录注册(97)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3798347.html">9. javaweb学习总结(十)——HttpServletRequest对象(一)(93)</a></li><li><a href="https://www.cnblogs.com/xdp-gacl/p/3751277.html">10. javaweb学习总结(四)——Http协议(91)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+        
+		
+<div id="footer">
+	Powered by: 
+	<br>
+	
+	<a id="Footer1_Hyperlink3" name="Hyperlink1" href="https://www.cnblogs.com/" style="font-family:Verdana;font-size:12px;">博客园</a>
+	<br>
+	Copyright © 孤傲苍狼
+</div>
+	
+</div>			
+			
+	
+
+
+<!--PageEndHtml Block Begin-->
+<!--评论，生成气泡效果标签代码-->
+<script type="text/javascript" language="javascript"> 
+    $(document).ready(function() {
+        var commentTime = setInterval(function(){if($("#comments_pager_bottom").length>0){CommentBubble();clearTimeout(commentTime);}},50);
+    }); 
+    function CommentBubble()
+    {
+var w1 = '<div class="list">' +
+        '<table class="out" border="0" cellspacing="0" cellpadding="0"> ' +
+            '<tr>' +
+                '<td class="icontd" align="right" valign="bottom">' +
+                    '<img src="http://pic.cnitblog.com/face/289233/20131202131125.png" width="70px" height="57px"/>' +
+                '</td>' +
+                '<td align="left" valign="bottom" class="q">' +
+                    '<table border="0" cellpadding="0" cellspacing="0" style=""> ' +
+                        '<tr><td class="topleft"></td><td class="top"></td><td class="topright"></td></tr> ' +
+                        '<tr><td class="left"></td> <td align="left" class="conmts"><p>';
+ 
+ 
+        var w2 = '</p> </td> <td class="right"></td></tr> ' +
+                        '<tr><td class="bottomleft"></td><td class="bottom"></td><td class="bottomright"></td></tr> ' +
+                    '</table>' +
+                '</td> ' +
+            '</tr> ' +
+        '</table> ' +
+    '</div>';
+ 
+        $.each($(".blog_comment_body"), function(i, t) {
+            $(t).html(w1 + $(t).html() + w2);
+        });
+$(".louzhu").closest(".feedbackItem").find(".out").removeClass("out").addClass("inc");
+        /*.find(".q").attr("align","right");*/
+        }
+</script>
+<!--PageEndHtml Block End-->
+
+
+<script type="text/javascript">
+  /*
+	功能：生成博客目录的JS工具
+	测试：IE8，火狐，google测试通过
+	孤傲苍狼
+	2014-5-11
+*/
+var BlogDirectory = {
+	/*
+		获取元素位置，距浏览器左边界的距离（left）和距浏览器上边界的距离（top）
+	*/
+	getElementPosition:function (ele) {        
+		var topPosition = 0;
+		var leftPosition = 0;
+		while (ele){              
+			topPosition += ele.offsetTop;
+			leftPosition += ele.offsetLeft;        
+			ele = ele.offsetParent;     
+		}  
+		return {top:topPosition, left:leftPosition}; 
+	},
+
+	/*
+	获取滚动条当前位置
+	*/
+	getScrollBarPosition:function () {
+		var scrollBarPosition = document.body.scrollTop || document.documentElement.scrollTop;
+		return  scrollBarPosition;
+	},
+	
+	/*
+	移动滚动条，finalPos 为目的位置，internal 为移动速度
+	*/
+	moveScrollBar:function(finalpos, interval) {
+
+		//若不支持此方法，则退出
+		if(!window.scrollTo) {
+			return false;
+		}
+
+		//窗体滚动时，禁用鼠标滚轮
+		window.onmousewheel = function(){
+			return false;
+		};
+		  
+		//清除计时
+		if (document.body.movement) { 
+			clearTimeout(document.body.movement); 
+		} 
+
+		var currentpos =BlogDirectory.getScrollBarPosition();//获取滚动条当前位置
+
+		var dist = 0; 
+		if (currentpos == finalpos) {//到达预定位置，则解禁鼠标滚轮，并退出
+			window.onmousewheel = function(){
+				return true;
+			}
+			return true; 
+		} 
+		if (currentpos < finalpos) {//未到达，则计算下一步所要移动的距离
+			dist = Math.ceil((finalpos - currentpos)/10); 
+			currentpos += dist; 
+		} 
+		if (currentpos > finalpos) { 
+			dist = Math.ceil((currentpos - finalpos)/10); 
+			currentpos -= dist; 
+		}
+		
+		var scrTop = BlogDirectory.getScrollBarPosition();//获取滚动条当前位置
+		window.scrollTo(0, currentpos);//移动窗口
+		if(BlogDirectory.getScrollBarPosition() == scrTop)//若已到底部，则解禁鼠标滚轮，并退出
+		{
+			window.onmousewheel = function(){
+				return true;
+			}
+			return true;
+		}
+		
+		//进行下一步移动
+		var repeat = "BlogDirectory.moveScrollBar(" + finalpos + "," + interval + ")"; 
+		document.body.movement = setTimeout(repeat, interval); 
+	},
+	
+	htmlDecode:function (text){
+		var temp = document.createElement("div");
+		temp.innerHTML = text;
+		var output = temp.innerText || temp.textContent;
+		temp = null;
+		return output;
+	},
+
+	/*
+	创建博客目录，
+	id表示包含博文正文的 div 容器的 id，
+	mt 和 st 分别表示主标题和次级标题的标签名称（如 H2、H3，大写或小写都可以！），
+	interval 表示移动的速度
+	*/
+	createBlogDirectory:function (id, mt, st, interval){
+		 //获取博文正文div容器
+		var elem = document.getElementById(id);
+		if(!elem) return false;
+		//获取div中所有元素结点
+		var nodes = elem.getElementsByTagName("*");
+		//创建博客目录的div容器
+		var divSideBar = document.createElement('DIV');
+		divSideBar.className = 'sideBar';
+		divSideBar.setAttribute('id', 'sideBar');
+		var divSideBarTab = document.createElement('DIV');
+		divSideBarTab.setAttribute('id', 'sideBarTab');
+		divSideBar.appendChild(divSideBarTab);
+		var h2 = document.createElement('H2');
+		divSideBarTab.appendChild(h2);
+		var txt = document.createTextNode('目录导航');
+		h2.appendChild(txt);
+		var divSideBarContents = document.createElement('DIV');
+		divSideBarContents.style.display = 'none';
+		divSideBarContents.setAttribute('id', 'sideBarContents');
+		divSideBar.appendChild(divSideBarContents);
+		//创建自定义列表
+		var dlist = document.createElement("dl");
+		divSideBarContents.appendChild(dlist);
+		var num = 0;//统计找到的mt和st
+		mt = mt.toUpperCase();//转化成大写
+		st = st.toUpperCase();//转化成大写
+		//遍历所有元素结点
+		for(var i=0; i<nodes.length; i++)
+		{
+			if(nodes[i].nodeName == mt|| nodes[i].nodeName == st)    
+			{
+				//获取标题文本
+				var nodetext = nodes[i].innerHTML.replace(/<\/?[^>]+>/g,"");//innerHTML里面的内容可能有HTML标签，所以用正则表达式去除HTML的标签
+				nodetext = nodetext.replace(/&nbsp;/ig, "");//替换掉所有的&nbsp;
+				nodetext = BlogDirectory.htmlDecode(nodetext);
+				//插入锚        
+				nodes[i].setAttribute("id", "blogTitle" + num);
+				var item;
+				switch(nodes[i].nodeName)
+				{
+					case mt:    //若为主标题 
+						item = document.createElement("dt");
+						break;
+					case st:    //若为子标题
+						item = document.createElement("dd");
+						break;
+				}
+				
+				//创建锚链接
+				var itemtext = document.createTextNode(nodetext);
+				item.appendChild(itemtext);
+				item.setAttribute("name", num);
+				item.onclick = function(){        //添加鼠标点击触发函数
+					var pos = BlogDirectory.getElementPosition(document.getElementById("blogTitle" + this.getAttribute("name")));
+					if(!BlogDirectory.moveScrollBar(pos.top, interval)) return false;
+				};            
+				
+				//将自定义表项加入自定义列表中
+				dlist.appendChild(item);
+				num++;
+			}
+		}
+		
+		if(num == 0) return false; 
+		/*鼠标进入时的事件处理*/
+		divSideBarTab.onmouseenter = function(){
+			divSideBarContents.style.display = 'block';
+		}
+		/*鼠标离开时的事件处理*/
+		divSideBar.onmouseleave = function() {
+			divSideBarContents.style.display = 'none';
+		}
+
+		document.body.appendChild(divSideBar);
+	}
+	
+};
+
+window.onload=function(){
+	/*页面加载完成之后生成博客目录*/
+	BlogDirectory.createBlogDirectory("cnblogs_post_body","h2","h3",20);
+}
+</script><script type="text/javascript">
+window.tctipConfig = {
+staticPrefix: "http://static.tctip.com",
+cssPrefix: "http://static.tctip.com",
+buttonImageId: 2,
+buttonTip: "dashang",
+list:{
+alipay: {qrimg: "https://files.cnblogs.com/files/xdp-gacl/zhifubao.bmp"},
+weixin:{qrimg: "https://files.cnblogs.com/files/xdp-gacl/wechat.bmp"},
+}
+};
+</script><script type="text/javascript">getFollowStatus('f1774468-815f-e011-a53f-842b2b196315')</script><iframe id="google_osd_static_frame_7263837325167" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./MyBatis学习总结(五)——实现关联表查询 - 孤傲苍狼 - 博客园_files/saved_resource(2).html"></iframe><div class="sideBar" id="sideBar"><div id="sideBarTab"><h2>目录导航</h2></div><div id="sideBarContents" style="display: none;"><dl><dt name="0">一、一对一关联</dt><dd name="1">1.1、提出需求</dd><dd name="2">1.2、创建表和数据</dd><dd name="3">1.3、定义实体类</dd><dd name="4">1.4、定义sql映射文件classMapper.xml</dd><dd name="5">1.5、编写单元测试代码</dd><dd name="6">1.6、MyBatis一对一关联查询总结</dd><dt name="7">二、一对多关联</dt><dd name="8">2.1、提出需求</dd><dd name="9">2.2、创建表和数据</dd><dd name="10">2.3、定义实体类</dd><dd name="11">2.4、修改sql映射文件classMapper.xml</dd><dd name="12">2.5、编写单元测试代码</dd><dd name="13">2.6、MyBatis一对多关联查询总结</dd></dl></div></div></body></html>

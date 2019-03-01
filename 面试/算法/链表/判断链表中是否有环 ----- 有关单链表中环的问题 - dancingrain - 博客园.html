@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://www.cnblogs.com/dancingrain/p/3405197.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+    <title>判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园</title>
+<meta property="og:description" content="给定一个单链表，判断其中是否有环，已经是一个比较老同时也是比较经典的问题，在网上搜集了一些资料，然后总结一下大概可以涉及到的问题，以及相应的解法。首先，关于单链表中的环，一般涉及到一下问题：1.给一个">
+    <link type="text/css" rel="stylesheet" href="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/bundle-BlueFresh.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/bundle-BlueFresh-mobile.css">
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/dancingrain/rss">
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/dancingrain/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/dancingrain/wlwmanifest.xml">
+    <script src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/osd.js"></script><script src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/amp4ads-host-v0.js"></script><script src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/pubads_impl_rendering_308.js"></script><script async="" src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/analytics.js"></script><script src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script>var currentBlogId=167715;var currentBlogApp='dancingrain',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/blog-common.js" type="text/javascript"></script>
+<link rel="preload" href="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/integrator.js" as="script"><script type="text/javascript" src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/integrator.js"></script><script src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/pubads_impl_308.js" async=""></script></head>
+<body>
+<a name="top"></a>
+
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/dancingrain/"><img id="blogLogo" src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/dancingrain/">dancingrain</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/dancingrain/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/dancingrain">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/dancingrain/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/dancingrain/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 64&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 3</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+        <div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/dancingrain/p/3405197.html">判断链表中是否有环 ----- 有关单链表中环的问题</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>给定一个单链表，判断其中是否有环，已经是一个比较老同时也是比较经典的问题，在网上搜集了一些资料，</p>
+<p>然后总结一下大概可以涉及到的问题，以及相应的解法。</p>
+<p><br>
+</p>
+<p>首先，关于单链表中的环，一般涉及到一下问题：</p>
+<p>1.给一个单链表，判断其中是否有环的存在；</p>
+<p>2.如果存在环，找出环的入口点；</p>
+<p>3.如果存在环，求出环上节点的个数；</p>
+<p>4.如果存在环，求出链表的长度；</p>
+<p>5.如果存在环，求出环上距离任意一个节点最远的点（对面节点）；</p>
+<p>6.（扩展）如何判断两个无环链表是否相交；</p>
+<p>7.（扩展）如果相交，求出第一个相交的节点；</p>
+<p><br>
+</p>
+<p>下面，我将针对上面这七个问题一一给出解释和相应的代码。</p>
+<p>1.判断时候有环（链表头指针为head）</p>
+<p><span style="white-space:pre"></span>对于这个问题我们可以采用“快慢指针”的方法。就是有两个指针fast和slow，开始的时候两个指针都指向链表头head，然后在每一步</p>
+<p>操作中slow向前走一步即：slow = slow-&gt;next，而fast每一步向前两步即：fast = fast-&gt;next-&gt;next。</p>
+<p><span style="white-space:pre"></span>由于fast要比slow移动的快，如果有环，fast一定会先进入环，而slow后进入环。当两个指针都进入环之后，经过一定步的操作之后</p>
+<p>二者一定能够在环上相遇，并且此时slow还没有绕环一圈，也就是说一定是在slow走完第一圈之前相遇。证明可以看下图：</p>
+<p><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/20130830101725281" alt=""><br>
+</p>
+<p><span style="white-space:pre"></span>当slow刚进入环时每个指针可能处于上面的情况，接下来slow和fast分别向前走即：</p>
+<p></p>
+<div class="dp-highlighter bg_cpp"><div class="bar"><div class="tools"><b>[cpp]</b> <a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;">view plain</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;">copy</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;">print</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;">?</a></div></div><ol start="1" class="dp-cpp"><li class="alt"><span><span class="keyword">if</span><span>&nbsp;(slow&nbsp;!=&nbsp;NULL&nbsp;&amp;&amp;&nbsp;fast-&gt;next&nbsp;!=&nbsp;NULL)&nbsp;&nbsp;</span></span></li><li class=""><span>{&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow&nbsp;=&nbsp;slow&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fast&nbsp;=&nbsp;fast&nbsp;-&gt;&nbsp;next&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class="alt"><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="cpp" style="display: none;">if (slow != NULL &amp;&amp; fast-&gt;next != NULL)
+{
+         slow = slow -&gt; next ;
+         fast = fast -&gt; next -&gt; next ;
+}</pre>
+也就是说，slow每次向前走一步，fast向前追了两步，因此每一步操作后fast到slow的距离缩短了1步，这样继续下去就会使得
+<p></p>
+<p>两者之间的距离逐渐缩小：...、5、4、3、2、1、0 -&gt; 相遇。又因为在同一个环中fast和slow之间的距离不会大于换的长度，因此</p>
+<p>到二者相遇的时候slow一定还没有走完一周（或者正好走完以后，这种情况出现在开始的时候fast和slow都在环的入口处）。</p>
+<p><br>
+</p>
+<p>下面给出问题1的完整代码：</p>
+<p></p>
+<div class="dp-highlighter bg_cpp"><div class="bar"><div class="tools"><b>[cpp]</b> <a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;">view plain</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;">copy</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;">print</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;">?</a></div></div><ol start="1" class="dp-cpp"><li class="alt"><span><span class="keyword">typedef</span><span>&nbsp;</span><span class="keyword">struct</span><span>&nbsp;node{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="datatypes">char</span><span>&nbsp;data&nbsp;;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;node&nbsp;*&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class=""><span>}Node;&nbsp;&nbsp;</span></li><li class="alt"><span><span class="datatypes">bool</span><span>&nbsp;exitLoop(Node&nbsp;*head)&nbsp;&nbsp;</span></span></li><li class=""><span>{&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;Node&nbsp;*fast,&nbsp;*slow&nbsp;;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;slow&nbsp;=&nbsp;fast&nbsp;=&nbsp;head&nbsp;;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span><span>&nbsp;(slow&nbsp;!=&nbsp;NULL&nbsp;&amp;&amp;&nbsp;fast&nbsp;-&gt;&nbsp;next&nbsp;!=&nbsp;NULL)&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow&nbsp;=&nbsp;slow&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fast&nbsp;=&nbsp;fast&nbsp;-&gt;&nbsp;next&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(slow&nbsp;==&nbsp;fast)&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">true</span><span>&nbsp;;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">false</span><span>&nbsp;;&nbsp;&nbsp;</span></span></li><li class=""><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="cpp" style="display: none;">typedef struct node{
+	char data ;
+	node * next ;
+}Node;
+bool exitLoop(Node *head)
+{
+	Node *fast, *slow ;
+	slow = fast = head ;
+
+	while (slow != NULL &amp;&amp; fast -&gt; next != NULL)
+	{
+		slow = slow -&gt; next ;
+		fast = fast -&gt; next -&gt; next ;
+		if (slow == fast)
+			return true ;
+	}
+	return false ;
+}</pre>
+<br>
+下面看问题2，找出环的入口点：
+<p></p>
+<p><br>
+</p>
+<p>我结合着下图讲解一下：</p>
+<p><br>
+</p>
+<p><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/20130830123959171" alt=""><br>
+</p>
+<p><br>
+</p>
+<p>从上面的分析知道，当fast和slow相遇时，slow还没有走完链表，假设fast已经在环内循环了n(1&lt;= n)圈。假设slow走了s步，则fast走了2s步，又由于</p>
+<p>fast走过的步数 = s + n*r（s + 在环上多走的n圈），则有下面的等式：</p>
+<p><br>
+</p>
+<p>2*s = s + n &nbsp;* r ; (1)</p>
+<p>&nbsp;=&gt; s = n*r (2)</p>
+<p>如果假设整个链表的长度是L，入口和相遇点的距离是x（如上图所示），起点到入口点的距离是a(如上图所示)，则有：</p>
+<p>a + x = s = n * r; (3) &nbsp;由（2）推出</p>
+<p>a + x = (n - 1) * r + r &nbsp;= (n - 1) * r + (L - a) (4) 由环的长度 = 链表总长度 - 起点到入口点的距离求出</p>
+<p>a = (n - 1) * r + (L -a -x) (5)</p>
+<p><br>
+</p>
+<p><span style="color:#ff0000">集合式子（5）以及上图我们可以看出，从链表起点head开始到入口点的距离a,与从slow和fast的相遇点（如图）到入口点的距离相等。</span></p>
+<p>因此我们就可以分别用一个指针（ptr1, prt2），同时从head与slow和fast的相遇点出发，每一次操作走一步，直到ptr1 == ptr2，此时的位置也就是入口点！</p>
+<p>到此第二个问题也已经解决。</p>
+<p>下面给出示意性的简单代码（没有测试但是应该没有问题）：</p>
+<p></p>
+<div class="dp-highlighter bg_cpp"><div class="bar"><div class="tools"><b>[cpp]</b> <a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;">view plain</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;">copy</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;">print</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;">?</a></div></div><ol start="1" class="dp-cpp"><li class="alt"><span><span>Node*&nbsp;findLoopStart(Node&nbsp;*head)&nbsp;&nbsp;</span></span></li><li class=""><span>{&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;Node&nbsp;*fast,&nbsp;*slow&nbsp;;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;slow&nbsp;=&nbsp;fast&nbsp;=&nbsp;head&nbsp;;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span><span>&nbsp;(slow&nbsp;!=&nbsp;NULL&nbsp;&amp;&amp;&nbsp;fast&nbsp;-&gt;&nbsp;next&nbsp;!=&nbsp;NULL)&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow&nbsp;=&nbsp;slow&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fast&nbsp;=&nbsp;fast&nbsp;-&gt;&nbsp;next&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(slow&nbsp;==&nbsp;fast)&nbsp;</span><span class="keyword">break</span><span>&nbsp;;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(slow&nbsp;==&nbsp;NULL&nbsp;||&nbsp;fast&nbsp;-&gt;&nbsp;next&nbsp;==&nbsp;NULL)&nbsp;</span><span class="keyword">return</span><span>&nbsp;NULL&nbsp;;&nbsp;</span><span class="comment">//没有环，返回NULL值</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;Node&nbsp;*&nbsp;ptr1&nbsp;=&nbsp;head&nbsp;;&nbsp;<span class="comment">//链表开始点</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;Node&nbsp;*&nbsp;ptr2&nbsp;=&nbsp;slow&nbsp;;&nbsp;<span class="comment">//相遇点</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span><span>&nbsp;(ptr1&nbsp;!=&nbsp;ptr2)&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ptr1&nbsp;=&nbsp;ptr1&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ptr2&nbsp;=&nbsp;ptr2&nbsp;-&gt;&nbsp;next&nbsp;;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;ptr1&nbsp;;&nbsp;</span><span class="comment">//找到入口点</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="cpp" style="display: none;">Node* findLoopStart(Node *head)
+{
+	Node *fast, *slow ;
+	slow = fast = head ;
+
+	while (slow != NULL &amp;&amp; fast -&gt; next != NULL)
+	{
+		slow = slow -&gt; next ;
+		fast = fast -&gt; next -&gt; next ;
+		if (slow == fast) break ;
+	}
+	if (slow == NULL || fast -&gt; next == NULL) return NULL ; //没有环，返回NULL值
+
+	Node * ptr1 = head ; //链表开始点
+	Node * ptr2 = slow ; //相遇点
+	while (ptr1 != ptr2) 
+	{
+		ptr1 = ptr1 -&gt; next ;
+		ptr2 = ptr2 -&gt; next ;
+	}
+	return ptr1 ; //找到入口点
+}</pre>
+<br>
+<br>
+<p></p>
+<p>第3个问题，如果存在环，求环上节点的个数：</p>
+<p>对于这个问题，我这里有两个思路（肯定还有其它跟好的办法）：</p>
+<p>思路1：记录下相遇节点存入临时变量tempPtr，然后让slow(或者fast，都一样)继续向前走slow = slow -&gt; next；一直到slow == tempPtr; 此时经过的步数就是环上节点的个数；</p>
+<p>思路2： 从相遇点开始slow和fast继续按照原来的方式向前走slow = slow -&gt; next; fast = fast -&gt; next -&gt; next；直到二者再次项目，此时经过的步数就是环上节点的个数 。</p>
+<p><br>
+</p>
+<p>第一种思路很简单，其实就是一次遍历链表的环，从而统计出点的个数，没有什么可以详细解释的了。</p>
+<p>对于第二种思路，我们可以这样想，结合上面的分析，fast和slow没一次操作都会使得两者之间的距离较少1。我们可以把两者相遇的时候看做两者之间的距离正好是整个环的</p>
+<p>长度r。因此，当再次相遇的时候所经过的步数正好是环上节点的数目。</p>
+<p>由于这两种思路都比较简单，代码也很容易实现，这里就不给出了。</p>
+<p><br>
+</p>
+<p>问题4是如果存在环，求出链表的长度：</p>
+<p>到这里，问题已经简单的多了，因为我们在问题1、2、3中已经做得足够的”准备工作“。</p>
+<p>我们可以这样求出整个链表的长度：</p>
+<p><br>
+</p>
+<p>链表长度L = 起点到入口点的距离 + 环的长度r;</p>
+<p><br>
+</p>
+<p>已经知道了起点和入口点的位置，那么两者之间的距离很好求了吧！环的长度也已经知道了，因此该问题也就迎刃而解了！</p>
+<p><br>
+</p>
+<p>问题5是，求出环上距离任意一个节点最远的点（对面节点）</p>
+<p><br>
+</p>
+<p>如下图所示，点1和4、点2和5、点3和6分别互为”对面节点“ ，也就是换上最远的点，我们的要求是怎么求出换上任意一个点的最远点。</p>
+<p><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/20130830132309343" alt=""><br>
+</p>
+<p><br>
+</p>
+<p>对于换上任意的一个点ptr0, 我们要找到它的”对面点“，可以这样思考：同样使用上面的快慢指针的方法，让slow和fast都指向ptr0，每一步都执行与上面相同的操作（slow每次跳一步，fast每次跳两步），</p>
+<p>当fast = ptr0或者fast = prt0-&gt;next的时候slow所指向的节点就是ptr0的”对面节点“。</p>
+<p>为什么是这样呢？我们可以这样分析：</p>
+<p><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/20130830142044625" alt=""><br>
+</p>
+<p><br>
+</p>
+<p>如上图，我们想像一下，把环从ptro处展开，展开后可以是无限长的（如上在6后重复前面的内容）如上图。</p>
+<p>现在问题就简单了，由于slow移动的距离永远是fast的一般，因此当fast遍历玩整个环长度r个节点的时候slow正好遍历了r/2个节点，</p>
+<p>也就是说，此时正好指向距离ptr0最远的点。</p>
+<p><br>
+</p>
+<p>对于问题6（扩展）如何判断两个无环链表是否相交，和7（扩展）如果相交，求出第一个相交的节点，其实就是做一个问题的转化：</p>
+<p><br>
+</p>
+<p>假设有连个链表listA和listB，如果两个链表都无环，并且有交点，那么我们可以让其中一个链表（不妨设是listA）的为节点连接到其头部，这样在listB中就一定会出现一个环。</p>
+<p>因此我们将问题6和7分别转化成了问题1和2.</p>
+<p>看看下图就会明白了：</p>
+<p><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/20130830144513578" alt=""><br>
+</p>
+<p>到此结束！休息一下！</p>
+<p>参考：</p>
+<p><a target="_blank" href="http://www.cppblog.com/humanchao/archive/2012/11/12/47357.html">http://www.cppblog.com/humanchao/archive/2012/11/12/47357.html</a><br>
+</p>
+<p><a target="_blank" href="http://blog.csdn.net/liuxialong/article/details/6555850">http://blog.csdn.net/liuxialong/article/details/6555850</a><br>
+</p>
+<p><a target="_blank" href="http://blog.csdn.net/liuxialong/article/details/6555850">http://blog.csdn.net/liuxialong/article/details/6555850</a><br>
+</p>
+<p><span style="color:#ff0000">欢迎转载，转载请注明原地址：<a target="_blank" href="http://blog.csdn.net/doufei_ccst/article/details/10578315">http://blog.csdn.net/doufei_ccst/article/details/10578315</a></span></p></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/dancingrain/category/530246.html" target="_blank">C++语言</a>,<a href="https://www.cnblogs.com/dancingrain/category/530247.html" target="_blank">算法与数据结构</a>,<a href="https://www.cnblogs.com/dancingrain/category/530253.html" target="_blank">笔试面试</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(3405197,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;d9222f3b-ee0d-e311-8d02-90b11c0b17d6&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/dancingrain/" target="_blank"><img src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/dancingrain/">dancingrain</a><br>
+            <a href="http://home.cnblogs.com/u/dancingrain/followees">关注 - 3</a><br>
+            <a href="http://home.cnblogs.com/u/dancingrain/followers">粉丝 - 2</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;d9222f3b-ee0d-e311-8d02-90b11c0b17d6&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(3405197,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">3</span>
+    </div>
+    <div class="buryit" onclick="votePost(3405197,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/dancingrain/p/3405198.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/dancingrain/p/3405198.html" title="发布于2013-08-26 09:19">do ... while(0)的好处</a><br><a href="https://www.cnblogs.com/dancingrain/p/3405196.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/dancingrain/p/3405196.html" title="发布于2013-09-02 13:17">Github使用学习</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2013-08-30 14:46</span> <a href="https://www.cnblogs.com/dancingrain/">dancingrain</a> 阅读(<span id="post_view_count">19625</span>) 评论(<span id="post_comment_count">2</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=3405197" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" onclick="AddToWz(3405197);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=167715,cb_entryId=3405197,cb_blogApp=currentBlogApp,cb_blogUserGuid='d9222f3b-ee0d-e311-8d02-90b11c0b17d6',cb_entryCreatedDate='2013/8/30 14:46:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+<script src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/syntax_highlighter_csdn.js" type="text/javascript"></script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/dancingrain/p/3405197.html#3973891" class="layer">#1楼</a><a name="3973891" id="comment_anchor_3973891"></a>  <span class="comment_date">2018-05-14 14:59</span> <a id="a_comment_author_3973891" href="http://home.cnblogs.com/u/1286142/" target="_blank">PPyTThon</a> <a href="http://msg.cnblogs.com/send/PPyTThon" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3973891" class="blog_comment_body">判断链表是否有环代码上，如果是偶数个节点，代码就出错了！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3973891,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3973891,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/dancingrain/p/3405197.html#4086439" class="layer">#2楼</a><a name="4086439" id="comment_anchor_4086439"></a><span id="comment-maxId" style="display:none;">4086439</span><span id="comment-maxDate" style="display:none;">2018/10/11 11:26:25</span>  <span class="comment_date">2018-10-11 11:26</span> <a id="a_comment_author_4086439" href="http://home.cnblogs.com/u/1506813/" target="_blank">一辆小蚂蚁</a> <a href="http://msg.cnblogs.com/send/%E4%B8%80%E8%BE%86%E5%B0%8F%E8%9A%82%E8%9A%81" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4086439" class="blog_comment_body">程序循环判断的地方while (slow != NULL &amp;&amp; fast -&gt; next != NULL)<br>以及条件判断的地方if (slow == NULL || fast -&gt; next == NULL) return NULL ;<br>要把slow改成fast，因为对于无环链表，快指针肯定比慢指针快到达链表尾部，链表节点有奇偶，所以只需判断快指针是否指向NULL（偶数节点）或者下一节点是否指向NULL（奇数节点），否则对于无环链表会出错</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4086439,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4086439,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万C++/C#源码: 大型实时仿真HMI组态CAD\GIS图形源码！</a><br><a href="https://gitee.com/enterprises?from=bky-2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-gitee&#39;)">【推荐】专业便捷的企业级代码托管服务 - Gitee 码云</a><br></div>
+<div id="opt_under_post"></div>
+<script async="async" src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/gpt.js"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c1" class="c_ad_block">
+    <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CP77uqOc0-ACFdi6lgodtYkCCw"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/dancingrain/p/3405197.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">判断链表中是否有环 ----- 有关单链表中环的问题</a><br>·  <a href="https://www.cnblogs.com/yugen/archive/2010/07/25/1784749.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">sqlserver中判断表或临时表是否存在</a><br>·  <a href="https://www.cnblogs.com/L-aho/archive/2012/09/20/2695443.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">链表中环的问题</a><br>·  <a href="https://www.cnblogs.com/nily/p/4856893.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">单链表中环的问题</a><br>·  <a href="https://www.cnblogs.com/bywallance/p/5534830.html" target="_blank" onclick="clickRecomItmem(undefined,&#39;undefined&#39;)">链表中环的判断及相关操作</a><br></div></div>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CMPxuqOc0-ACFU-4lgoddQYCzQ"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/saved_resource(1).html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/620167/" target="_blank">北京豪车代驾的忧伤客人们</a><br> ·  <a href="https://news.cnblogs.com/n/620186/" target="_blank">那个要干掉“二手房中介”的爱屋吉屋，为什么会倒闭？</a><br> ·  <a href="https://news.cnblogs.com/n/620185/" target="_blank">前置仓模式开启生鲜电商下半场，四面楚歌的"叮咚买菜"们能否突围？</a><br> ·  <a href="https://news.cnblogs.com/n/620184/" target="_blank">月薪万元的制造业工种，还是招不到人</a><br> ·  <a href="https://news.cnblogs.com/n/620183/" target="_blank">抖音广告不断在边缘试探，是要为1000亿KPI拼了？</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/dancingrain/">dancingrain</a><br>园龄：<a href="https://home.cnblogs.com/u/dancingrain/" title="入园时间：2013-08-26">5年5个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/dancingrain/followers/">2</a><br>关注：<a href="https://home.cnblogs.com/u/dancingrain/followees/">3</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;d9222f3b-ee0d-e311-8d02-90b11c0b17d6&#39;)">+加关注</a></div><script>getFollowStatus('d9222f3b-ee0d-e311-8d02-90b11c0b17d6')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/01/01&#39;);return false;">&lt;</a></td><td align="center">2019年2月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/03/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td class="CalWeekendDay" align="center">2</td></tr><tr><td class="CalWeekendDay" align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td class="CalWeekendDay" align="center">9</td></tr><tr><td class="CalWeekendDay" align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td class="CalWeekendDay" align="center">16</td></tr><tr><td class="CalWeekendDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td class="CalWeekendDay" align="center">23</td></tr><tr><td class="CalTodayDay" align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td></tr><tr><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/dancingrain/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/dancingrain/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/dancingrain/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/dancingrain/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/dancingrain/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/dancingrain/category/530267.html">【C++】#define vs const 、enum &amp;amp; inline</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/dancingrain/category/530249.html">ACM(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/dancingrain/category/530264.html">Billboard技术浅析</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/dancingrain/category/530246.html">C++语言(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/dancingrain/category/530261.html">C++中IO流</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/dancingrain/category/530256.html">k-d tree算法</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/dancingrain/category/530255.html">k-d tree算法研究</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/dancingrain/category/530250.html">Linux</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/dancingrain/category/530263.html">Linux系统内存管理</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/dancingrain/category/530252.html">Python(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/dancingrain/category/530269.html">Python中定义“私有”成员变量和成员函数</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/dancingrain/category/530251.html">Qt</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/dancingrain/category/530271.html">stringstream</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/dancingrain/category/530262.html">八叉树三维数据结构</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/dancingrain/category/530253.html">笔试面试(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/dancingrain/category/530268.html">红黑树——经典</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/dancingrain/category/530259.html">快速求小于N的所有素数</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/dancingrain/category/530257.html">爬虫原理</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/dancingrain/category/530265.html">判断链表中是否有环 ----- 有关单链表中环的问题</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/dancingrain/category/530258.html">求用一维数组表示的矩阵的乘积</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/dancingrain/category/530270.html">删除字符串前后的空格</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/dancingrain/category/530254.html">实现下拉更新UITableView   EGORefreshTableHeaderView</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/dancingrain/category/530247.html">算法与数据结构(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/dancingrain/category/530260.html">温习C/C++笔记(2)——指针和引用的区别</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/dancingrain/category/530266.html">向量的点乘和叉乘</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/dancingrain/category/530248.html">移动开发(3)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/dancingrain/archive/2013/10.html">2013年10月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/dancingrain/archive/2013/09.html">2013年9月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/dancingrain/archive/2013/08.html">2013年8月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/dancingrain/archive/2013/07.html">2013年7月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/dancingrain/archive/2013/06.html">2013年6月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/dancingrain/archive/2013/03.html">2013年3月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/dancingrain/archive/2012/12.html">2012年12月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/dancingrain/archive/2012/08.html">2012年8月 (24)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#4086439">1. Re:判断链表中是否有环 ----- 有关单链表中环的问题</a></li>
+        <li class="recent_comment_body">程序循环判断的地方while (slow != NULL &amp;&amp; fast -&gt; next != NULL)以及条件判断的地方if (slow == NULL || fast -&gt; next == NU......</li>
+        <li class="recent_comment_author">--一辆小蚂蚁</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/dancingrain/p/3405197.html#3973891">2. Re:判断链表中是否有环 ----- 有关单链表中环的问题</a></li>
+        <li class="recent_comment_body">判断链表是否有环代码上，如果是偶数个节点，代码就出错了！</li>
+        <li class="recent_comment_author">--PPyTThon</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/dancingrain/archive/2013/03/31/3405204.html#2808910">3. Re:红黑树——经典</a></li>
+        <li class="recent_comment_body">写的不错！</li>
+        <li class="recent_comment_author">--Halibaba</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/dancingrain/p/3405197.html">1. 判断链表中是否有环 ----- 有关单链表中环的问题(19626)</a></li><li><a href="https://www.cnblogs.com/dancingrain/p/3405203.html">2. Python中定义“私有”成员变量和成员函数(790)</a></li><li><a href="https://www.cnblogs.com/dancingrain/p/3405196.html">3. Github使用学习(293)</a></li><li><a href="https://www.cnblogs.com/dancingrain/archive/2012/08/01/3405249.html">4. 八叉树三维数据结构(249)</a></li><li><a href="https://www.cnblogs.com/dancingrain/p/3405186.html">5. 网易有道笔试题（2014届，2013.10北邮站）(211)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/dancingrain/p/3405197.html">1. 判断链表中是否有环 ----- 有关单链表中环的问题(2)</a></li><li><a href="https://www.cnblogs.com/dancingrain/archive/2013/03/31/3405204.html">2. 红黑树——经典(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/dancingrain/p/3405197.html">1. 判断链表中是否有环 ----- 有关单链表中环的问题(3)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2019 dancingrain
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+
+<iframe id="google_osd_static_frame_2807884945409" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./判断链表中是否有环 ----- 有关单链表中环的问题 - dancingrain - 博客园_files/saved_resource(2).html"></iframe></body></html>
