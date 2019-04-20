@@ -30,8 +30,10 @@ int main(){
 	vector<int> v(a,a+6);
 	
 	quickSort(v, 0, 5);
+	cout << "ÅÅÐòºó" <<endl; 
 	for(int i=0;i<v.size();i++){
-		cout << v[i] << endl;
+		cout << v[i] <<" ";
 	}
+		cout <<endl;
 	return 0;
 } 
