@@ -18,3 +18,6 @@
 * [Java 基础知识回顾](https://github.com/Snailclimb/Java-Guide/blob/master/Java相关/Java基础知识.md)
 * [J2EE 基础知识回顾](https://github.com/Snailclimb/Java-Guide/blob/master/Java相关/J2EE基础知识.md)
 
+### Java 虚拟机 jvm
+
+* [搞定JVM垃圾回收就是这么简单](https://github.com/myacai/JavaHandBook/tree/master/java/jvm垃圾回收.md)
