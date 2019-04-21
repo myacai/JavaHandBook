@@ -31,15 +31,14 @@
 
 ### Java/J2EE 基础
 
-* [Java 基础知识回顾]
-* [J2EE 基础知识回顾]
+
 
 ### Java 集合框架
-* [Java 集合框架]
+
 
 ### Java 多线程
-* [Java 多线程](https://github.com/myacai/JavaHandBook/tree/master/java/java并发.md)
-
+* [Java 并发总结](https://github.com/myacai/JavaHandBook/tree/master/java/java并发.md)
+* [Java 并发常见问题](https://github.com/myacai/JavaHandBook/tree/master/java/java并发常见问题.md)
 ### Java IO NIO AIO
 
 ### Java 虚拟机 jvm

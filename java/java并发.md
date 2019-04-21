@@ -39,13 +39,23 @@ Runnable 接口不会返回结果但是 Callable 接口可以返回结果。
 
 
 ## java内存模型
+在 JDK1.2 之前，Java的内存模型实现总是从主存（即共享内存）读取变量
 
-
-
-
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/内存模型2.jpg" width=""/></br>
+当前的 Java 内存模型下，线程可以把变量保存本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/内存模型.jpg" width=""/></br>
 ## volatile
+volatile是轻量级的synchronized，它在多处理器开发中保证了共享变量的“可见性”。但是不保证原子性，因为volatile修饰的变量，在多线程情况下，一个操作可能会被其他线程干扰。
 
+### 底层原理
+volatile修饰的变量,
+在读操作的时候，会强制从主存中读取。
+在写操作的时候，命令转为汇编代码时，会有Lock前缀的指令，例如（lock addl $0×0,(%esp);）
+Lock前缀的指令在多核处理器下会引发了两件事情。
+1）将当前处理器缓存行的数据写回到系统内存。
+2）这个写回内存的操作会使在其他CPU里缓存了该内存地址的数据无效。
 
+（来自java并发编程艺术）
 
 ## synchronized
 
