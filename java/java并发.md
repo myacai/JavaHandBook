@@ -42,8 +42,8 @@ Runnable 接口不会返回结果但是 Callable 接口可以返回结果。
 在 JDK1.2 之前，Java的内存模型实现总是从主存（即共享内存）读取变量
 
 <img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/内存模型2.jpg" width=""/></br>
-当前的 Java 内存模型下，线程可以把变量保存本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/内存模型.jpg" width=""/></br>
+当前的 Java 内存模型下，线程可以把变量保存本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。</br>
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/内存模型1.jpg" width=""/></br>
 ## volatile
 volatile是轻量级的synchronized，它在多处理器开发中保证了共享变量的“可见性”。但是不保证原子性，因为volatile修饰的变量，在多线程情况下，一个操作可能会被其他线程干扰。
 
@@ -58,11 +58,40 @@ Lock前缀的指令在多核处理器下会引发了两件事情。
 （来自java并发编程艺术）
 
 ## synchronized
+synchronized是重量级锁，可重入锁，可以保证可见性，原子性。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。
+### 锁升级
+（java并发编程艺术）在Java SE 1.6中，锁一共有4种状态，级别从低到高依次是：无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态，这几个状态会随着竞争情况逐渐升级。锁可以升级但不能降级，意味着偏向锁升级成轻量级锁后不能降级成偏向锁。
+
+对于普通同步方法，锁是当前实例对象。
+对于静态同步方法，锁是当前类的Class对象。
+对于同步方法块，锁是Synchonized括号里配置的对象
+
+## 悲观锁乐观锁（CAS）
+对于乐观派而言，他们认为事情总会往好的方向发展，总是认为坏的情况发生的概率特别小，可以无所顾忌地做事，但对于悲观派而已，他们总会认为发展事态如果不及时控制，以后就无法挽回了。
+
+无锁则总是假设对共享资源的访问没有冲突，线程可以不停执行，无需加锁，无需等待，一旦发现冲突，无锁策略则采用一种称为CAS的技术来保证线程执行的安全性，这项CAS技术就是无锁策略实现的关键。
+
+**CAS:当线程写数据的时候，先对内存中要操作的数据保留一份旧值，真正写的时候，比较当前的值是否和旧值相同，如果相同，则进行写操作。如果不同，说明在此期间值已经被修改过，则重新尝试。**
+
+
 
 ## Lock锁
-
+JDK1.5之后并发包中新增了Lock接口以及相关实现类来实现锁功能。
+Lock接口的实现类： 
+ReentrantLock
+ReentrantReadWriteLock
+### ReentrantLock
+ReentrantLock是可重入锁，等待可中断，可实现公平锁，可实现选择性通知
+1.等待可中断
+使用lock.lockInterruptibly()来实现等待的线程放弃等待。
+2.可实现公平锁
+ReentrantLock(boolean fair)构造函数，创建一个特定锁类型（公平锁/非公平锁）的ReentrantLock的实例
+3.可实现选择性通知
+synchronized关键字与wait()和notify/notifyAll()方法相结合可以实现等待/通知机制。ReentrantLock借助于Condition接口与newCondition() 方法
 ## 线程池
 
 ## Atomic原子类
 
 ## AQS
+
+## TreadLoclk
