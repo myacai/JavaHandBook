@@ -121,6 +121,36 @@ AtomicIntegerArray类主要是提供原子的方式更新数组里的整
 ·AtomicLongFieldUpdater：原子更新长整型字段的更新器。
 AtomicStampedReference：原子更新带有版本号的引用类型。
 
+### 举例AtomicInteger的用法
+
+```
+public final int get() //获取当前的值
+public final int getAndSet(int newValue)//获取当前的值，并设置新的值
+public final int getAndIncrement()//获取当前的值，并自增
+public final int getAndDecrement() //获取当前的值，并自减
+public final int getAndAdd(int delta) //获取当前的值，并加上预期的值
+boolean compareAndSet(int expect, int update) //如果输入的数值等于预期值，则以原子方式将该值设置为输入值（update）
+public final void lazySet(int newValue)//最终设置为newValue,使用 lazySet 设置之后可能导致其他线程在之后的一小段时间内还是可以读到旧的值。
+```
+示例代码
+
+```
+import java.util.concurrent.atomic.AtomicInteger;
+public class AtomicIntegerTest{
+	 static AtomicInteger ai = new AtomicInteger(1);
+	 public static void main(String[] args) 	{		  
+	 	 System.out.println(ai.getAndIncrement());
+		 System.out.println(ai.get());
+	}
+}
+```
+输出结果如下
+
+```
+1
+2
+```
+
 ## AQS
 
 ## TreadLoclk
