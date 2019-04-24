@@ -91,6 +91,35 @@ synchronized关键字与wait()和notify/notifyAll()方法相结合可以实现�
 ## 线程池
 
 ## Atomic原子类
+即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程干扰。
+原子类都存放在java.util.concurrent.atomic
+
+基本类型
+使用原子的方式更新基本类型，Atomic包提供了以下3个类
+AtomicBoolean：原子更新布尔类型。
+AtomicInteger：原子更新整型。
+AtomicLong：原子更新长整型。
+
+数组类型
+通过原子的方式更新数组里的某个元素，Atomic包提供了以下4个类
+·AtomicIntegerArray：原子更新整型数组里的元素。
+·AtomicLongArray：原子更新长整型数组里的元素。
+·AtomicReferenceArray：原子更新引用类型数组里的元素。
+AtomicIntegerArray类主要是提供原子的方式更新数组里的整
+
+
+引用类型
+原子更新基本类型的AtomicInteger，只能更新一个变量，如果要原子更新多个变量，就需要使用这个原子更新引用类型提供的类。Atomic包提供了以下3个类。
+·AtomicReference：原子更新引用类型。
+·AtomicReferenceFieldUpdater：原子更新引用类型里的字段。
+·AtomicMarkableReference：原子更新带有标记位的引用类型。可以原子更新一个布尔类型的标记位和引用类型。
+
+对象的属性修改类型
+如果需原子地更新某个类里的某个字段时，就需要使用原子更新字段类，Atomic包提供
+了以下3个类进行原子字段更新。
+·AtomicIntegerFieldUpdater：原子更新整型的字段的更新器。
+·AtomicLongFieldUpdater：原子更新长整型字段的更新器。
+AtomicStampedReference：原子更新带有版本号的引用类型。
 
 ## AQS
 
