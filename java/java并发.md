@@ -69,11 +69,18 @@ synchronized是重量级锁，可重入锁，可以保证可见性，原子性�
 ## 悲观锁乐观锁（CAS）
 对于乐观派而言，他们认为事情总会往好的方向发展，总是认为坏的情况发生的概率特别小，可以无所顾忌地做事，但对于悲观派而已，他们总会认为发展事态如果不及时控制，以后就无法挽回了。
 
+**乐观锁适用于多读的应用类型，这样可以提高吞吐量，所以一般多写的场景下用悲观锁就比较合适。**
 无锁则总是假设对共享资源的访问没有冲突，线程可以不停执行，无需加锁，无需等待，一旦发现冲突，无锁策略则采用一种称为CAS的技术来保证线程执行的安全性，这项CAS技术就是无锁策略实现的关键。
 
 **CAS:当线程写数据的时候，先对内存中要操作的数据保留一份旧值，真正写的时候，比较当前的值是否和旧值相同，如果相同，则进行写操作。如果不同，说明在此期间值已经被修改过，则重新尝试。**
 
+### CAS会出现的问题
+**ABA问题**
+原值为A。修改成B之后，再次修改成A，那么CAS就会误以为值没有被修改过。
+**办法（版本号机制）**
+增加一个版本字段verdion
 
+**循环等待时间太长问题**
 
 ## Lock锁
 JDK1.5之后并发包中新增了Lock接口以及相关实现类来实现锁功能。
@@ -151,6 +158,24 @@ public class AtomicIntegerTest{
 2
 ```
 
+### 原子类的原理
+
+```
+    // setup to use Unsafe.compareAndSwapInt for updates（更新操作时提供“比较并替换”的作用）
+    private static final Unsafe unsafe = Unsafe.getUnsafe();
+    private static final long valueOffset;
+
+    static {
+        try {
+            valueOffset = unsafe.objectFieldOffset
+                (AtomicInteger.class.getDeclaredField("value"));
+        } catch (Exception ex) { throw new Error(ex); }
+    }
+
+    private volatile int value;
+```
+主要利用了CAS+volatile+native方法来保证原子操作，
+unsafe.objectFieldOffset来获取原来值的内存地址。
 ## AQS
 
 ## TreadLoclk
