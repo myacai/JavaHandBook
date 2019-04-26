@@ -7,7 +7,6 @@ Java并发编程的艺术
 ### 进程状态
 <img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/进程状态.PNG" width=""/></br>
 
-![Alt](https://github.com/myacai/JavaHandBook/blob/master/images/java/进程状态.PNG#pic_center)
 ### 线程状态
 <img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/线程基本状态.PNG" width=""/></br>
 
@@ -78,12 +77,31 @@ synchronized是重量级锁，可重入锁，可以保证可见性，原子性�
 **ABA问题**
 原值为A。修改成B之后，再次修改成A，那么CAS就会误以为值没有被修改过。
 **办法（版本号机制）**
-增加一个版本字段verdion
+增加一个版本字段verdion,数据修改之后,version加一，读数据的时候，也会读取version的值，提交更新时，version值相等时才能更新。
+</br>
 
 **循环等待时间太长问题**
 
 ## Lock锁
 JDK1.5之后并发包中新增了Lock接口以及相关实现类来实现锁功能。
+
+```
+Lock lock=new ReentrantLock()；
+  lock.lock();
+   try{
+    }finally{
+    lock.unlock();
+    }
+```
+| 方法名称 |  描述|
+|-----------|--|
+| void lock() | 获得锁。如果锁不可用，则当前线程将被禁用以进行线程调度，并处于休眠状态，直到获取锁。 |
+|void lockInterruptibly()|获取锁，如果可用并立即返回。如果锁不可用，那么当前线程将被禁用以进行线程调度，并且处于休眠状态，和lock()方法不同的是在锁的获取中可以中断当前线程（相应中断）。 |
+|Condition newCondition()|获取等待通知组件，该组件和当前的锁绑定，当前线程只有获得了锁，才能调用该组件的wait()方法，而调用后，当前线程将释放锁。|
+|boolean tryLock()|只有在调用时才可以获得锁。如果可用，则获取锁定，并立即返回值为true；如果锁不可用，则此方法将立即返回值为false 。|
+|boolean tryLock(long time, TimeUnit unit)|超时获取锁，当前线程在一下三种情况下会返回： 1. 当前线程在超时时间内获得了锁；2.当前线程在超时时间内被中断；3.超时时间结束，返回false.|
+|void unlock()|释放锁。|
+
 Lock接口的实现类： 
 ReentrantLock
 ReentrantReadWriteLock
@@ -92,9 +110,68 @@ ReentrantLock是可重入锁，等待可中断，可实现公平锁，可实现�
 1.等待可中断
 使用lock.lockInterruptibly()来实现等待的线程放弃等待。
 2.可实现公平锁
+即先来先得的FIFO先进先出顺序。而非公平锁就是一种获取锁的抢占机制，是随机获取锁的
 ReentrantLock(boolean fair)构造函数，创建一个特定锁类型（公平锁/非公平锁）的ReentrantLock的实例
 3.可实现选择性通知
 synchronized关键字与wait()和notify/notifyAll()方法相结合可以实现等待/通知机制。ReentrantLock借助于Condition接口与newCondition() 方法
+
+```
+Lock lock = new ReentrantLock();
+Condition condition = lock.newCondition();
+public void conditionWait() throws InterruptedException {
+	lock.lock();
+	try {
+		condition.await();
+	} finally {
+		lock.unlock();
+	}
+}
+public void conditionSignal() throws InterruptedException {
+	lock.lock();
+	try {
+		condition.signal();
+	} finally {
+		lock.unlock();
+	}
+}
+```
+### ReentrantReadWriteLock
+读写锁维护了两个锁，一个是读操作相关的锁也成为共享锁，一个是写操作相关的锁 也称为排他锁。通过分离读锁和写锁，其并发性比一般排他锁有了很大提升。
+```
+    private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
+    public void read() {
+        try {
+            try {
+                lock.readLock().lock();
+                System.out.println("获得读锁" + Thread.currentThread().getName()
+                        + " " + System.currentTimeMillis());
+                Thread.sleep(10000);
+            } finally {
+                lock.readLock().unlock();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void write() {
+        try {
+            try {
+                lock.writeLock().lock();
+                System.out.println("获得写锁" + Thread.currentThread().getName()
+                        + " " + System.currentTimeMillis());
+                Thread.sleep(10000);
+            } finally {
+                lock.writeLock().unlock();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+```
+
 ## 线程池
 
 ## Atomic原子类
