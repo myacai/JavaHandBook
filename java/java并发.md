@@ -179,5 +179,5 @@ public class AtomicIntegerTest{
 主要利用了CAS+volatile+native方法来保证原子操作，
 unsafe.objectFieldOffset来获取原来值的内存地址。
 ## AQS
-AQS
+AQS创建Lock
 ## TreadLoclk
