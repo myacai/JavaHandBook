@@ -179,5 +179,67 @@ public class AtomicIntegerTest{
 主要利用了CAS+volatile+native方法来保证原子操作，
 unsafe.objectFieldOffset来获取原来值的内存地址。
 ## AQS
-AQS创建Lock
-## TreadLoclk
+队列同步器AbstractQueuedSynchronizer，是用来构建锁或者其他同步组
+件的基础框架，它使用了一个int成员变量表示同步状态，通过内置的FIFO队列来完成资源获取线程的排队工作，并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。
+同步器的设计是基于模板方法模式的，也就是说，使用者需要继承同步器并重写指定的方法，随后将同步器组合在自定义同步组件的实现中，并调用同步器提供的模板方法，而这些模板方法将会调用使用者重写的方法。
+</br>
+重写同步器指定的方法时，需要使用同步器提供的如下3个方法来访问或修改同步状态。
+
+```
+getState()：获取当前同步状态。
+setState(int newState)：设置当前同步状态。
+compareAndSetState(int expect,int update)：使用CAS设置当前状态，该方法能够保证状态设置的原子性。
+```
+**自定义同步器时需要重写下面几个AQS提供的模板方法：**
+
+```
+isHeldExclusively()//该线程是否正在独占资源。只有用到condition才需要去实现它。
+tryAcquire(int)//独占方式。尝试获取资源，成功则返回true，失败则返回false。
+tryRelease(int)//独占方式。尝试释放资源，成功则返回true，失败则返回false。
+tryAcquireShared(int)//共享方式。尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。
+tryReleaseShared(int)//共享方式。尝试释放资源，成功则返回true，失败则返回false。
+```
+同步器提供的模板方法基本上分为3类：独占式获取与释放同步状态、共享式获取与释放
+同步状态和查询同步队列中的等待线程情况。
+
+**实例**
+
+```
+
+class Mutex implements Lock {
+	// 静态内部类，自定义同步器
+	private static class Sync extends AbstractQueuedSynchronizer {
+		// 是否处于占用状态
+		protected boolean isHeldExclusively() {
+			return getState() == 1;
+		}
+		// 当状态为0的时候获取锁
+		public boolean tryAcquire(int acquires) {
+			if (compareAndSetState(0, 1)) {
+            	setExclusiveOwnerThread(Thread.currentThread());
+			return true;}return false;
+		}
+		// 释放锁，将状态设置为0
+		protected boolean tryRelease(int releases) {
+			if (getState() == 0) throw newIllegalMonitorStateException();
+			setExclusiveOwnerThread(null);
+			setState(0);return true;
+		}
+		// 返回一个Condition，每个condition都包含了一个condition队列
+		Condition newCondition() { return new ConditionObject(); }
+	}
+	// 仅需要将操作代理到Sync上即可
+	private final Sync sync = new Sync();
+	public void lock() { sync.acquire(1); }
+	public boolean tryLock() { return sync.tryAcquire(1); }
+	public void unlock() { sync.release(1); }
+	public Condition newCondition() { return sync.newCondition(); }
+	public boolean isLocked() { return sync.isHeldExclusively(); }
+	public boolean hasQueuedThreads() { return sync.hasQueuedThreads(); }
+	public void lockInterruptibly() throws InterruptedException {sync.acquireInterruptibly(1);}
+	public boolean tryLock(long timeout, TimeUnit unit) throws InterruptedException {return sync.tryAcquireNanos(1, unit.toNanos(timeout));}
+}
+
+```
+上述示例中，独占锁Mutex是一个自定义同步组件，它在同一时刻只允许一个线程占有锁。Mutex中定义了一个静态内部类，该内部类继承了同步器并实现了独占式获取和释放同步状态。在tryAcquire(int acquires)方法中，如果经过CAS设置成功（同步状态设置为1），则代表获取了同步状态，而在tryRelease(int releases)方法中只是将同步状态重置为0。用户使用Mutex时并不会直接和内部同步器的实现打交道，而是调用Mutex提供的方法，在Mutex的实现中，以获取锁的lock()方法为例，只需要在方法实现中调用同步器的模板方法acquire(int args)即可，当前线程调用该方法获取同步状态失败后会被加入到同步队列中等待，这样就大大降低了实现一个可靠自定义同步组件的门槛。
+## TreadLoclkz
