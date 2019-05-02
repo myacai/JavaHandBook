@@ -1,3 +1,4 @@
+
 @[TOC](Java并发)
 书籍推荐：
 Java并发编程实战
@@ -58,9 +59,9 @@ Lock前缀的指令在多核处理器下会引发了两件事情。
 （来自java并发编程艺术）
 
 ## synchronized
-synchronized是重量级锁，可重入锁，可以保证可见性，原子性。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。
+synchronized关键字解决的是多个线程之间访问资源的同步性，保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。synchronized是重量级锁，可重入锁，可以保证可见性，原子性。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。
 ### 锁升级
-（java并发编程艺术）在Java SE 1.6中，锁一共有4种状态，级别从低到高依次是：无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态，这几个状态会随着竞争情况逐渐升级。锁可以升级但不能降级，意味着偏向锁升级成轻量级锁后不能降级成偏向锁。
+（java并发编程艺术）在Java SE 1.6中，锁一共有4种状态，级别从低到高依次是：无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态，这几个状态会随着竞争情况逐渐升级。锁可以升级但不能降级，意味着偏向锁升级成轻量级锁后不能降级成偏向锁。（详细在java并发编程艺术第二章第二节）
 
 对于普通同步方法，锁是当前实例对象。
 对于静态同步方法，锁是当前类的Class对象。
@@ -242,4 +243,140 @@ class Mutex implements Lock {
 
 ```
 上述示例中，独占锁Mutex是一个自定义同步组件，它在同一时刻只允许一个线程占有锁。Mutex中定义了一个静态内部类，该内部类继承了同步器并实现了独占式获取和释放同步状态。在tryAcquire(int acquires)方法中，如果经过CAS设置成功（同步状态设置为1），则代表获取了同步状态，而在tryRelease(int releases)方法中只是将同步状态重置为0。用户使用Mutex时并不会直接和内部同步器的实现打交道，而是调用Mutex提供的方法，在Mutex的实现中，以获取锁的lock()方法为例，只需要在方法实现中调用同步器的模板方法acquire(int args)即可，当前线程调用该方法获取同步状态失败后会被加入到同步队列中等待，这样就大大降低了实现一个可靠自定义同步组件的门槛。
-## TreadLoclkz
+## TreadLocal
+ThreadLocal类主要解决的就是让每个线程绑定自己的值。
+如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将其值更改为当前线程所存的副本的值，从而避免了线程安全问题。
+### ThreadLocal示例
+
+```java
+import java.text.SimpleDateFormat;
+import java.util.Random;
+
+public class ThreadLocalExample implements Runnable{
+
+     // SimpleDateFormat 不是线程安全的，所以每个线程都要有自己独立的副本
+    private static final ThreadLocal<SimpleDateFormat> formatter = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMMdd HHmm"));
+
+    public static void main(String[] args) throws InterruptedException {
+        ThreadLocalExample obj = new ThreadLocalExample();
+        for(int i=0 ; i<10; i++){
+            Thread t = new Thread(obj, ""+i);
+            Thread.sleep(new Random().nextInt(1000));
+            t.start();
+        }
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Thread Name= "+Thread.currentThread().getName()+" default Formatter = "+formatter.get().toPattern());
+        try {
+            Thread.sleep(new Random().nextInt(1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //formatter pattern is changed here by thread, but it won't reflect to other threads
+        formatter.set(new SimpleDateFormat());
+
+        System.out.println("Thread Name= "+Thread.currentThread().getName()+" formatter = "+formatter.get().toPattern());
+    }
+
+}
+
+```
+
+Output:
+
+```
+Thread Name= 0 default Formatter = yyyyMMdd HHmm
+Thread Name= 0 formatter = yy-M-d ah:mm
+Thread Name= 1 default Formatter = yyyyMMdd HHmm
+Thread Name= 2 default Formatter = yyyyMMdd HHmm
+Thread Name= 1 formatter = yy-M-d ah:mm
+Thread Name= 3 default Formatter = yyyyMMdd HHmm
+Thread Name= 2 formatter = yy-M-d ah:mm
+Thread Name= 4 default Formatter = yyyyMMdd HHmm
+Thread Name= 3 formatter = yy-M-d ah:mm
+Thread Name= 4 formatter = yy-M-d ah:mm
+Thread Name= 5 default Formatter = yyyyMMdd HHmm
+Thread Name= 5 formatter = yy-M-d ah:mm
+Thread Name= 6 default Formatter = yyyyMMdd HHmm
+Thread Name= 6 formatter = yy-M-d ah:mm
+Thread Name= 7 default Formatter = yyyyMMdd HHmm
+Thread Name= 7 formatter = yy-M-d ah:mm
+Thread Name= 8 default Formatter = yyyyMMdd HHmm
+Thread Name= 9 default Formatter = yyyyMMdd HHmm
+Thread Name= 8 formatter = yy-M-d ah:mm
+Thread Name= 9 formatter = yy-M-d ah:mm
+```
+
+从输出中可以看出，Thread-0已经改变了formatter的值，但仍然是thread-2默认格式化程序与初始化值相同，其他线程也一样。
+
+上面有一段代码用到了创建 `ThreadLocal` 变量的那段代码用到了 Java8 的知识，它等于下面这段代码，如果你写了下面这段代码的话，IDEA会提示你转换为Java8的格式(IDEA真的不错！)。因为ThreadLocal类在Java 8中扩展，使用一个新的方法`withInitial()`，将Supplier功能接口作为参数。
+
+```java
+ private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>(){
+        @Override
+        protected SimpleDateFormat initialValue()
+        {
+            return new SimpleDateFormat("yyyyMMdd HHmm");
+        }
+    };
+```
+
+### ThreadLocal原理
+
+从 `Thread`类源代码入手。
+
+```java
+public class Thread implements Runnable {
+ ......
+//与此线程有关的ThreadLocal值。由ThreadLocal类维护
+ThreadLocal.ThreadLocalMap threadLocals = null;
+
+//与此线程有关的InheritableThreadLocal值。由InheritableThreadLocal类维护
+ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
+ ......
+}
+```
+
+从上面`Thread`类 源代码可以看出`Thread` 类中有一个 `threadLocals` 和 一个  `inheritableThreadLocals` 变量，它们都是 `ThreadLocalMap`  类型的变量,我们可以把 `ThreadLocalMap`  理解为`ThreadLocal` 类实现的定制化的 `HashMap`。默认情况下这两个变量都是null，只有当前线程调用 `ThreadLocal` 类的 `set`或`get`方法时才创建它们，实际上调用这两个方法的时候，我们调用的是`ThreadLocalMap`类对应的 `get()`、`set() `方法。
+
+`ThreadLocal`类的`set()`方法
+
+```java
+    public void set(T value) {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+            map.set(this, value);
+        else
+            createMap(t, value);
+    }
+    ThreadLocalMap getMap(Thread t) {
+        return t.threadLocals;
+    }
+```
+
+通过上面这些内容，我们足以通过猜测得出结论：**最终的变量是放在了当前线程的 `ThreadLocalMap` 中，并不是存在 `ThreadLocal` 上，ThreadLocal 可以理解为只是ThreadLocalMap的封装，传递了变量值。**
+
+**每个`Thread`中都具备一个`ThreadLocalMap`，而`ThreadLocalMap`可以存储以`ThreadLocal`为key的键值对。这里解释了为什么每个线程访问同一个`ThreadLocal`，得到的确是不同的数值。另外，`ThreadLocal` 是 map结构是为了让每个线程可以关联多个 `ThreadLocal`变量。**
+
+`ThreadLocalMap`是`ThreadLocal`的静态内部类。
+
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/ThreadLocal.jpg" width=""/></br>
+### ThreadLocal 内存泄露问题
+
+`ThreadLocalMap` 中使用的 key 为 `ThreadLocal` 的弱引用,而 value 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，在垃圾回收的时候会 key 会被清理掉，而 value 不会被清理掉。这样一来，`ThreadLocalMap` 中就会出现key为null的Entry。假如我们不做任何措施的话，value 永远无法被GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap实现中已经考虑了这种情况，在调用 `set()`、`get()`、`remove()` 方法的时候，会清理掉 key 为 null 的记录。使用完 `ThreadLocal`方法后 最好手动调用`remove()`方法
+
+```java
+      static class Entry extends WeakReference<ThreadLocal<?>> {
+            /** The value associated with this ThreadLocal. */
+            Object value;
+
+            Entry(ThreadLocal<?> k, Object v) {
+                super(k);
+                value = v;
+            }
+        }
+```
+
