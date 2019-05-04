@@ -107,8 +107,27 @@ hashCode() 的作用就是获取哈希码，也称为散列码；它实际上是
 
 先比较hashcode是否相等，这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。
 ## 为什么Java中只有值传递
+按值调用(call by value)表示方法接收的是调用者提供的值。
+按引用调用（call by reference)表示方法接收的是调用者提供的变量地址。
+Java程序设计语言总是采用按值调用。
+一个方法可以修改传递引用所对应的变量值，而不能修改传递值调用所对应的变量值。
 ## 线程有哪些基本状态?
-## 简述线程，程序、进程的基本概念。以及他们之间关系是什么
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/线程基本状态.PNG" width=""/></br>
 ## 关于 final 关键字的一些总结
+
+final关键字主要用在三个地方：变量、方法、类。
+
+ 1. 对于一个final变量，如果是基本数据类型的变量，则其数值一旦在初始化之后便不能更改；如果是引用类型的变量，则在对其初始化之后便不能再让其指向另一个对象。
+ 2. 当用final修饰一个类时，表明这个类不能被继承。final类中的所有成员方法都会被隐式地指定为final方法。
+ 3. 使用final方法的原因有两个。第一个原因是把方法锁定，以防任何继承类修改它的含义；第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升（现在的Java版本已经不需要使用final方法进行这些优化了）。类中所有的private方法都隐式地指定为final。
+
+
 ##  Java 中的异常处理
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/Excetion.png" width=""/></br>
+Error（错误）:是程序无法处理的错误，表示运行应用程序中较严重问题。大多数错误与代码编写者执行的操作无关，而表示代码运行时 JVM（Java 虚拟机）出现的问题。例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时，将出现 OutOfMemoryError。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止。
+
+Exception（异常）:是程序本身可以处理的异常。Exception 类有一个重要的子类 RuntimeException。RuntimeException 异常由Java虚拟机抛出。NullPointerException（要访问的变量没有引用任何对象时，抛出该异常）、ArithmeticException（算术运算异常，一个整数除以0时，抛出该异常）和 ArrayIndexOutOfBoundsException （下标越界异常）。
 ## Java序列化中如果有些字段不想进行序列化 怎么办
+对于不想进行序列化的变量，使用transient关键字修饰。
+
+transient关键字的作用是：阻止实例中那些用此关键字修饰的的变量序列化；当对象被反序列化时，被transient修饰的变量值不会被持久化和恢复。transient只能修饰变量，不能修饰类和方法。
