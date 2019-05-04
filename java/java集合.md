@@ -30,6 +30,7 @@ HashMap 底层是 数组和链表 结合在一起使用也就是 链表散列。
 **初始容量大小和每次扩充容量大小的不同 ：** ①创建时如果不指定容量初始值，Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。②创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小，而 HashMap 会将其扩充为2的幂次方大小
 **底层数据结构：** JDK1.8之后HashMap 链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。
 ## HashSet 和 HashMap 区别
+HashSet底层使用HashMap
 ## ConcurrentHashMap线程安全的具体实现方式/底层具体实现
 JDK1.7
  <img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/concurrenthashMap17.jpg" width=""/></br>
