@@ -20,8 +20,7 @@
 ### 运行时数据区域
 ### 堆（详解）
 ## 类加载机制
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/
-类加载过程.png" width=""/></br>
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/类加载过程.png" width=""/></br>
 类加载的5个过程
 加载：类加载过程的一个阶段：通过一个类的完全限定查找此类字节码文件，并利用字节码文件创建一个Class对象
 
@@ -45,8 +44,7 @@
 　 在Java的日常应用程序开发中，类的加载几乎是由上述3种类加载器相互配合执行的，在必要时，我们还可以自定义类加载器，需要注意的是，Java虚拟机对class文件采用的是按需加载的方式，也就是说当需要使用该类时才会将它的class文件加载到内存生成class对象，而且加载某个类的class文件时，Java虚拟机采用的是双亲委派模式即把请求交由父类处理，它一种任务委派模式
 
 ### 双亲委派模式
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/
-双亲委派.png" width=""/></br>
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/双亲委派.png" width=""/></br>
 
 双亲委派模式是在Java 1.2后引入的，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是双亲委派模式
 ### 好处

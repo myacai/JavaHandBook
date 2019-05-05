@@ -298,8 +298,7 @@ NIO核心组件简单介绍
   
   
 **通道 Channel**
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/
-channel.png" width=""/></br>
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/channel.png" width=""/></br>
 我们对数据的读取和写入要通过Channel，它就像水管一样，是一个通道。通道不同于流的地方就是通道是双向的，可以用于读、写和同时读写操作。
 
    底层的操作系统的通道一般都是全双工的，所以全双工的Channel比流能更好的映射底层操作系统的API。
@@ -316,5 +315,4 @@ Selector是Java  NIO 编程的基础。
 
     一个Selector可以同时轮询多个Channel，因为JDK使用了epoll()代替传统的select实现，所以没有最大连接句柄1024/2048的限制。所以，只需要一个线程负责Selector的轮询，就可以接入成千上万的客户端。
 
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/
-nio.png" width=""/></br>
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/nio.png" width=""/></br>
