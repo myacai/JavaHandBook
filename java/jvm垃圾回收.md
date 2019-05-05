@@ -1,235 +1,54 @@
 @[TOC](Jvm垃圾回收)
 
 ## 如何判断对象已经死亡
-
-你好！ 这是你第一次使用 **Markdown编辑器** 所展示的欢迎页。如果你想学习如何使用Markdown编辑器, 可以仔细阅读这篇文章，了解一下Markdown的基本语法知识。
-
-## 新的改变
-
-我们对Markdown编辑器进行了一些功能拓展与语法支持，除了标准的Markdown编辑器功能，我们增加了如下几点新功能，帮助你用它写博客：
-
- 1. **全新的界面设计** ，将会带来全新的写作体验；
- 2. 在创作中心设置你喜爱的代码高亮样式，Markdown **将代码片显示选择的高亮样式** 进行展示；
- 3. 增加了 **图片拖拽** 功能，你可以将本地的图片直接拖拽到编辑区域直接展示；
- 4. 全新的 **KaTeX数学公式** 语法；
- 5. 增加了支持**甘特图的mermaid语法[^1]** 功能；
- 6. 增加了 **多屏幕编辑** Markdown文章功能；
- 7. 增加了 **焦点写作模式、预览模式、简洁写作模式、左右区域同步滚轮设置** 等功能，功能按钮位于编辑区域与预览区域中间；
- 8. 增加了 **检查列表** 功能。
- [^1]: [mermaid语法说明](https://mermaidjs.github.io/)
-
-## 功能快捷键
-
-撤销：<kbd>Ctrl/Command</kbd> + <kbd>Z</kbd>
-重做：<kbd>Ctrl/Command</kbd> + <kbd>Y</kbd>
-加粗：<kbd>Ctrl/Command</kbd> + <kbd>B</kbd>
-斜体：<kbd>Ctrl/Command</kbd> + <kbd>I</kbd>
-标题：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd>
-无序列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>U</kbd>
-有序列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>O</kbd>
-检查列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>
-插入代码：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd>
-插入链接：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd>
-插入图片：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>
-
-
-## 合理的创建标题，有助于目录的生成
-
-直接输入1次<kbd>#</kbd>，并按下<kbd>space</kbd>后，将生成1级标题。
-输入2次<kbd>#</kbd>，并按下<kbd>space</kbd>后，将生成2级标题。
-以此类推，我们支持6级标题。有助于使用`TOC`语法后生成一个完美的目录。
-
-
-
-## 如何改变文本的样式
-
-*强调文本* _强调文本_
-
-**加粗文本** __加粗文本__
-
-==标记文本==
-
-~~删除文本~~
-
-> 引用文本
-
-H~2~O is是液体。
-
-2^10^ 运算结果是 1024.
-
-
-
-## 插入链接与图片
-
-链接: [link](https://mp.csdn.net).
-
-图片: ![Alt](https://avatar.csdn.net/7/7/B/1_ralf_hx163com.jpg)
-
-带尺寸的图片: ![Alt](https://avatar.csdn.net/7/7/B/1_ralf_hx163com.jpg =30x30)
-
-居中的图片: ![Alt](https://avatar.csdn.net/7/7/B/1_ralf_hx163com.jpg#pic_center)
-
-居中并且带尺寸的图片: ![Alt](https://avatar.csdn.net/7/7/B/1_ralf_hx163com.jpg#pic_center =30x30)
-
-当然，我们为了让用户更加便捷，我们增加了图片拖拽功能。
-
-
-## 如何插入一段漂亮的代码片
-
-去[博客设置](https://mp.csdn.net/configure)页面，选择一款你喜欢的代码片高亮样式，下面展示同样高亮的 `代码片`.
-```javascript
-// An highlighted block
-var foo = 'bar';
-```
-
-
-## 生成一个适合你的列表
-
-- 项目
-  - 项目
-    - 项目
-
-1. 项目1
-2. 项目2
-3. 项目3
-
-- [ ] 计划任务
-- [x] 完成任务
-
-
-## 创建一个表格
-一个简单的表格是这么创建的：
-项目     | Value
--------- | -----
-电脑  | $1600
-手机  | $12
-导管  | $1
-
-### 设定内容居中、居左、居右
-使用`:---------:`居中
-使用`:----------`居左
-使用`----------:`居右
-| 第一列       | 第二列         | 第三列        |
-|:-----------:| -------------:|:-------------|
-| 第一列文本居中 | 第二列文本居右  | 第三列文本居左 | 
-
-
-### SmartyPants
-SmartyPants将ASCII标点字符转换为“智能”印刷标点HTML实体。例如：
-|    TYPE   |ASCII                          |HTML                         
-|----------------|-------------------------------|-----------------------------|
-|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
-|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
-
-
-## 创建一个自定义列表
-Markdown
-:  Text-to-HTML conversion tool
-
-Authors
-:  John
-:  Luke
-
-
-## 如何创建一个注脚
-
-一个具有注脚的文本。[^2]
-
-[^2]: 注脚的解释
-
-
-##  注释也是必不可少的
-
-Markdown将文本转换为 HTML。
-
-*[HTML]:   超文本标记语言
-
-
-## KaTeX数学公式
-
-您可以使用渲染LaTeX数学表达式 [KaTeX](https://khan.github.io/KaTeX/):
-
-Gamma公式展示 $\Gamma(n) = (n-1)!\quad\forall
-n\in\mathbb N$ 是通过欧拉积分
-
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
-
-> 你可以找到更多关于的信息 **LaTeX** 数学表达式[here][1].
-
-
-## 新的甘特图功能，丰富你的文章
-
-```mermaid
-gantt
-        dateFormat  YYYY-MM-DD
-        title Adding GANTT diagram functionality to mermaid
-        section 现有任务
-        已完成               :done,    des1, 2014-01-06,2014-01-08
-        进行中               :active,  des2, 2014-01-09, 3d
-        计划一               :         des3, after des2, 5d
-        计划二               :         des4, after des3, 5d
-```
-- 关于 **甘特图** 语法，参考 [这儿][2],
-
-## UML 图表
-
-可以使用UML图表进行渲染。 [Mermaid](https://mermaidjs.github.io/). 例如下面产生的一个序列图：:
-
-```mermaid
-sequenceDiagram
-张三 ->> 李四: 你好！李四, 最近怎么样?
-李四-->>王五: 你最近怎么样，王五？
-李四--x 张三: 我很好，谢谢!
-李四-x 王五: 我很好，谢谢!
-Note right of 王五: 李四想了很长时间, 文字太长了<br/>不适合放在一行.
-
-李四-->>张三: 打量着王五...
-张三->>王五: 很好... 王五, 你怎么样?
-```
-
-这将产生一个流程图。:
-
-```mermaid
-graph LR
-A[长方形] -- 链接 --> B((圆))
-A --> C(圆角长方形)
-B --> D{菱形}
-C --> D
-```
-
-- 关于 **Mermaid** 语法，参考 [这儿][3],
-
-## FLowchart流程图
-
-我们依旧会支持flowchart的流程图：
-```mermaid
-flowchat
-st=>start: 开始
-e=>end: 结束
-op=>operation: 我的操作
-cond=>condition: 确认？
-
-st->op->cond
-cond(yes)->e
-cond(no)->op
-```
-
-- 关于 **Flowchart流程图** 语法，参考 [这儿][4].
-
-
-## 导出与导入
-
-###  导出
-如果你想尝试使用此编辑器, 你可以在此篇文章任意编辑。当你完成了一篇文章的写作, 在上方工具栏找到 **文章导出** ，生成一个.md文件或者.html文件进行本地保存。
-
-### 导入
-如果你想加载一篇你写过的.md文件或者.html文件，在上方工具栏可以选择导入功能进行对应扩展名的文件导入，
-继续你的创作。
-
- [1]: http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference
- [2]: https://mermaidjs.github.io/
- [3]: https://mermaidjs.github.io/
- [4]: http://adrai.github.io/flowchart.js/
+## 垃圾回收
+### 引用计数法
+### 可达性分析算法
+### 引用
+## 垃圾收集算法
+### 标记-清除算法
+###  复制算法
+### 标记-整理算法
+### 分代收集算法
+## 垃圾收集器
+### Serial 收集器
+### ParNew 收集器
+### Parallel Scavenge 收集器
+### CMS 收集器(*)
+### G1 收集器(*)
+### Java 内存区域
+### 运行时数据区域
+### 堆（详解）
+## 类加载机制
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/
+类加载过程.png" width=""/></br>
+类加载的5个过程
+加载：类加载过程的一个阶段：通过一个类的完全限定查找此类字节码文件，并利用字节码文件创建一个Class对象
+
+验证：目的在于确保Class文件的字节流中包含信息符合当前虚拟机要求，不会危害虚拟机自身安全。主要包括四种验证，文件格式验证，元数据验证，字节码验证，符号引用验证。
+
+准备：为类变量(即static修饰的字段变量)分配内存并且设置该类变量的初始值即0(如static int i=5;这里只将i初始化为0，至于5的值将在初始化时赋值)，这里不包含用final修饰的static，因为final在编译的时候就会分配了，注意这里不会为实例变量分配初始化，类变量会分配在方法区中，而实例变量是会随着对象一起分配到Java堆中。
+
+解析：主要将常量池中的符号引用替换为直接引用的过程。符号引用就是一组符号来描述目标，可以是任何字面量，而直接引用就是直接指向目标的指针、相对偏移量或一个间接定位到目标的句柄。有类或接口的解析，字段解析，类方法解析，接口方法解析(这里涉及到字节码变量的引用，如需更详细了解，可参考《深入Java虚拟机》)。
+
+初始化：类加载最后阶段，若该类具有超类，则对其进行初始化，执行静态初始化器和静态初始化成员变量(如前面只初始化了默认值的static变量将会在这个阶段赋值，成员变量也将被初始化)。
+
+## 类加载器
+类加载器的任务是根据一个类的全限定名来读取此类的二进制字节流到JVM中，然后转换为一个与目标类对应的java.lang.Class对象实例，在虚拟机提供了3种类加载器
+启动（Bootstrap）类加载器
+启动类加载器主要加载的是JVM自身需要的类，这个类加载使用C++语言实现的，是虚拟机自身的一部分，它负责将 <JAVA_HOME>/lib路径下的核心类库或-Xbootclasspath参数指定的路径下的jar包加载到内存中，注意必由于虚拟机是按照文件名识别加载jar包的，如rt.jar，如果文件名不被虚拟机识别，即使把jar包丢到lib目录下也是没有作用的(出于安全考虑，Bootstrap启动类加载器只加载包名为java、javax、sun等开头的类)。
+扩展（Extension）类加载器
+扩展类加载器是指Sun公司(已被Oracle收购)实现的sun.misc.Launcher$ExtClassLoader类，由Java语言实现的，是Launcher的静态内部类，它负责加载<JAVA_HOME>/lib/ext目录下或者由系统变量-Djava.ext.dir指定位路径中的类库，开发者可以直接使用标准扩展类加载器。
+系统（System）类加载器
+
+也称应用程序加载器是指 Sun公司实现的sun.misc.Launcher$AppClassLoader。它负责加载系统类路径java -classpath或-D java.class.path 指定路径下的类库，也就是我们经常用到的classpath路径，开发者可以直接使用系统类加载器，一般情况下该类加载是程序中默认的类加载器，通过ClassLoader#getSystemClassLoader()方法可以获取到该类加载器。 
+　 在Java的日常应用程序开发中，类的加载几乎是由上述3种类加载器相互配合执行的，在必要时，我们还可以自定义类加载器，需要注意的是，Java虚拟机对class文件采用的是按需加载的方式，也就是说当需要使用该类时才会将它的class文件加载到内存生成class对象，而且加载某个类的class文件时，Java虚拟机采用的是双亲委派模式即把请求交由父类处理，它一种任务委派模式
+
+### 双亲委派模式
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/
+双亲委派.png" width=""/></br>
+
+双亲委派模式是在Java 1.2后引入的，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是双亲委派模式
+### 好处
+避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。
+其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。
