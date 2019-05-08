@@ -1,1 +1,0 @@
-https://draveness.me/database-concurrency-control
