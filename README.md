@@ -31,7 +31,7 @@
 
 ### Java/J2EE 基础
 * [Java 基础](https://github.com/myacai/JavaHandBook/tree/master/java/java基础.md)
-* [JavaEE 基础](https://github.com/myacai/JavaHandBook/tree/master/java/java基础.md)
+* [JavaEE 基础](https://github.com/myacai/JavaHandBook/tree/master/java/javaee基础.md)
 
 
 
