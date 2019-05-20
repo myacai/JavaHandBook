@@ -99,3 +99,16 @@ getAttribute 返回的是Object，需进行转换,可用setAttribute 设置成�
 由于HTTP协议是无状态的协议，所以服务端需要记录用户的状态时，就需要用某种机制来识具体的用户，这个机制就是Session。
 Cookie是服务器给客户端的，每次HTTP请求的时候，客户端都会发送相应的Cookie信息到服务端。服务端根据 Cookie 里面记录的Session ID就知道你是谁了。Cookie也用来记录用户的一些信息，比如登陆的账号信息。
 Session是保存在服务端的，有一个唯一标识。跟踪用户，用来保存用户会话。
+
+## Filter
+Servlet中的过滤器Filter是实现了javax.servlet.Filter接口的服务器端程序，主要的用途是设置字符集、控制权限、控制转向、做一些业务逻辑判断等。其工作原理是，只要你在web.xml文件配置好要拦截的客户端请求，它都会帮你拦截到请求.
+它是随你的web应用启动而启动的，只初始化一次，以后就可以拦截相关请求，只有当你的web应用停止或重新部署的时候才销毁。
+Filter可以认为是Servlet的一种“加强版”，它主要用于对用户请求进行预处理，也可以对HttpServletResponse进行后处理，是个典型的处理链。
+
+
+流程是：Filter对用户请求进行预处理，接着将请求交给Servlet进行处理并生成响应，最后Filter再对服务器响应进行后处理。
+
+三个方法:
+void init(FilterConfig config):用于完成Filter的初始化。
+void destory():用于Filter销毁前，完成某些资源的回收。
+void doFilter(ServletRequest request,ServletResponse response,FilterChain chain):实现过滤功能，该方法就是对每个请求及响应增加的额外处理。该方法可以实现对用户请求进行预处理(ServletRequest request)，也可实现对服务器响应进行后处理(ServletResponse response)—它们的分界线为是否调用了chain.doFilter(),执行该方法之前，即对用户请求进行预处理；执行该方法之后，即对服务器响应进行后处理。
