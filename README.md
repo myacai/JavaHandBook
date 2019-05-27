@@ -10,6 +10,8 @@
   - [Java 虚拟机 jvm](#java-虚拟机-jvm
 - [:art: 数据结构](#art-数据结构)
   - [二叉树](#二叉树)
+  - [排序](#排序)
+  - [剑指offer](#剑指offer)
 - [:computer: 计算机网络与数据通信](#computer-计算机网络与数据通信)
   - [网络相关](#网络相关)  
 - [:iphone: 操作系统](#iphone-操作系统)
@@ -56,7 +58,7 @@
 ## :art: 数据结构
 * [排序总结](https://github.com/myacai/JavaHandBook/tree/master/数据结构/排序.md)
 * [二叉树问题总结](https://github.com/myacai/JavaHandBook/tree/master/数据结构/二叉树.md)
-
+* [剑指offer](https://github.com/myacai/JavaHandBook/tree/master/数据结构/剑指offer.md)
 ## :floppy_disk: 数据存储
 
 ### MySQL
