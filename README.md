@@ -62,7 +62,7 @@
 ## :floppy_disk: 数据存储
 
 ### MySQL
-* [mysql索引](https://github.com/myacai/JavaHandBook/tree/master/数据结构/二叉树.md)
+* [mysql索引](https://github.com/myacai/JavaHandBook/tree/master/数据存储/mysql索引.md)
 
  
 ## 主流框架
