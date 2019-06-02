@@ -63,7 +63,7 @@
 
 ### MySQL
 * [mysql索引](https://github.com/myacai/JavaHandBook/tree/master/数据存储/mysql索引.md)
-
+* [redis](https://github.com/myacai/JavaHandBook/tree/master/数据存储/redis.md)
  
 ## 主流框架
 * [Spring](https://github.com/myacai/JavaHandBook/tree/master/框架/spring.md)
