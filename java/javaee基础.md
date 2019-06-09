@@ -1,4 +1,8 @@
 @[TOC](JavaEE基础)
+
+
+推荐书籍，《深入分析Java  Web技术内幕》
+
 ## Servlet接口中有哪些方法及Servlet生命周期探秘
 Servlet接口定义了5个方法，其中前三个方法与Servlet生命周期相关：
 
@@ -112,3 +116,7 @@ Filter可以认为是Servlet的一种“加强版”，它主要用于对用户�
 void init(FilterConfig config):用于完成Filter的初始化。
 void destory():用于Filter销毁前，完成某些资源的回收。
 void doFilter(ServletRequest request,ServletResponse response,FilterChain chain):实现过滤功能，该方法就是对每个请求及响应增加的额外处理。该方法可以实现对用户请求进行预处理(ServletRequest request)，也可实现对服务器响应进行后处理(ServletResponse response)—它们的分界线为是否调用了chain.doFilter(),执行该方法之前，即对用户请求进行预处理；执行该方法之后，即对服务器响应进行后处理。
+
+## 浏览器输入一个url
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/url1.png" width=""/></br>
+<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/url2.png" width=""/></br>
