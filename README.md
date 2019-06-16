@@ -9,12 +9,14 @@
   - [Java IO NIO AIO](#java-io-与-nio)
   - [Java 虚拟机 jvm](#java-虚拟机-jvm
 - [:art: 数据结构](#art-数据结构)
-  - [二叉树](#二叉树)
+  - [二叉树问题总结](#二叉树问题总结)
+  - [平衡二叉树B树红黑树](#平衡二叉树B树红黑树)
   - [排序](#排序)
   - [剑指offer](#剑指offer)
 - [:computer: 计算机网络与数据通信](#computer-计算机网络与数据通信)
   - [网络相关](#网络相关)  
 - [:iphone: 操作系统](#iphone-操作系统)
+  - [操作系统常见问题](#操作系统常见问题)
   - [Linux相关](#linux相关)
 - [:pencil2: 主流框架/软件](#pencil2-主流框架软件)
   - [Spring](#spring)
@@ -56,14 +58,19 @@
 * [搞定JVM垃圾回收就是这么简单](https://github.com/myacai/JavaHandBook/tree/master/java/jvm垃圾回收.md)
 
 ## :art: 数据结构
-* [排序总结](https://github.com/myacai/JavaHandBook/tree/master/数据结构/排序.md)
+* [排序](https://github.com/myacai/JavaHandBook/tree/master/数据结构/排序.md)
 * [二叉树问题总结](https://github.com/myacai/JavaHandBook/tree/master/数据结构/二叉树.md)
+* [平衡二叉树B树红黑树](https://github.com/myacai/JavaHandBook/tree/master/数据结构/平衡二叉树B树红黑树.md)
 * [剑指offer](https://github.com/myacai/JavaHandBook/tree/master/数据结构/剑指offer.md)
 ## :floppy_disk: 数据存储
 
 ### MySQL
 * [mysql索引](https://github.com/myacai/JavaHandBook/tree/master/数据存储/mysql索引.md)
 * [redis](https://github.com/myacai/JavaHandBook/tree/master/数据存储/redis.md)
+ 
+## 操作系统
+* [操作系统常见问题](https://github.com/myacai/JavaHandBook/tree/master/操作系统/操作系统.md) 
+* [Linux相关](https://github.com/myacai/JavaHandBook/tree/master/操作系统/Linux.md) 
  
 ## 主流框架
 * [Spring](https://github.com/myacai/JavaHandBook/tree/master/框架/spring.md)
