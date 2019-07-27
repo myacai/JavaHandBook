@@ -4,19 +4,20 @@
 Java并发编程实战
 Java并发编程的艺术
 
-## 何为进程线程，有什么区别
-### 进程状态
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/进程状态.PNG" width=""/></br>
+# 何为进程线程，有什么区别
+## 进程状态
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190727073930301.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3Nzg2Nzc1,size_16,color_FFFFFF,t_70)
+## 线程状态
 
-![Alt](https://github.com/myacai/JavaHandBook/blob/master/images/java/进程状态.PNG#pic_center)
-### 线程状态
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/线程基本状态.PNG" width=""/></br>
 
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190727074008382.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3Nzg2Nzc1,size_16,color_FFFFFF,t_70)
 进程：进程是进程实体的运行过程，是系统进行资源分配和调度的一个独立单位（具有动态、并发、独立、异步的特性，以及就绪、执行、阻塞3种状态）；引入进程是为了使多个程序可以并发的执行，以提高系统的资源利用率和吞吐量。
 
 线程：是比进程更小的可独立运行的基本单位，可以看做是轻量级的进程（具有轻型实体，独立调度分派单位，可并发执行，共享进程资源等属性）；引入目的是为了减少程序在并发执行过程中的开销，使OS的并发效率更高。
+## sleep和wait的区别
+ ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190727134913672.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3Nzg2Nzc1,size_16,color_FFFFFF,t_70)
 
-## 并发并行
+# 并发并行
 
 并发和并行是两个非常容易被混淆的概念。它们都可以表示两个或者多个任务一起执行，但是偏重点有些不同。并发偏重于多个任务交替执行，而多个任务之间有可能还是串行的。而并行是真正意义上的“同时执行”。
 
@@ -24,31 +25,61 @@ Java并发编程的艺术
 
 
 
-## 使用多线程常见的四种方式
+# 使用多线程常见的四种方式
 继承Thread类
 实现Runnable接口
-实现Callable接口
+实现Callable接口,Callable 可以有返回值，返回值通过 FutureTask 进行封装。
+
+```java
+public class MyCallable implements Callable<Integer> {
+    public Integer call() {
+        return 123;
+    }
+}
+```
+
+```java
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+    MyCallable mc = new MyCallable();
+    FutureTask<Integer> ft = new FutureTask<>(mc);
+    Thread thread = new Thread(ft);
+    thread.start();
+    System.out.println(ft.get());
+}
+```
+
 使用线程池
 
 推荐使用线程池创建线程
-### 使用线程池创建线程的好处
+
+
+## 使用线程池创建线程的好处
 第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。
 第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。
 第三：提高线程的可管理性。线程是稀缺资源，如果无限制地创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一分配、调优和监控。但是，要做到合理利用线程池。
-### Callable和Runnable的区别
+## Callable和Runnable的区别
 Runnable 接口不会返回结果但是 Callable 接口可以返回结果。
 
+# 线程池
+Executor 管理多个异步任务的执行，而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。
+主要有三种 Executor：
 
-## java内存模型
+CachedThreadPool：一个任务创建一个线程；
+FixedThreadPool：所有任务只能使用固定大小的线程；
+SingleThreadExecutor：相当于大小为 1 的 FixedThreadPool。
+# java内存模型
 在 JDK1.2 之前，Java的内存模型实现总是从主存（即共享内存）读取变量
 
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/内存模型2.jpg" width=""/></br>
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190727074057456.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3Nzg2Nzc1,size_16,color_FFFFFF,t_70)
+
+
 当前的 Java 内存模型下，线程可以把变量保存本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。</br>
-<img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/内存模型1.jpg" width=""/></br>
-## volatile
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190727074110356.jpg)
+# volatile
 volatile是轻量级的synchronized，它在多处理器开发中保证了共享变量的“可见性”。但是不保证原子性，因为volatile修饰的变量，在多线程情况下，一个操作可能会被其他线程干扰。
 
-### 底层原理
+## 底层原理
 volatile修饰的变量,
 在读操作的时候，会强制从主存中读取。
 在写操作的时候，命令转为汇编代码时，会有Lock前缀的指令，例如（lock addl $0×0,(%esp);）
@@ -58,16 +89,16 @@ Lock前缀的指令在多核处理器下会引发了两件事情。
 
 （来自java并发编程艺术）
 
-## synchronized
+# synchronized
 synchronized关键字解决的是多个线程之间访问资源的同步性，保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。synchronized是重量级锁，可重入锁，可以保证可见性，原子性。JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。
-### 锁升级
+## 锁升级
 （java并发编程艺术）在Java SE 1.6中，锁一共有4种状态，级别从低到高依次是：无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态，这几个状态会随着竞争情况逐渐升级。锁可以升级但不能降级，意味着偏向锁升级成轻量级锁后不能降级成偏向锁。（详细在java并发编程艺术第二章第二节）
 
 对于普通同步方法，锁是当前实例对象。
 对于静态同步方法，锁是当前类的Class对象。
 对于同步方法块，锁是Synchonized括号里配置的对象
 
-## 悲观锁乐观锁（CAS）
+# 悲观锁乐观锁（CAS）
 对于乐观派而言，他们认为事情总会往好的方向发展，总是认为坏的情况发生的概率特别小，可以无所顾忌地做事，但对于悲观派而已，他们总会认为发展事态如果不及时控制，以后就无法挽回了。
 
 **乐观锁适用于多读的应用类型，这样可以提高吞吐量，所以一般多写的场景下用悲观锁就比较合适。**
@@ -75,7 +106,7 @@ synchronized关键字解决的是多个线程之间访问资源的同步性，�
 
 **CAS:当线程写数据的时候，先对内存中要操作的数据保留一份旧值，真正写的时候，比较当前的值是否和旧值相同，如果相同，则进行写操作。如果不同，说明在此期间值已经被修改过，则重新尝试。**
 
-### CAS会出现的问题
+# CAS会出现的问题
 **ABA问题**
 原值为A。修改成B之后，再次修改成A，那么CAS就会误以为值没有被修改过。</br>
 **办法（版本号机制）**
@@ -85,12 +116,12 @@ synchronized关键字解决的是多个线程之间访问资源的同步性，�
 </br>
 **只能保证一个共享变量的原子操作**
 </br>
-## Lock锁
+# Lock锁
 JDK1.5之后并发包中新增了Lock接口以及相关实现类来实现锁功能。
 Lock接口的实现类： 
 ReentrantLock
 ReentrantReadWriteLock
-### ReentrantLock
+## ReentrantLock
 ReentrantLock是可重入锁，等待可中断，可实现公平锁，可实现选择性通知
 1.等待可中断
 使用lock.lockInterruptibly()来实现等待的线程放弃等待。
@@ -98,9 +129,9 @@ ReentrantLock是可重入锁，等待可中断，可实现公平锁，可实现�
 ReentrantLock(boolean fair)构造函数，创建一个特定锁类型（公平锁/非公平锁）的ReentrantLock的实例
 3.可实现选择性通知
 synchronized关键字与wait()和notify/notifyAll()方法相结合可以实现等待/通知机制。ReentrantLock借助于Condition接口与newCondition() 方法
-## 线程池
+# 线程池
 
-## Atomic原子类
+# Atomic原子类
 即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程干扰。
 原子类都存放在java.util.concurrent.atomic
 
@@ -131,7 +162,7 @@ AtomicIntegerArray类主要是提供原子的方式更新数组里的整
 ·AtomicLongFieldUpdater：原子更新长整型字段的更新器。
 AtomicStampedReference：原子更新带有版本号的引用类型。
 
-### 举例AtomicInteger的用法
+## 举例AtomicInteger的用法
 
 ```
 public final int get() //获取当前的值
@@ -161,7 +192,7 @@ public class AtomicIntegerTest{
 2
 ```
 
-### 原子类的原理
+## 原子类的原理
 
 ```
     // setup to use Unsafe.compareAndSwapInt for updates（更新操作时提供“比较并替换”的作用）
@@ -179,7 +210,7 @@ public class AtomicIntegerTest{
 ```
 主要利用了CAS+volatile+native方法来保证原子操作，
 unsafe.objectFieldOffset来获取原来值的内存地址。
-## AQS
+# AQS
 队列同步器AbstractQueuedSynchronizer，是用来构建锁或者其他同步组
 件的基础框架，它使用了一个int成员变量表示同步状态，通过内置的FIFO队列来完成资源获取线程的排队工作，并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。
 同步器的设计是基于模板方法模式的，也就是说，使用者需要继承同步器并重写指定的方法，随后将同步器组合在自定义同步组件的实现中，并调用同步器提供的模板方法，而这些模板方法将会调用使用者重写的方法。
@@ -243,10 +274,10 @@ class Mutex implements Lock {
 
 ```
 上述示例中，独占锁Mutex是一个自定义同步组件，它在同一时刻只允许一个线程占有锁。Mutex中定义了一个静态内部类，该内部类继承了同步器并实现了独占式获取和释放同步状态。在tryAcquire(int acquires)方法中，如果经过CAS设置成功（同步状态设置为1），则代表获取了同步状态，而在tryRelease(int releases)方法中只是将同步状态重置为0。用户使用Mutex时并不会直接和内部同步器的实现打交道，而是调用Mutex提供的方法，在Mutex的实现中，以获取锁的lock()方法为例，只需要在方法实现中调用同步器的模板方法acquire(int args)即可，当前线程调用该方法获取同步状态失败后会被加入到同步队列中等待，这样就大大降低了实现一个可靠自定义同步组件的门槛。
-## TreadLocal
+# TreadLocal
 ThreadLocal类主要解决的就是让每个线程绑定自己的值。
 如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本，这也是ThreadLocal变量名的由来。他们可以使用 get（） 和 set（） 方法来获取默认值或将其值更改为当前线程所存的副本的值，从而避免了线程安全问题。
-### ThreadLocal示例
+## ThreadLocal示例
 
 ```java
 import java.text.SimpleDateFormat;
@@ -323,7 +354,7 @@ Thread Name= 9 formatter = yy-M-d ah:mm
     };
 ```
 
-### ThreadLocal原理
+## ThreadLocal原理
 
 从 `Thread`类源代码入手。
 
@@ -364,7 +395,7 @@ ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
 `ThreadLocalMap`是`ThreadLocal`的静态内部类。
 
 <img src="https://github.com/myacai/JavaHandBook/blob/master/images/java/ThreadLocal.jpg" width=""/></br>
-### ThreadLocal 内存泄露问题
+## ThreadLocal 内存泄露问题
 
 `ThreadLocalMap` 中使用的 key 为 `ThreadLocal` 的弱引用,而 value 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，在垃圾回收的时候会 key 会被清理掉，而 value 不会被清理掉。这样一来，`ThreadLocalMap` 中就会出现key为null的Entry。假如我们不做任何措施的话，value 永远无法被GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap实现中已经考虑了这种情况，在调用 `set()`、`get()`、`remove()` 方法的时候，会清理掉 key 为 null 的记录。使用完 `ThreadLocal`方法后 最好手动调用`remove()`方法
 
