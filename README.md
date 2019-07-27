@@ -17,7 +17,8 @@
   - [网络基础](#网络基础) 
   - [HTTP](#HTTP)  
 - [:iphone: 操作系统](#iphone-操作系统)
-  - [操作系统常见问题](#操作系统常见问题)
+  - [操作系统-进程管理](#操作系统-进程管理)
+  - [操作系统-内存管理](#操作系统-内存管理)
   - [Linux相关](#linux相关)
 - [:pencil2: 主流框架/软件](#pencil2-主流框架软件)
   - [Spring](#spring)
@@ -72,7 +73,8 @@
 * [SQL](https://github.com/myacai/JavaHandBook/tree/master/数据存储/SQL.md)
  
 ## 操作系统
-* [操作系统常见问题](https://github.com/myacai/JavaHandBook/tree/master/操作系统/操作系统.md) 
+* [操作系统-进程管理](https://github.com/myacai/JavaHandBook/tree/master/操作系统/操作系统-进程管理.md) 
+* [操作系统-内存管理](https://github.com/myacai/JavaHandBook/tree/master/操作系统/操作系统-内存管理.md) 
 * [Linux相关](https://github.com/myacai/JavaHandBook/tree/master/操作系统/Linux.md) 
 
 ## 计算机网络与数据通信
